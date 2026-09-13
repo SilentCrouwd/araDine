@@ -1,4 +1,4 @@
-import { HashRouter as Router, Route, Routes } from "react-router";
+import { Route, Routes } from "react-router";
 import "./App.css";
 import Root from "./Views/Root/Root";
 import Order from "./Views/Order/Order";
@@ -11,27 +11,25 @@ import RefreshmentDetail from "./Views/Dashboard/DashboardViews/RefreshmentDetai
 
 function App() {
   return (
-    <Router>
-      <Routes>
-      <Route path="/araDine/" element={<Root />} />
+    <Routes>
+      <Route path="araDine/" element={<Root />} />
 
-      <Route path="/araDine/order" element={<Order />}>
-        <Route path="/araDine/order/login/:roll" element={<Login />} />
-        <Route path="/araDine/order/signup/:roll" element={<SignUp />} />
+      <Route path="araDine/order" element={<Order />}>
+        <Route path="araDine/order/login/:roll" element={<Login />} />
+        <Route path="araDine/order/signup/:roll" element={<SignUp />} />
       </Route>
-      <Route path="/araDine/dashboard" element={<Dashboard />}>
+      <Route path="araDine/dashboard" element={<Dashboard />}>
         <Route index element={<DashboardOverview />} />
         <Route
-          path="/araDine/dashboard/room-view/:roomId"
+          path="araDine/dashboard/room-view/:roomId"
           element={<DashboardRoomView />}
         />
         <Route
-          path="/araDine/dashboard/room-view/:roomId/refreshment-detail/:refreshmentId"
+          path="araDine/dashboard/room-view/:roomId/refreshment-detail/:refreshmentId"
           element={<RefreshmentDetail />}
         />
       </Route>
     </Routes>
-    </Router>
   );
 }
 
