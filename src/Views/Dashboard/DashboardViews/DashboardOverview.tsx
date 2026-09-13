@@ -23,6 +23,46 @@ import {
 import { useState } from "react";
 import { Link } from "react-router";
 
+interface Room {
+  boocked: boolean;
+  roomNumber: number;
+  service?: boolean;
+}
+
+function RoomStatusIcon({ room }: { room: Room }) {
+  const getRoomIcon = () => {
+    if (room.service) {
+      return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+    }
+
+    if (!room.boocked) {
+      return <DoorOpen className="h-5 w-5 text-green-600" />;
+    }
+
+    return <DoorClosed className="h-5 w-5 text-red-500" />;
+  };
+
+  return getRoomIcon();
+}
+function RoomStatus({ room }: { room: Room }) {
+  if (room.service) {
+    return <p>Service</p>;
+  }
+  if (!room.boocked) {
+    return <p>Frei</p>;
+  }
+  return <p>Belegt</p>;
+}
+function getRoomStatusText({ room }: { room: Room }) {
+  if (room.service) {
+    return "text-foreground underline decoration-yellow-500 underline-offset-4";
+  }
+  if (!room.boocked) {
+    return "text-foreground text-sm";
+  }
+  return "text-muted text-sm";
+}
+
 function DashboardOverview() {
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0],
@@ -47,22 +87,6 @@ function DashboardOverview() {
     { boocked: true, roomNumber: 110, service: true },
   ];
 
-  function RoomStatusIcon({ room }: { room: Room }) {
-
-    const getRoomIcon = () => {
-      if (room.service) {
-        return <AlertCircle className="h-5 w-5 text-yellow-500" />;
-      }
-
-      if (!room.boocked) {
-        return <DoorOpen className="h-5 w-5 text-green-600" />;
-      }
-
-      return <DoorClosed className="h-5 w-5 text-red-500" />;
-    };
-
-    return getRoomIcon();
-  }
   return (
     <div>
       <h1 className="text-2xl font-semibold text-center py-5">Overview</h1>
@@ -174,13 +198,13 @@ function DashboardOverview() {
                 <RoomStatusIcon room={room} />
               </div>
               <p
-                className={`text-lg ${room.service ? "text-foreground" : !room.boocked ? "text-muted text-sm" : "text-foreground text-lg"} font-semibold text-center`}
+                className={`text-lg ${getRoomStatusText({ room })} font-semibold text-center`}
               >
                 <span className="text-lg text-foreground">
                   {room.roomNumber}
                 </span>{" "}
                 <br></br>
-                {room.service ? "Service" : !room.boocked ? "Frei" : "Belegt"}
+                <RoomStatus room={room} />
               </p>
             </Card>
           </Link>
