@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { HashRouter as Router, Route, Routes } from "react-router";
 import "./App.css";
 import Root from "./Views/Root/Root";
 import Order from "./Views/Order/Order";
@@ -11,7 +11,8 @@ import RefreshmentDetail from "./Views/Dashboard/DashboardViews/RefreshmentDetai
 
 function App() {
   return (
-    <Routes>
+    <Router>
+      <Routes>
       <Route path="/araDine/" element={<Root />} />
 
       <Route path="/araDine/order" element={<Order />}>
@@ -30,6 +31,7 @@ function App() {
         />
       </Route>
     </Routes>
+    </Router>
   );
 }
 
