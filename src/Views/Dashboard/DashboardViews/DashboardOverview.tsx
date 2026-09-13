@@ -180,7 +180,7 @@ function DashboardOverview() {
                   {room.roomNumber}
                 </span>{" "}
                 <br></br>
-                {room.service ? "Bewirtung" : !room.boocked ? "Frei" : "Boocked"}
+                {room.service ? "Service" : !room.boocked ? "Frei" : "Belegt"}
               </p>
             </Card>
           </Link>
