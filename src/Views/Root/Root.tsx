@@ -11,13 +11,13 @@ function Root() {
       </h1>
       <div className=" flex flex-col items-center gap-4 px-10">
         <Link
-          to="/order"
+          to="/araDine/order"
           className=" w-40 text-center text-xl bg-accent-foreground text-accent px-4 py-2 rounded-md hover:bg-accent-foreground/70"
         >
           <p>Place Order</p>
         </Link>
         <Link
-          to="/dashboard"
+          to="/araDine/dashboard"
           className=" w-40 text-center text-xl bg-accent-foreground text-accent px-4 py-2 rounded-md hover:bg-accent-foreground/70"
         >
           To Dashboard

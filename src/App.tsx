@@ -12,17 +12,20 @@ import RefreshmentDetail from "./Views/Dashboard/DashboardViews/RefreshmentDetai
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Root />} />
+      <Route path="/araDine/" element={<Root />} />
 
-      <Route path="order" element={<Order />}>
-        <Route path="login/:roll" element={<Login />} />
-        <Route path="signup/:roll" element={<SignUp />} />
+      <Route path="/araDine/order" element={<Order />}>
+        <Route path="/araDine/order/login/:roll" element={<Login />} />
+        <Route path="/araDine/order/signup/:roll" element={<SignUp />} />
       </Route>
-      <Route path="dashboard" element={<Dashboard />}>
+      <Route path="/araDine/dashboard" element={<Dashboard />}>
         <Route index element={<DashboardOverview />} />
-        <Route path="room-view/:roomId" element={<DashboardRoomView />} />
         <Route
-          path="room-view/:roomId/refreshment-detail/:refreshmentId"
+          path="/araDine/dashboard/room-view/:roomId"
+          element={<DashboardRoomView />}
+        />
+        <Route
+          path="/araDine/dashboard/room-view/:roomId/refreshment-detail/:refreshmentId"
           element={<RefreshmentDetail />}
         />
       </Route>
