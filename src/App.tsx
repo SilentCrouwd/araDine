@@ -3,11 +3,11 @@ import "./App.css";
 import Root from "./Views/Root/Root";
 import Order from "./Views/Order/Order";
 import Dashboard from "./Views/Dashboard/Dashboard";
-import DashboardOverview from "./Views/Dashboard/DashboardViews/DashboardOverview";
 import SignUp from "./Views/Root/components/SignUp";
 import Login from "./Views/Root/components/Login";
 import DashboardRoomView from "./Views/Dashboard/DashboardViews/DashboardRoomView";
 import RefreshmentDetail from "./Views/Dashboard/DashboardViews/RefreshmentDetail";
+import DashboardEmployee from "./Views/Dashboard/DashboardViews/DashboardEmployee";
 
 function App() {
   return (
@@ -19,7 +19,7 @@ function App() {
         <Route path="araDine/order/signup/:roll" element={<SignUp />} />
       </Route>
       <Route path="araDine/dashboard" element={<Dashboard />}>
-        <Route index element={<DashboardOverview />} />
+        <Route index element={<DashboardEmployee />} />
         <Route
           path="araDine/dashboard/room-view/:roomId"
           element={<DashboardRoomView />}

@@ -5,10 +5,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-body {
-  box-sizing: border-box;
-}
-
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: "Geist Variable", sans-serif;
@@ -55,18 +51,18 @@ body {
 }
 
 :root {
-  --background: oklch(1 0 0);
+  --background: oklch(45% 0.03 244.12);
   --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
+  --card: oklch(98.4% 0.002 247.9);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: oklch(98.441% 0.00317 15.269);
+  --primary-foreground: oklch(8.467% 0.00001 271.152);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(49.443% 0.00252 16.017);
-  --muted-foreground: oklch(0.556 0 0);
+  --muted: oklch(84.761% 0.0033 15.615);
+  --muted-foreground: oklch(95.968% 0.00212 14.359);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
@@ -131,7 +127,7 @@ body {
     @apply border-border outline-ring/50 box-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background;
   }
   html {
     @apply font-sans;

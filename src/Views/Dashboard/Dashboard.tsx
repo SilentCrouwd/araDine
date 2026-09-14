@@ -3,8 +3,8 @@ import { Outlet } from "react-router";
 function Dashboard() {
   return (
     <div className="min-h-screen bg-background text-foreground lg:max-w-250 lg:mx-auto border border-border">
-      <header className=" flex justify-between items-center border-b border-l border-r border-border bg-card px-6 py-4 ">
-        <h1 className="text-2xl font-semibold">AraDine</h1>
+      <header className=" flex justify-between items-center border-b border-l border-r border-border bg-background px-6 py-4 ">
+        <h1 className="text-2xl font-semibold text-primary">AraDine</h1>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <p>User Name</p>
           <svg
