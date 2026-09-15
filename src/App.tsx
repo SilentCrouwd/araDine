@@ -5,7 +5,6 @@ import Order from "./Views/Order/Order";
 import Dashboard from "./Views/Dashboard/Dashboard";
 import SignUp from "./Views/Root/components/SignUp";
 import Login from "./Views/Root/components/Login";
-import DashboardRoomView from "./Views/Dashboard/DashboardViews/DashboardRoomView";
 import RefreshmentDetail from "./Views/Dashboard/DashboardViews/RefreshmentDetail";
 import DashboardEmployee from "./Views/Dashboard/DashboardViews/DashboardEmployee";
 
@@ -20,12 +19,9 @@ function App() {
       </Route>
       <Route path="araDine/dashboard" element={<Dashboard />}>
         <Route index element={<DashboardEmployee />} />
+
         <Route
-          path="araDine/dashboard/room-view/:roomId"
-          element={<DashboardRoomView />}
-        />
-        <Route
-          path="araDine/dashboard/room-view/:roomId/refreshment-detail/:refreshmentId"
+          path="araDine/dashboard/refreshment-detail/:refreshmentId"
           element={<RefreshmentDetail />}
         />
       </Route>

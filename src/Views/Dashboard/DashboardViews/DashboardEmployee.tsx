@@ -1,5 +1,5 @@
-import React from "react";
-import { cn } from "cn";
+import { useState } from "react";
+
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -18,21 +18,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import RefreshmentCard from "./components/RefreshmentCard";
+import { Link } from "react-router";
 function DashboardEmployee() {
   const items = [
     { label: "LHM", value: "LHM" },
     { label: "LEX", value: "LEX" },
     { label: "MCC", value: "MCC" },
   ];
-  const [date, setDate] = React.useState<Date>();
+  const roomOverview = [
+    { room: "214", floor: "1. Stock", startTime: "12:00", status: "Belegt" },
+    { room: "215", floor: "1. Stock", startTime: "13:00", status: "Frei" },
+    { room: "216", floor: "1. Stock", startTime: "14:00", status: "Belegt" },
+  ];
+  const [date, setDate] = useState<Date>();
   return (
-    <div className="flex flex-col py-4 px-2 gap-4  md:flex-row">
-      <div className="gap-4  grid grid-cols-2">
+    <div className="flex flex-col py-4 px-4 gap-4  ">
+      <div className="  grid grid-cols-2 md:self-center md:gap-5">
         <Select items={items}>
           <SelectTrigger className="w-45 p-5 bg-card/20 hover:bg-transparent ">
             <SelectValue
               placeholder="Standort"
-              className="text-muted-foreground "
+              className="text-muted-foreground text-base lg:text-xl"
             />
           </SelectTrigger>
           <SelectContent>
@@ -51,16 +58,18 @@ function DashboardEmployee() {
               <Button
                 variant="outline"
                 data-empty={!date}
-                className="justify-start text-left font-normal data-[empty=true]:text-muted-foreground p-5 hover:bg-transparent bg-card/20"
+                className="justify-start text-left font-normal data-[empty=true]:text-muted-foreground p-5 hover:bg-transparent bg-card/20 w-fit"
               />
             }
           >
             {date ? (
-              <span className="text-muted-foreground">
-                {format(date, "PPP")}
+              <span className="text-muted-foreground text-base lg:text-xl">
+                {format(date, "dd.MM.yyyy")}
               </span>
             ) : (
-              <span className="text-muted-foreground w-30 ">Pick a date</span>
+              <span className="text-muted-foreground w-fit text-base lg:text-xl">
+                Pick a date
+              </span>
             )}
             <CalendarIcon className="text-muted-foreground" />
           </PopoverTrigger>
@@ -88,8 +97,89 @@ function DashboardEmployee() {
       </div>
       <div className="w-full flex flex-col bg-card/20 border border-border rounded-xl text-muted-foreground">
         <h2 className="text-lg font-bold p-4">Bewirtungen Heute</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-card/20 border border-border rounded-xl text-muted-foreground text-center p-4"></div>
+        <div className="grid grid-cols-1 gap-4 max-h-75 overflow-y-auto md:grid-cols-3 lg:grid-cols-4">
+          <Link
+            className="flex justify-center"
+            to={`araDine/dashboard/refreshment-detail/${"2"}`}
+          >
+            <RefreshmentCard
+              title="Müller"
+              startTime="12:00"
+              endTime="13:00"
+              numberPax={15}
+              date={new Date().toLocaleDateString("de-DE")}
+              room="214"
+              refresh={false}
+              refreshmentId="1"
+            ></RefreshmentCard>
+          </Link>
+          <Link
+            className="flex justify-center"
+            to={`araDine/dashboard/refreshment-detail/${"2"}`}
+          >
+            <RefreshmentCard
+              title="Müller"
+              startTime="12:00"
+              endTime="13:00"
+              numberPax={15}
+              date={new Date().toLocaleDateString("de-DE")}
+              room="214"
+              refresh={false}
+              refreshmentId="1"
+            ></RefreshmentCard>
+          </Link>
+          <Link
+            className="flex justify-center"
+            to={`araDine/dashboard/refreshment-detail/${"2"}`}
+          >
+            <RefreshmentCard
+              title="Müller"
+              startTime="12:00"
+              endTime="13:00"
+              numberPax={15}
+              date={new Date().toLocaleDateString("de-DE")}
+              room="214"
+              refresh={false}
+              refreshmentId="1"
+            ></RefreshmentCard>
+          </Link>
+          <Link
+            className="flex justify-center"
+            to={`araDine/dashboard/refreshment-detail/${"2"}`}
+          >
+            <RefreshmentCard
+              title="Müller"
+              startTime="12:00"
+              endTime="13:00"
+              numberPax={15}
+              date={new Date().toLocaleDateString("de-DE")}
+              room="214"
+              refresh={false}
+              refreshmentId="1"
+            ></RefreshmentCard>
+          </Link>
+        </div>
+      </div>
+      <div className=" flex flex-col bg-card/20 border border-border py-4 px-6 rounded-xl text-muted-foreground">
+        <h2 className="text-lg font-bold   ">Raum Übersicht</h2>
+        <div className="flex flex-col px-1 ">
+          <div className="grid grid-cols-4">
+            <p>Räume</p> <p>Startzeit</p> <p>Status</p>
+            <p>Aktion</p>
+          </div>
+          {roomOverview.map((room) => (
+            <div
+              className="grid grid-cols-4 border-b border-border  py-0.5   "
+              key={room.room}
+            >
+              <p>{room.room}</p>
+              <p>{room.startTime}</p>
+              <p>{room.status}</p>
+              <Button className="w-fit " variant="outline">
+                edit
+              </Button>
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -97,11 +187,3 @@ function DashboardEmployee() {
 }
 
 export default DashboardEmployee;
-// // Dashboard Employee
-// Header: Räume belegt,Räume Gebucht, Bewirtungen Gesamt, Datumsauswahl
-// Datumsauswahl via Select
-//  Main: Bewirtung Today Board: Auflistung der heutigen Bewirtungen
-// Die Bewirtung Karte  anklickbar.
-// Footer: Räume abräumen:Auflistung aller Bewirtungen die abgeräumt werden müssen
-// Footer: Farblicher status: Bewirtung abschließen
-// Klicken: für Detailansicht, ID-Übergabe durch Link Adresse.
