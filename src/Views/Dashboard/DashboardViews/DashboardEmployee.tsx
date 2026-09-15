@@ -34,9 +34,9 @@ function DashboardEmployee() {
   const [date, setDate] = useState<Date>();
   return (
     <div className="flex flex-col py-4 px-4 gap-4  ">
-      <div className="  grid grid-cols-2 md:self-center md:gap-5">
+      <div className="  grid grid-cols-2 self-center md:gap-5">
         <Select items={items}>
-          <SelectTrigger className="w-45 p-5 bg-card/20 hover:bg-transparent ">
+          <SelectTrigger className="w-fit p-5 bg-card/20 hover:bg-transparent ">
             <SelectValue
               placeholder="Standort"
               className="text-muted-foreground text-base lg:text-xl"
