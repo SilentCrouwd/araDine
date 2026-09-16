@@ -29,7 +29,7 @@ function RefreshmentDetail() {
             <div className="grid grid-cols-2">
               <p>PersonenZahl:</p> <p>15</p>
             </div>
-            <div className="grid grid-cols-2">
+            <div className="grid grid-cols-2 wrap-break-word">
               <p>E-mail:</p> <p>john.doe@example.com</p>
             </div>
             <div className="grid grid-cols-2">
@@ -63,7 +63,7 @@ function RefreshmentDetail() {
         <Card className="h-fit w-full border border-border bg-card/20 p-2">
           <CardHeader>
             <h2 className="text-xl underline underline-offset-3 font-bold text-muted-foreground">
-              Personen:
+              Personen Mittagessen:
             </h2>
           </CardHeader>
           <CardContent className="text-base bg-card-foreground/30 text-muted-foreground shadow-2xl/20 rounded-xl m-2 p-2">
