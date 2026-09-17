@@ -2,9 +2,9 @@ import { Link } from "react-router";
 
 function SignUp() {
   return (
-    <div>
+    <div className="p-6">
       <form
-        className="mx-auto mt-45 flex w-full max-w-md flex-col gap-6 rounded-lg border border-border bg-card p-6"
+        className="mx-auto mt-5 flex w-full max-w-md flex-col gap-6 rounded-lg border border-border bg-card/20 p-6"
         action="#"
         method="post"
       >
@@ -82,7 +82,10 @@ function SignUp() {
         </button>
         <p className="text-center text-sm text-muted-foreground">
           Bereits registriert?{" "}
-          <Link to="../login/kunde" className="text-primary hover:underline">
+          <Link
+            to="/araDine/order/login/kunde"
+            className="text-primary hover:underline"
+          >
             Jetzt anmelden
           </Link>
         </p>
