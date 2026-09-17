@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router";
-import OrderForm from "./Views/Order/components/OrderForm";
 import "./App.css";
 import Root from "./Views/Root/Root";
 import Order from "./Views/Order/OrderLayout";

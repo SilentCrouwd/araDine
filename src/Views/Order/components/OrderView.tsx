@@ -1,9 +1,10 @@
 import Login from "@/Views/Root/components/Login";
+import OrderForm from "./OrderForm";
 
 function OrderView() {
   const user = true;
   if (user) {
-    return <div>Order View</div>;
+    return <OrderForm />;
   } else {
     return <Login />;
   }
