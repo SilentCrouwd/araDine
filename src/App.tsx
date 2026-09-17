@@ -1,8 +1,8 @@
 import { Route, Routes } from "react-router";
 import "./App.css";
 import Root from "./Views/Root/Root";
-import Order from "./Views/Order/OrderLayout";
-import Dashboard from "./Views/Dashboard/Dashboard";
+import Order from "./Views/Layouts/OrderLayout";
+import Dashboard from "./Views/Layouts/DashboardLayout";
 import SignUp from "./Views/Root/components/SignUp";
 import Login from "./Views/Root/components/Login";
 import RefreshmentDetail from "./Views/RefreshmentView/RefreshmentDetail";
