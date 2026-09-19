@@ -11,6 +11,9 @@ import {
 
 import OrderRefreshmentForm from "./OrderRefreshmentForm";
 import OrderMoreInformationForm from "./OrderMoreInformationForm";
+import OrderExtraService from "./OrderExtraService";
+import { Button } from "@/components/ui/button";
+import { Send } from "lucide-react";
 
 function OrderForm() {
   // Zustände für die ausgewählten Werte in der Standort- und Raum-Auswahl.
@@ -85,10 +88,25 @@ function OrderForm() {
         </Select>
       </div>
       <div className="w-full flex flex-col items-center gap-4 sm:flex-row sm:items-start">
-        <OrderRefreshmentForm />
-        <OrderMoreInformationForm />
+        <div className="flex w-full flex-col gap-4">
+          <OrderRefreshmentForm />
+          <OrderPackageForm />
+          <OrderExtraService />
+        </div>
+        <div className="flex w-full flex-col gap-4">
+          <OrderMoreInformationForm />
+          <div>
+            <Button
+              type="submit"
+              variant="default"
+              className="w-full mx-auto p-5 text-lg flex items-center justify-center"
+            >
+              Abschicken
+              <Send className="h-5 w-5 ml-2" />
+            </Button>
+          </div>
+        </div>
       </div>
-      <OrderPackageForm />
     </form>
   );
 }

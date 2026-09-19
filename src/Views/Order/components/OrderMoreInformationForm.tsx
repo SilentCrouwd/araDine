@@ -1,7 +1,9 @@
-import { Input } from "@/components/ui/input";
+import { useState, type ChangeEvent } from "react";
+import OrderparticipantsField from "./OrderParticipantsField";
 import { Label } from "@/components/ui/label";
 import { AlertTriangle } from "lucide-react";
-import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import OrderParticipantsField from "./OrderParticipantsField";
 
 function OrderMoreInformationForm() {
   // Der Toggle bestimmt, ob im Formular zusätzliche Teilnehmer- oder Zeitangaben
@@ -19,14 +21,14 @@ function OrderMoreInformationForm() {
       id: "mittagsverpflegung",
       label: "Mittagsverpflegung:",
       type: "checkbox",
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+      onChange: (e: ChangeEvent<HTMLInputElement>) =>
         setLunch(e.target.checked),
     },
     {
       id: "nachbewirtung",
       label: "Nachbewirtung:",
       type: "checkbox",
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+      onChange: (e: ChangeEvent<HTMLInputElement>) =>
         setRefresh(e.target.checked),
     },
   ];
@@ -60,13 +62,7 @@ function OrderMoreInformationForm() {
           </p>
 
           <div className="flex gap-2 py-0.5 px-2">
-            <Label htmlFor="teilnehmerName" className="w-1/2">
-              Teilnehmer:
-            </Label>
-            <textarea
-              id="teilnehmerName"
-              className="w-50 border border-border rounded-xl text-foreground p-2 text-base"
-            />
+            <OrderParticipantsField />
           </div>
         </div>
       )}
