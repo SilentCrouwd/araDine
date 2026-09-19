@@ -7,10 +7,12 @@ import SignUp from "./Views/Root/components/SignUp";
 import Login from "./Views/Root/components/Login";
 import RefreshmentDetail from "./Views/RefreshmentView/RefreshmentDetail";
 import DashboardEmployee from "./Views/DashboardEmployeeView/DashboardEmployee";
-import OrderView from "./Views/Order/components/OrderView";
+import OrderView from "./Views/Order/OrderView";
 
 function App() {
   return (
+    // Zentrale Routen-Definition der Anwendung:
+    // Startseite -> Root, Bestellprozess -> Order, Dashboard -> Mitarbeiterbereich
     <Routes>
       <Route path="araDine/" element={<Root />} />
 
