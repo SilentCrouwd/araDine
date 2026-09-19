@@ -1,5 +1,4 @@
 import { useState, type ChangeEvent } from "react";
-import OrderparticipantsField from "./OrderParticipantsField";
 import { Label } from "@/components/ui/label";
 import { AlertTriangle } from "lucide-react";
 import { Input } from "@/components/ui/input";
