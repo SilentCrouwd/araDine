@@ -15,7 +15,7 @@ function RefreshmentInfoCard() {
           <p>Name:</p> <p>John Doe</p>
         </div>
         <div className="grid grid-cols-2">
-          <p>PersonenZahl:</p> <p>15</p>
+          <p>Personen:</p> <p>15</p>
         </div>
         <div className="grid grid-cols-2 wrap-break-word">
           <p>E-mail:</p> <p>john.doe@example.com</p>

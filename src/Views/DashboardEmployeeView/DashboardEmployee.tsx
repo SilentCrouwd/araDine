@@ -74,7 +74,7 @@ function DashboardEmployee() {
               </span>
             ) : (
               <span className="text-muted-foreground w-fit text-base lg:text-xl">
-                Pick a date
+                Datum
               </span>
             )}
             <CalendarIcon className="text-muted-foreground" />

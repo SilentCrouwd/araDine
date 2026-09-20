@@ -107,9 +107,11 @@ function OrderPackageForm() {
           />
         </div>
       </div>
-      <div className="p-2 mt-5 bg-card-foreground/20 rounded-xl m-2">
-        {handlePackageInfo()}
-      </div>
+      {selectedPackage && (
+        <div className="p-2 mt-5 bg-card-foreground/20 rounded-xl m-2">
+          {handlePackageInfo()}
+        </div>
+      )}
     </div>
   );
 }

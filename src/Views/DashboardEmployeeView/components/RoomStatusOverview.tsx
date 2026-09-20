@@ -34,7 +34,7 @@ function RoomStatusOverview({
           </p>
           <Link to={`araDine/dashboard/refreshment-detail/${"2"}`}>
             <Button className="w-fit " variant="outline">
-              edit
+              Details
             </Button>
           </Link>
         </div>

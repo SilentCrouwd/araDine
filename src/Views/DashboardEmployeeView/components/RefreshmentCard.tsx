@@ -35,15 +35,15 @@ function RefreshmentCard({
       </div>
       <div className="flex flex-col gap-2">
         <div className="gap-1 py-3 px-6">
-          <p>Date: {date}</p>
+          <p>Datum: {date}</p>
           <p>
-            Time: {startTime} - {endTime}
+            Uhrzeit: {startTime} - {endTime}
           </p>
-          <p>Room: {room}</p>
+          <p>Raum: {room}</p>
         </div>
         <div className="flex  justify-between py-2 gap-10  px-6">
           <p className=" flex gap-2">
-            Refresh:{" "}
+            Erfrischung:{" "}
             {refresh ? (
               <RefreshCcwDot className="text-green-500" />
             ) : (
