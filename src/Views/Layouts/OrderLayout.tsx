@@ -12,7 +12,12 @@ function Order() {
             Back
           </Button>
         </Link>
-        <h1 className="text-2xl font-semibold text-primary">AraDine</h1>
+        <h1 className="text-xl font-semibold text-primary sm:text-2xl">
+          Bestellformular
+        </h1>
+        <h1 className="text-xl font-semibold text-primary sm:text-2xl">
+          AraDine
+        </h1>
       </header>
       <Outlet />
     </div>

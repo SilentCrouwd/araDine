@@ -95,18 +95,17 @@ function OrderForm() {
         </div>
         <div className="flex w-full flex-col gap-4">
           <OrderMoreInformationForm />
-          <div>
-            <Button
-              type="submit"
-              variant="default"
-              className="w-full mx-auto p-5 text-lg flex items-center justify-center"
-            >
-              Abschicken
-              <Send className="h-5 w-5 ml-2" />
-            </Button>
-          </div>
+          <div></div>
         </div>
       </div>
+      <Button
+        type="submit"
+        variant="default"
+        className="w-full mt-5 mx-auto p-5 text-lg flex items-center justify-center sm:w-120"
+      >
+        Abschicken
+        <Send className="h-5 w-5 ml-2" />
+      </Button>
     </form>
   );
 }
