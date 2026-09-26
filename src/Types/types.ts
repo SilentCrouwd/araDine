@@ -7,3 +7,9 @@ export type Raeume = Database["public"]["Tables"]["raeume"]["Row"][];
 export type Standorte = Database["public"]["Tables"]["standorte"]["Row"][];
 
 export type Extras = Database["public"]["Tables"]["zusatzleistungen"]["Row"][];
+
+export type StandortMitRaeumen = Standorte[number] & {
+  raeume: Raeume;
+};
+
+export type StandorteMitRaeumen = StandortMitRaeumen[];

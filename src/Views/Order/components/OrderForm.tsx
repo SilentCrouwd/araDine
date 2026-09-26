@@ -1,5 +1,5 @@
 import OrderPackageForm from "./OrderPackegeForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -14,23 +14,30 @@ import OrderMoreInformationForm from "./OrderMoreInformationForm";
 import OrderExtraService from "./OrderExtraService";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
+import { fetchStandorte } from "@/Hooks/SupaBaseAPI";
+import type { StandorteMitRaeumen } from "@/Types/types";
 
 function OrderForm() {
   // Zustände für die ausgewählten Werte in der Standort- und Raum-Auswahl.
-  const [selectedLocation, setSelectedLocation] = useState("");
+  const [locations, setLocations] = useState<StandorteMitRaeumen>([]);
+
+  const [selectedLocation, setSelectedLocation] = useState<string>("");
+
   const [selectedRoom, setSelectedRoom] = useState("");
 
-  // Definiert die verfügbaren Standorte und die Räume, die zu jedem Standort gehören.
-  // Diese Daten werden in den Select-Feldern dynamisch dargestellt.
-  const locationItems = [
-    { label: "LHM", value: "LHM", rooms: ["Room 102", "Room 102"] },
-    { label: "LEX", value: "LEX", rooms: ["Room 201", "Room 202"] },
-    { label: "MCC", value: "MCC", rooms: ["Room 301", "Room 302"] },
-  ];
+  async function handleLocationChange() {
+    const newLocation = await fetchStandorte();
+
+    setLocations(newLocation ?? []);
+  }
+
+  useEffect(() => {
+    handleLocationChange();
+  }, []);
 
   // Holt den aktuell ausgewählten Standort inklusive seiner Räume.
-  const selectedLocationItem = locationItems.find(
-    (item) => item.value === selectedLocation,
+  const selectedLocationItem = locations.find(
+    (item) => item?.name === selectedLocation,
   );
 
   return (
@@ -39,7 +46,10 @@ function OrderForm() {
       {/* Standort- und Raum-Auswahl */}
       <div className="flex p-4 w-full justify-between sm:justify-evenly">
         <Select
-          items={locationItems}
+          items={locations?.map((location) => ({
+            label: location?.name,
+            value: location?.name,
+          }))}
           value={selectedLocation}
           onValueChange={(value) => {
             setSelectedLocation(value ?? "");
@@ -54,18 +64,18 @@ function OrderForm() {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {locationItems.map((item) => (
-                <SelectItem key={item.value} value={item.value}>
-                  {item.label}
+              {locations.map((item) => (
+                <SelectItem key={item?.id} value={item.name}>
+                  {item.name}
                 </SelectItem>
               ))}
             </SelectGroup>
           </SelectContent>
         </Select>
         <Select
-          items={selectedLocationItem?.rooms.map((room) => ({
-            label: room,
-            value: room,
+          items={selectedLocationItem?.raeume.map((room) => ({
+            label: room.name,
+            value: room.name,
           }))}
           value={selectedRoom}
           onValueChange={(value) => setSelectedRoom(value ?? "")}
@@ -78,9 +88,9 @@ function OrderForm() {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {selectedLocationItem?.rooms.map((room) => (
-                <SelectItem key={room} value={room}>
-                  {room}
+              {selectedLocationItem?.raeume.map((room) => (
+                <SelectItem key={room.id} value={room.name}>
+                  {room.name}
                 </SelectItem>
               ))}
             </SelectGroup>
@@ -100,6 +110,7 @@ function OrderForm() {
       </div>
       <Button
         type="submit"
+        disabled={!selectedLocation || !selectedRoom}
         variant="default"
         className="w-full mt-5 mx-auto p-5 text-lg flex items-center justify-center sm:w-120"
       >
