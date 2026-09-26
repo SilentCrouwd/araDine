@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import type { Raeume, StandortMitRaeumen } from "@/Types/types";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -22,26 +22,43 @@ import RefreshmentCard from "./components/RefreshmentCard";
 import { Link } from "react-router";
 import RoomInfoCard from "./components/RoomInfoCard";
 import RoomStatusOverview from "./components/RoomStatusOverview";
+import { fetchStandorte } from "@/Hooks/SupaBaseAPI";
+import type { StandorteMitRaeumen } from "@/Types/types";
 
 function DashboardEmployee() {
-  const items = [
-    { label: "LHM", value: "LHM" },
-    { label: "LEX", value: "LEX" },
-    { label: "MCC", value: "MCC" },
-  ];
-  const roomOverview = [
-    { room: "214", startTime: "12:00", status: "Belegt" },
-    { room: "215", startTime: "13:00", status: "Frei" },
-    { room: "217", startTime: "14:00", status: "Fertig" },
-    { room: "216", startTime: "14:00", status: "Service" },
-  ];
+  const [locations, setLocations] = useState<StandorteMitRaeumen>([]);
+  const [selectedLocation, setSelectedLocation] = useState<string>("");
+  const [selectedRoom, setSelectedRoom] = useState<Raeume>([]);
+  useEffect(() => {
+    fetchLocations();
+    getRoomOverview();
+  }, [selectedLocation]);
+
+  async function fetchLocations() {
+    const newLocations = await fetchStandorte();
+    setLocations(newLocations ?? []);
+  }
+  async function getRoomOverview() {
+    const currSelectedLocation = locations.filter(
+      (location) => location.name === selectedLocation,
+    );
+    const selectedRooms = currSelectedLocation[0]?.raeume ?? [];
+    setSelectedRoom(selectedRooms);
+  }
 
   const [date, setDate] = useState<Date>();
   const [open, setOpen] = useState(false);
   return (
     <div className="flex flex-col py-4 px-4 gap-4  ">
       <div className="  grid grid-cols-2 self-center md:gap-5">
-        <Select items={items}>
+        <Select
+          value={selectedLocation}
+          onValueChange={(value) => setSelectedLocation(value ?? "")}
+          items={locations.map((location) => ({
+            label: location.name,
+            value: location.name,
+          }))}
+        >
           <SelectTrigger className="w-fit p-5 bg-card/20 hover:bg-transparent ">
             <SelectValue
               placeholder="Standort"
@@ -50,9 +67,9 @@ function DashboardEmployee() {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {items.map((item) => (
-                <SelectItem key={item.value} value={item.value}>
-                  {item.label}
+              {locations.map((location) => (
+                <SelectItem key={location.id} value={location.name}>
+                  {location.name}
                 </SelectItem>
               ))}
             </SelectGroup>
@@ -91,7 +108,7 @@ function DashboardEmployee() {
           </PopoverContent>
         </Popover>
       </div>
-      <RoomInfoCard roomStatus={roomOverview} />
+      <RoomInfoCard roomStatus={selectedRoom} />
       <div className="w-full p-6  mx-auto flex flex-col bg-card/20 border border-border rounded-xl text-muted-foreground">
         <h2 className="text-lg font-bold p-4">Bewirtungen Heute</h2>
         <div className="grid gap-1 grid-cols-1  max-h-75 overflow-y-auto md:grid-cols-3 lg:grid-cols-4">
@@ -120,7 +137,7 @@ function DashboardEmployee() {
             <p>Aktion</p>
           </div>
 
-          <RoomStatusOverview roomOverview={roomOverview} />
+          <RoomStatusOverview roomOverview={selectedRoom} />
         </div>
       </div>
     </div>
