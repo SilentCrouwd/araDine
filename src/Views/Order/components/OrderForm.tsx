@@ -1,5 +1,5 @@
 import OrderPackageForm from "./OrderPackegeForm";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -15,22 +15,76 @@ import OrderExtraService from "./OrderExtraService";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 import { fetchStandorte } from "@/Hooks/SupaBaseAPI";
-import type { StandorteMitRaeumen } from "@/Types/types";
+import type {
+  Bewirtungen,
+  NeueBewirtung,
+  NeueZusatzleistung,
+  StandorteMitRaeumen,
+} from "@/Types/types";
+import { useOrderContext } from "@/Context/RefreshmentContext";
+
+function getText(formData: FormData, key: string): string {
+  const value = formData.get(key);
+  return typeof value === "string" ? value : "";
+}
 
 function OrderForm() {
   // Zustände für die ausgewählten Werte in der Standort- und Raum-Auswahl.
   const [locations, setLocations] = useState<StandorteMitRaeumen>([]);
-
+  const [selectedPackage, setSelectedPackage] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<string>("");
-
+  const orderContext = useOrderContext();
   const [selectedRoom, setSelectedRoom] = useState("");
+
+  // const [refreshmentData, setRefreshmentData] = useState<NeueBewirtung | null>(
+  //   null,
+  // );
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+
+    const newRefreshment: NeueBewirtung = {
+      kunden_name: getText(formData, "refreshmentName"),
+      personen_zahl: Number(getText(formData, "pax")),
+      kunden_email: getText(formData, "email"),
+      startzeit: getText(formData, "startTime"),
+      endzeit: getText(formData, "endTime"),
+      kundenBewirtung: formData.get("customerService") === "on",
+      paket: formData.get("paket") as Bewirtungen[number]["paket"],
+      anlass: getText(formData, "anlass"),
+      buchungskreis: getText(formData, "buchungskreis"),
+      abteilung: getText(formData, "abteilung"),
+      mittagsverpflegung: formData.get("mittagsverpflegung") === "on",
+      kostenstelle: getText(formData, "kostenstelle"),
+      standort_id:
+        locations.find((locaton) => locaton.name === selectedLocation)?.id ??
+        null,
+      raum_id:
+        locations
+          .find((location) => location.name === selectedLocation)
+          ?.raeume.find((raume) => raume.name === selectedRoom)?.id ?? null,
+      status: "Ready",
+      teilnehmerliste: "",
+    };
+
+    const extraService: NeueZusatzleistung = {
+      erneuerung: formData.get("nachbewirtung") === "on",
+      erneuerung_uhrzeit: getText(formData, "nachbewirtungUhrzeit"),
+    };
+    // setRefreshmentData(newRefreshment);
+    orderContext.dispatch({ type: "ADD_ORDER", payload: newRefreshment });
+  }
 
   async function handleLocationChange() {
     const newLocation = await fetchStandorte();
 
     setLocations(newLocation ?? []);
   }
-
+  function handlePackageStatus(status: boolean) {
+    setSelectedPackage(status);
+  }
   useEffect(() => {
     handleLocationChange();
   }, []);
@@ -42,7 +96,10 @@ function OrderForm() {
 
   return (
     // Hauptformular für die Bewirtungsbestellung.
-    <form className="p-4 flex flex-col items-center gap-4">
+    <form
+      className="p-4 flex flex-col items-center gap-4 "
+      onSubmit={handleSubmit}
+    >
       {/* Standort- und Raum-Auswahl */}
       <div className="flex p-4 w-full justify-between sm:justify-evenly">
         <Select
@@ -56,7 +113,7 @@ function OrderForm() {
             setSelectedRoom("");
           }}
         >
-          <SelectTrigger className="w-fit p-5 bg-card/20 hover:bg-transparent ">
+          <SelectTrigger className="w-fit p-5 bg-card-foreground/20 hover:bg-transparent ">
             <SelectValue
               placeholder="Standort"
               className="text-muted-foreground text-base lg:text-xl"
@@ -80,7 +137,7 @@ function OrderForm() {
           value={selectedRoom}
           onValueChange={(value) => setSelectedRoom(value ?? "")}
         >
-          <SelectTrigger className="w-fit p-5 bg-card/20 hover:bg-transparent ">
+          <SelectTrigger className="w-fit p-5 bg-card-foreground/20 hover:bg-transparent ">
             <SelectValue
               placeholder="Raum"
               className="text-muted-foreground text-base lg:text-xl"
@@ -100,7 +157,7 @@ function OrderForm() {
       <div className="w-full flex flex-col items-center gap-4 sm:flex-row sm:items-start">
         <div className="flex w-full flex-col gap-4">
           <OrderRefreshmentForm />
-          <OrderPackageForm />
+          <OrderPackageForm packageStatus={handlePackageStatus} />
           <OrderExtraService />
         </div>
         <div className="flex w-full flex-col gap-4">
@@ -110,7 +167,7 @@ function OrderForm() {
       </div>
       <Button
         type="submit"
-        disabled={!selectedLocation || !selectedRoom}
+        disabled={!selectedLocation || !selectedRoom || !selectedPackage}
         variant="default"
         className="w-full mt-5 mx-auto p-5 text-lg flex items-center justify-center sm:w-120"
       >

@@ -15,6 +15,7 @@ function OrderMoreInformationForm() {
   const additionalFields = [
     { id: "buchungskreis", label: "Buchungskreis:", type: "text" },
     { id: "abteilung", label: "Abteilung:", type: "text" },
+    { id: "kostenstelle", label: "Kostenstelle:", type: "text" },
     { id: "anlass", label: "Anlass:", type: "text" },
     {
       id: "mittagsverpflegung",
@@ -32,10 +33,13 @@ function OrderMoreInformationForm() {
     },
   ];
   return (
-    <div className="w-full  text-muted-foreground border border-border rounded-xl bg-card/20">
+    <div className="w-full  text-muted-foreground border border-border rounded-xl bg-card-foreground/20 p-3">
       <h2 className="text-xl font-bold p-2">Weitere Angaben</h2>
       {additionalFields.map((field) => (
-        <div key={field.id} className="flex gap-2 py-0.5 px-2">
+        <div
+          key={field.id}
+          className="flex gap-2 justify-between  px-2 border-b border-border py-2"
+        >
           <Label htmlFor={field.id} className="w-1/2">
             {field.label}
           </Label>
@@ -43,7 +47,8 @@ function OrderMoreInformationForm() {
             onChange={field.onChange}
             type={field.type}
             id={field.id}
-            className="w-50 "
+            className={`w-50 ${field.type === "checkbox" ? "w-40  p-0" : ""}`}
+            name={field.id.toLowerCase()}
           />
         </div>
       ))}
@@ -74,6 +79,7 @@ function OrderMoreInformationForm() {
           <Input
             type="time"
             id="startzeit"
+            name="nachbewirtungUhrzeit"
             required
             className="w-50 [&::-webkit-calendar-picker-indicator]:invert"
           />

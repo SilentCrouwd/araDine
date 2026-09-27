@@ -6,6 +6,7 @@ import { useState } from "react";
 function OrderParticipantsField() {
   const [participantName, setParticipantName] = useState<string[]>([]);
   const [value, setValue] = useState<string>("");
+  
   function handleParticipantChange() {
     if (!value) return;
     setParticipantName([...participantName, value]);

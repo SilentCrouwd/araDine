@@ -71,7 +71,7 @@ export type Database = {
       bewirtungen: {
         Row: {
           abteilung: string | null;
-          anlass: string;
+          kundenBewirtung: boolean;
           buchungskreis: string | null;
           endzeit: string;
           id: string;
@@ -86,10 +86,11 @@ export type Database = {
           startzeit: string;
           status: Database["public"]["Enums"]["bewirtungs_status_enum"];
           teilnehmerliste: string | null;
+          anlass: string | null;
         };
         Insert: {
           abteilung?: string | null;
-          anlass: string;
+          kundenBewirtung: boolean;
           buchungskreis?: string | null;
           endzeit: string;
           id?: string;
@@ -104,10 +105,11 @@ export type Database = {
           startzeit: string;
           status: Database["public"]["Enums"]["bewirtungs_status_enum"];
           teilnehmerliste?: string | null;
+          anlass: string | null;
         };
         Update: {
           abteilung?: string | null;
-          anlass?: string;
+          kundenBewirtung?: boolean;
           buchungskreis?: string | null;
           endzeit?: string;
           id?: string;
@@ -122,6 +124,7 @@ export type Database = {
           startzeit?: string;
           status?: Database["public"]["Enums"]["bewirtungs_status_enum"];
           teilnehmerliste?: string | null;
+          anlass: string | null;
         };
         Relationships: [
           {

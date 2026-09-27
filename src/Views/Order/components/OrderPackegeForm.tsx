@@ -2,8 +2,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Coffee } from "lucide-react";
 import { useState } from "react";
-
-function OrderPackageForm() {
+type OrderPackageFormProps = {
+  packageStatus: (status: boolean) => void;
+};
+function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
   // Speichert das aktuell ausgewählte Paket.
   const [selectedPackage, setSelectedPackage] = useState("");
 
@@ -55,7 +57,7 @@ function OrderPackageForm() {
   }
   return (
     // Auswahl der Verpflegungspakete mit erläuternder Vorschau.
-    <div className="w-full text-muted-foreground border border-border rounded-xl bg-card/20">
+    <div className="w-full text-muted-foreground border border-border rounded-xl bg-card-foreground/20 p-3">
       <h2 className="text-xl font-bold p-2 ">Pakete</h2>
       <div className=" w-full flex justify-center">
         <div className="flex flex-col p-2 w-fit items-center ">
@@ -66,10 +68,15 @@ function OrderPackageForm() {
             Paket 1:
           </Label>
           <Input
-            onChange={() => setSelectedPackage("paket-1")}
+            onChange={() => {
+              setSelectedPackage("paket-1");
+              packageStatus(true);
+            }}
             checked={selectedPackage === "paket-1"}
             type="radio"
             name="paket"
+            value="Paket_1"
+            required
             id="paket-1"
             className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
           />
@@ -82,10 +89,14 @@ function OrderPackageForm() {
             Paket 2:
           </Label>
           <Input
-            onChange={() => setSelectedPackage("paket-2")}
+            onChange={() => {
+              setSelectedPackage("paket-2");
+              packageStatus(true);
+            }}
             checked={selectedPackage === "paket-2"}
             type="radio"
             name="paket"
+            value="Paket_2"
             id="paket-2"
             className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
           />
@@ -98,10 +109,14 @@ function OrderPackageForm() {
             Paket 3:
           </Label>
           <Input
-            onChange={() => setSelectedPackage("paket-3")}
+            onChange={() => {
+              setSelectedPackage("paket-3");
+              packageStatus(true);
+            }}
             checked={selectedPackage === "paket-3"}
             type="radio"
             name="paket"
+            value="Paket_3"
             id="paket-3"
             className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
           />
