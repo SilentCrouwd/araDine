@@ -73,6 +73,7 @@ export type Database = {
           abteilung: string | null;
           kundenBewirtung: boolean;
           buchungskreis: string | null;
+          datum: string;
           endzeit: string;
           id: string;
           kostenstelle: string;
@@ -92,6 +93,7 @@ export type Database = {
           abteilung?: string | null;
           kundenBewirtung: boolean;
           buchungskreis?: string | null;
+          datum: string;
           endzeit: string;
           id?: string;
           kostenstelle: string;
@@ -111,6 +113,7 @@ export type Database = {
           abteilung?: string | null;
           kundenBewirtung?: boolean;
           buchungskreis?: string | null;
+          datum: string;
           endzeit?: string;
           id?: string;
           kostenstelle?: string;

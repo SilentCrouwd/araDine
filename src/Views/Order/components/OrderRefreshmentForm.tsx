@@ -4,10 +4,21 @@ import { Input } from "@/components/ui/input";
 function OrderRefreshmentForm() {
   const refreshmentFields = [
     { id: "name", name: "main_kunden_name", label: "Name:", type: "text" },
-    { id: "personenZahl", name: "main_personen_zahl", label: "Personen:", type: "number" },
+    {
+      id: "personenZahl",
+      name: "main_personen_zahl",
+      label: "Personen:",
+      type: "number",
+    },
     { id: "email", name: "main_kunden_email", label: "E-mail:", type: "email" },
-    { id: "startzeit", name: "main_startzeit", label: "Startzeit:", type: "time" },
+    {
+      id: "startzeit",
+      name: "main_startzeit",
+      label: "Startzeit:",
+      type: "time",
+    },
     { id: "endzeit", name: "main_endzeit", label: "Endzeit:", type: "time" },
+    { id: "datum", name: "main_datum", label: "Datum:", type: "date" },
     {
       id: "kundenbewirtung",
       name: "main_kundenBewirtung",
@@ -38,7 +49,7 @@ function OrderRefreshmentForm() {
               type={field.type}
               required
               className={
-                field.type === "time"
+                field.type === "time" || "date"
                   ? "w-50 [&::-webkit-calendar-picker-indicator]:invert"
                   : "w-50 text-muted-foreground placeholder:text-muted"
               }

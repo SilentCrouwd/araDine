@@ -14,7 +14,7 @@ import OrderMoreInformationForm from "./OrderMoreInformationForm";
 import OrderExtraService from "./OrderExtraService";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
-import { fetchStandorte } from "@/Hooks/SupaBaseAPI";
+import { fetchStandorte, insertBewirtung } from "@/Hooks/SupaBaseAPI";
 import type {
   NeueBewirtung,
   NeueZusatzleistung,
@@ -36,7 +36,7 @@ function OrderForm() {
   const orderContext = useOrderContext();
   const [selectedRoom, setSelectedRoom] = useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
@@ -47,6 +47,7 @@ function OrderForm() {
       kunden_email: getText(formData, "main_kunden_email"),
       startzeit: getText(formData, "main_startzeit"),
       endzeit: getText(formData, "main_endzeit"),
+      datum: getText(formData, "main_datum"),
       kundenBewirtung: formData.get("main_kundenBewirtung") === "on",
       kostenstelle: getText(formData, "main_kostenstelle"),
       paket: formData.get(
@@ -64,8 +65,6 @@ function OrderForm() {
       teilnehmerliste: "",
     };
 
-    console.log(newRefreshment);
-
     orderContext.dispatch({ type: "ADD_ORDER", payload: newRefreshment });
 
     const extraService: Record<string, FormDataEntryValue> = {};
@@ -78,6 +77,12 @@ function OrderForm() {
       // Hier ist die neueZusatzleistung als Objekt vom Typ NeueZusatzleistung.
     }
     const newExtraService: NeueZusatzleistung = extraService;
+    orderContext.dispatch({
+      type: "ADD_EXTRA_SERVICE",
+      payload: newExtraService,
+    });
+    console.log(orderContext.state);
+    await insertBewirtung(newRefreshment, newExtraService);
   }
 
   async function handleLocationChange() {
