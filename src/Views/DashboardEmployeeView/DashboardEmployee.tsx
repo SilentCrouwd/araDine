@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Raeume, StandortMitRaeumen } from "@/Types/types";
+import type { Raeume } from "@/Types/types";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 

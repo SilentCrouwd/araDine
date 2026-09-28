@@ -1,11 +1,9 @@
 import { CheckCircle, Circle, Wrench } from "lucide-react";
 import type { Raeume } from "@/Types/types";
 
-interface RoomInfoCardProps {
-  roomStatus: Raeume;
-}
+function RoomInfoCard({ roomStatus }: { roomStatus: Raeume }) {
+  console.log(roomStatus);
 
-function RoomInfoCard({ roomStatus }: RoomInfoCardProps) {
   return (
     <section className="grid grid-cols-1 gap-3 text-muted-foreground sm:grid-cols-4">
       <div className="flex items-center gap-4 rounded-xl border border-border bg-card/20 p-4">
