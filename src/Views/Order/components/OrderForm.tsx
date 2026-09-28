@@ -1,5 +1,5 @@
 import OrderPackageForm from "./OrderPackegeForm";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -16,12 +16,12 @@ import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 import { fetchStandorte } from "@/Hooks/SupaBaseAPI";
 import type {
-  Bewirtungen,
   NeueBewirtung,
   NeueZusatzleistung,
   StandorteMitRaeumen,
 } from "@/Types/types";
 import { useOrderContext } from "@/Context/RefreshmentContext";
+import type { Database } from "@/Types/supabaseTypes";
 
 function getText(formData: FormData, key: string): string {
   const value = formData.get(key);
@@ -36,28 +36,23 @@ function OrderForm() {
   const orderContext = useOrderContext();
   const [selectedRoom, setSelectedRoom] = useState("");
 
-  // const [refreshmentData, setRefreshmentData] = useState<NeueBewirtung | null>(
-  //   null,
-  // );
-
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
 
     const newRefreshment: NeueBewirtung = {
-      kunden_name: getText(formData, "refreshmentName"),
-      personen_zahl: Number(getText(formData, "pax")),
-      kunden_email: getText(formData, "email"),
-      startzeit: getText(formData, "startTime"),
-      endzeit: getText(formData, "endTime"),
-      kundenBewirtung: formData.get("customerService") === "on",
-      paket: formData.get("paket") as Bewirtungen[number]["paket"],
-      anlass: getText(formData, "anlass"),
-      buchungskreis: getText(formData, "buchungskreis"),
-      abteilung: getText(formData, "abteilung"),
-      mittagsverpflegung: formData.get("mittagsverpflegung") === "on",
-      kostenstelle: getText(formData, "kostenstelle"),
+      kunden_name: getText(formData, "main_kunden_name"),
+      personen_zahl: Number(getText(formData, "main_personen_zahl")),
+      kunden_email: getText(formData, "main_kunden_email"),
+      startzeit: getText(formData, "main_startzeit"),
+      endzeit: getText(formData, "main_endzeit"),
+      kundenBewirtung: formData.get("main_kundenBewirtung") === "on",
+      kostenstelle: getText(formData, "main_kostenstelle"),
+      paket: formData.get(
+        "main_paket",
+      ) as Database["public"]["Enums"]["paket_enum"],
+      anlass: getText(formData, "main_anlass") || null,
       standort_id:
         locations.find((locaton) => locaton.name === selectedLocation)?.id ??
         null,
@@ -69,12 +64,20 @@ function OrderForm() {
       teilnehmerliste: "",
     };
 
-    const extraService: NeueZusatzleistung = {
-      erneuerung: formData.get("nachbewirtung") === "on",
-      erneuerung_uhrzeit: getText(formData, "nachbewirtungUhrzeit"),
-    };
-    // setRefreshmentData(newRefreshment);
+    console.log(newRefreshment);
+
     orderContext.dispatch({ type: "ADD_ORDER", payload: newRefreshment });
+
+    const extraService: Record<string, FormDataEntryValue> = {};
+    for (let [key, value] of formData.entries()) {
+      if (key.startsWith("extra_")) {
+        // "sub_" vom Key entfernen, falls gewünscht:
+        const cleanKey = key.replace("extra_", "");
+        extraService[cleanKey] = value;
+      }
+      // Hier ist die neueZusatzleistung als Objekt vom Typ NeueZusatzleistung.
+    }
+    const newExtraService: NeueZusatzleistung = extraService;
   }
 
   async function handleLocationChange() {

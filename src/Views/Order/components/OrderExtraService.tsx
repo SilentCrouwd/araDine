@@ -1,43 +1,55 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { useState } from "react";
+
 function OrderExtraService() {
+  const [refresh, setRefresh] = useState(false);
   const extraServiceData = [
     {
-      id: "wasser",
+      id: "extra_wasser",
       label: "Wasser:",
       value_id: "wasser_value",
       Placeholder: "Flaschen 0.75L",
     },
     {
-      id: "tee",
+      id: "extra_tee",
       label: "Tee:",
       value_id: "Tee_value",
       Placeholder: "Kanne 4pax",
     },
     {
-      id: "nuesse",
+      id: "extra_nuesse",
       label: "Nüsse:",
       value_id: "nuesse_value",
       Placeholder: "Portionen 45g",
     },
     {
-      id: "obst",
+      id: "extra_obst",
       label: "Obst:",
       value_id: "obst_value",
       Placeholder: "Stück",
     },
     {
-      id: "suessware",
+      id: "extra_suessware",
       label: "Süssware:",
       value_id: "suessware_value",
       Placeholder: "Riegel",
     },
     {
-      id: "softdrinks",
+      id: "extra_softdrinks",
       label: "Softdrinks:",
       value_id: "softdrinks_value",
       Placeholder: "Flaschen 0.33L ",
+    },
+    {
+      id: "extra_nachbewirtung",
+      label: "Nachbewirtung:",
+      value_id: "nachbewirtung_value",
+      type: "checkbox",
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        setRefresh(e.target.checked);
+      },
     },
   ];
 
@@ -61,7 +73,8 @@ function OrderExtraService() {
                 {service.label}
               </Label>
               <Input
-                type="number"
+                onChange={service.onChange}
+                type={service.type || "number"}
                 id={service.value_id}
                 placeholder={service.Placeholder}
                 name={service.id}
@@ -70,6 +83,20 @@ function OrderExtraService() {
             </div>
           ))}
         </div>
+        {refresh && (
+          <div className="flex gap-2 py-0.5 px-2 text-muted-foreground">
+            <Label htmlFor="startzeit" className="w-1/2">
+              Nachbewirtung:
+            </Label>
+            <Input
+              type="time"
+              id="startzeit"
+              name="extra_nachbewirtungUhrzeit"
+              required
+              className="w-50 [&::-webkit-calendar-picker-indicator]:invert"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -3,14 +3,14 @@ import { Input } from "@/components/ui/input";
 
 function OrderRefreshmentForm() {
   const refreshmentFields = [
-    { id: "name", name: "refreshmentName", label: "Name:", type: "text" },
-    { id: "personenZahl", name: "pax", label: "Personen:", type: "number" },
-    { id: "email", name: "email", label: "E-mail:", type: "email" },
-    { id: "startzeit", name: "startTime", label: "Startzeit:", type: "time" },
-    { id: "endzeit", name: "endTime", label: "Endzeit:", type: "time" },
+    { id: "name", name: "main_kunden_name", label: "Name:", type: "text" },
+    { id: "personenZahl", name: "main_personen_zahl", label: "Personen:", type: "number" },
+    { id: "email", name: "main_kunden_email", label: "E-mail:", type: "email" },
+    { id: "startzeit", name: "main_startzeit", label: "Startzeit:", type: "time" },
+    { id: "endzeit", name: "main_endzeit", label: "Endzeit:", type: "time" },
     {
       id: "kundenbewirtung",
-      name: "customerService",
+      name: "main_kundenBewirtung",
       label: "Kundenbewirtung:",
       type: "checkbox",
     },

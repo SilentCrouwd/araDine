@@ -8,28 +8,20 @@ function OrderMoreInformationForm() {
   // Der Toggle bestimmt, ob im Formular zusätzliche Teilnehmer- oder Zeitangaben
   // für die Mittagsverpflegung bzw. Nachbewirtung angezeigt werden.
   const [lunch, setLunch] = useState(false);
-  const [refresh, setRefresh] = useState(false);
 
   // Standardfelder für die Zusatzinformationen des Belegs.
   // Checkboxen schalten zusätzliche Abschnitte ein oder aus.
   const additionalFields = [
-    { id: "buchungskreis", label: "Buchungskreis:", type: "text" },
-    { id: "abteilung", label: "Abteilung:", type: "text" },
-    { id: "kostenstelle", label: "Kostenstelle:", type: "text" },
-    { id: "anlass", label: "Anlass:", type: "text" },
+    { id: "main_buchungskreis", label: "Buchungskreis:", type: "text" },
+    { id: "main_abteilung", label: "Abteilung:", type: "text" },
+    { id: "main_kostenstelle", label: "Kostenstelle:", type: "text" },
+    { id: "main_anlass", label: "Anlass:", type: "text" },
     {
-      id: "mittagsverpflegung",
+      id: "main_mittagsverpflegung",
       label: "Mittagsverpflegung:",
       type: "checkbox",
       onChange: (e: ChangeEvent<HTMLInputElement>) =>
         setLunch(e.target.checked),
-    },
-    {
-      id: "nachbewirtung",
-      label: "Nachbewirtung:",
-      type: "checkbox",
-      onChange: (e: ChangeEvent<HTMLInputElement>) =>
-        setRefresh(e.target.checked),
     },
   ];
   return (
@@ -68,21 +60,6 @@ function OrderMoreInformationForm() {
           <div className="flex gap-2 py-0.5 px-2">
             <OrderParticipantsField />
           </div>
-        </div>
-      )}
-      {/* Wird nur bei aktivierter Nachbewirtung angezeigt */}
-      {refresh && (
-        <div className="flex gap-2 py-0.5 px-2">
-          <Label htmlFor="startzeit" className="w-1/2">
-            Nachbewirtung:
-          </Label>
-          <Input
-            type="time"
-            id="startzeit"
-            name="nachbewirtungUhrzeit"
-            required
-            className="w-50 [&::-webkit-calendar-picker-indicator]:invert"
-          />
         </div>
       )}
     </div>

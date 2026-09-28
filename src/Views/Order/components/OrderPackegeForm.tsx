@@ -74,7 +74,7 @@ function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
             }}
             checked={selectedPackage === "paket-1"}
             type="radio"
-            name="paket"
+            name="main_paket"
             value="Paket_1"
             required
             id="paket-1"
@@ -83,7 +83,7 @@ function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
         </div>
         <div className="flex flex-col p-2 w-fit items-center ">
           <Label
-            htmlFor="paket-2"
+            htmlFor="main_paket-2"
             className="text-base underline underline-offset-2"
           >
             Paket 2:
@@ -95,7 +95,7 @@ function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
             }}
             checked={selectedPackage === "paket-2"}
             type="radio"
-            name="paket"
+            name="main_paket"
             value="Paket_2"
             id="paket-2"
             className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
@@ -115,7 +115,7 @@ function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
             }}
             checked={selectedPackage === "paket-3"}
             type="radio"
-            name="paket"
+            name="main_paket"
             value="Paket_3"
             id="paket-3"
             className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
