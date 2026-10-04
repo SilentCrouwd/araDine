@@ -8,7 +8,7 @@ export async function fetchStandorte() {
   if (error) {
     console.error("Error fetching standorte:", error);
   }
-  console.log("Fetched standorte:", data);
+   console.log("Fetched standorte:", data);
   return data;
 }
 

@@ -1,17 +1,23 @@
-import type { NeueBewirtung, NeueZusatzleistung } from "@/Types/types";
+import type {
+  NeueBewirtung,
+  NeueZusatzleistung,
+  StandorteMitRaeumen,
+} from "@/Types/types";
 export type OrderState = {
   orders: NeueBewirtung[];
   extraServices: NeueZusatzleistung[];
+  location: StandorteMitRaeumen;
 };
 
 export const initialOrderState: OrderState = {
   orders: [],
   extraServices: [],
+  location: [],
 };
 export type OrderAction =
   | { type: "ADD_ORDER"; payload: NeueBewirtung }
-  | { type: "ADD_EXTRA_SERVICE"; payload: NeueZusatzleistung }; // Replace `any` with the actual payload type
-
+  | { type: "ADD_EXTRA_SERVICE"; payload: NeueZusatzleistung }
+  | { type: "GET_LOCATION"; payload: StandorteMitRaeumen };
 export function orderReducer(state: OrderState, action: OrderAction) {
   switch (action.type) {
     case "ADD_ORDER":
@@ -24,6 +30,13 @@ export function orderReducer(state: OrderState, action: OrderAction) {
       return {
         ...state,
         extraServices: [...state.extraServices, action.payload],
+      };
+    case "GET_LOCATION":
+      console.log(state.location);
+
+      return {
+        ...state,
+        location: action.payload,
       };
     default:
       return state;

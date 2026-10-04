@@ -14,7 +14,7 @@ import OrderMoreInformationForm from "./OrderMoreInformationForm";
 import OrderExtraService from "./OrderExtraService";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
-import { fetchStandorte, insertBewirtung } from "@/Hooks/SupaBaseAPI";
+import { insertBewirtung } from "@/Hooks/SupaBaseAPI";
 import type {
   NeueBewirtung,
   NeueZusatzleistung,
@@ -31,6 +31,7 @@ function getText(formData: FormData, key: string): string {
 function OrderForm() {
   // Zustände für die ausgewählten Werte in der Standort- und Raum-Auswahl.
   const [locations, setLocations] = useState<StandorteMitRaeumen>([]);
+
   const [selectedPackage, setSelectedPackage] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<string>("");
   const orderContext = useOrderContext();
@@ -55,10 +56,11 @@ function OrderForm() {
       ) as Database["public"]["Enums"]["paket_enum"],
       anlass: getText(formData, "main_anlass") || null,
       standort_id:
-        locations.find((locaton) => locaton.name === selectedLocation)?.id ??
-        null,
+        orderContext.state.location.find(
+          (locaton) => locaton.name === selectedLocation,
+        )?.id ?? null,
       raum_id:
-        locations
+        orderContext.state.location
           .find((location) => location.name === selectedLocation)
           ?.raeume.find((raume) => raume.name === selectedRoom)?.id ?? null,
       status: "Ready",
@@ -85,20 +87,12 @@ function OrderForm() {
     await insertBewirtung(newRefreshment, newExtraService);
   }
 
-  async function handleLocationChange() {
-    const newLocation = await fetchStandorte();
-
-    setLocations(newLocation ?? []);
-  }
   function handlePackageStatus(status: boolean) {
     setSelectedPackage(status);
   }
-  useEffect(() => {
-    handleLocationChange();
-  }, []);
 
   // Holt den aktuell ausgewählten Standort inklusive seiner Räume.
-  const selectedLocationItem = locations.find(
+  const selectedLocationItem = orderContext.state.location.find(
     (item) => item?.name === selectedLocation,
   );
 
@@ -111,7 +105,7 @@ function OrderForm() {
       {/* Standort- und Raum-Auswahl */}
       <div className="flex p-4 w-full justify-between sm:justify-evenly">
         <Select
-          items={locations?.map((location) => ({
+          items={orderContext.state.location?.map((location) => ({
             label: location?.name,
             value: location?.name,
           }))}
@@ -129,7 +123,7 @@ function OrderForm() {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {locations.map((item) => (
+              {orderContext.state.location?.map((item) => (
                 <SelectItem key={item?.id} value={item.name}>
                   {item.name}
                 </SelectItem>
