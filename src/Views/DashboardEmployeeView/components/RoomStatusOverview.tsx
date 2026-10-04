@@ -24,9 +24,9 @@ function RoomStatusOverview({ roomOverview }: { roomOverview: Raeume }) {
           <p>{room.name}</p>
           <p>"12:00"</p>
           <p
-            className={`${handleRoomStatus("Service")} flex justify-center  w-1/2 font-bold text-sm tracking-tighter rounded-xl text-muted-foreground text-shadow-sm/40 `}
+            className={`${handleRoomStatus(room.status)} flex justify-center  w-1/2 font-bold text-sm tracking-tighter rounded-xl text-muted-foreground text-shadow-sm/40 `}
           >
-            {"Service"}
+            {room.status}
           </p>
           <Link to={`araDine/dashboard/refreshment-detail/${"2"}`}>
             <Button className="w-fit " variant="outline">

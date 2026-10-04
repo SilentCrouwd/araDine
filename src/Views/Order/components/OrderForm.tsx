@@ -83,7 +83,7 @@ function OrderForm() {
       type: "ADD_EXTRA_SERVICE",
       payload: newExtraService,
     });
-    console.log(orderContext.state);
+    // console.log(orderContext.state);
     await insertBewirtung(newRefreshment, newExtraService);
   }
 

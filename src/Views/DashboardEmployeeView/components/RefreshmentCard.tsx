@@ -11,7 +11,7 @@ export interface RefreshmentCardProps {
   endTime: string;
   numberPax: number;
   date: string;
-  room: string;
+  room: (string | undefined)[];
   refresh: boolean;
   refreshmentId: string;
 }

@@ -11,7 +11,7 @@ import {
   orderReducer,
   type OrderAction,
 } from "../Hooks/UseReducerOrder";
-import { fetchStandorte } from "@/Hooks/SupaBaseAPI";
+import { fetchBewirtungen, fetchStandorte } from "@/Hooks/SupaBaseAPI";
 import type { StandorteMitRaeumen } from "@/Types/types";
 
 type OrderContextValue = {
@@ -28,7 +28,13 @@ export function OrderProvider({ children }: { children: ReactNode }) {
       const standorte: StandorteMitRaeumen = (await fetchStandorte()) ?? [];
       dispatch({ type: "GET_LOCATION", payload: standorte ?? [] });
     }
+    async function loadRefreshments() {
+      const refreshments = await fetchBewirtungen();
+
+      dispatch({ type: "GET_REFRESHMENT", payload: refreshments ?? [] });
+    }
     loadStandorte();
+    loadRefreshments();
   }, []);
   return (
     <OrderContext.Provider value={{ state, dispatch }}>

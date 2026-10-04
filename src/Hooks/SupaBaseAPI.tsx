@@ -8,8 +8,17 @@ export async function fetchStandorte() {
   if (error) {
     console.error("Error fetching standorte:", error);
   }
-   console.log("Fetched standorte:", data);
+  //  console.log("Fetched standorte:", data);
   return data;
+}
+export async function fetchBewirtungen() {
+  let { data: bewirtungen, error } = await supabase
+    .from("bewirtungen")
+    .select("*");
+  if (error) {
+    console.error("Error fetching bewirtungen:", error);
+  }
+  return bewirtungen;
 }
 
 export async function insertBewirtung(

@@ -15,5 +15,8 @@ export type NeueZusatzleistung =
 export type StandortMitRaeumen = Standorte[number] & {
   raeume: Raeume;
 };
+export type BewirtungenMitExtras = Bewirtungen[number] & {
+  extras: Extras;
+};
 
 export type StandorteMitRaeumen = StandortMitRaeumen[];

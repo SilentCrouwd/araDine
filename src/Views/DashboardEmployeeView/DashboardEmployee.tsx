@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Raeume } from "@/Types/types";
+
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -22,38 +22,40 @@ import RefreshmentCard from "./components/RefreshmentCard";
 import { Link } from "react-router";
 import RoomInfoCard from "./components/RoomInfoCard";
 import RoomStatusOverview from "./components/RoomStatusOverview";
-import { fetchStandorte } from "@/Hooks/SupaBaseAPI";
-import type { StandorteMitRaeumen } from "@/Types/types";
+import { useOrderContext } from "@/Context/RefreshmentContext";
 
 function DashboardEmployee() {
-  const [locations, setLocations] = useState<StandorteMitRaeumen>([]);
-  const [selectedLocation, setSelectedLocation] = useState<string>("");
-  const [selectedRoom, setSelectedRoom] = useState<Raeume>([]);
-  useEffect(() => {
-    fetchLocations();
-    getRoomOverview();
-  }, [selectedLocation]);
-
-  async function fetchLocations() {
-    const newLocations = await fetchStandorte();
-    setLocations(newLocations ?? []);
-  }
-  async function getRoomOverview() {
-    const currSelectedLocation = locations.filter(
-      (location) => location.name === selectedLocation,
-    );
-    const selectedRooms = currSelectedLocation[0]?.raeume ?? [];
-    setSelectedRoom(selectedRooms);
-  }
-
+  const orderContext = useOrderContext();
+  const locations = orderContext.state.location;
+  const [selectedLocationName, setselectedLocationName] = useState<string>("");
   const [date, setDate] = useState<Date>();
   const [open, setOpen] = useState(false);
+
+  const currLocation = locations.find(
+    (location) => location.name === selectedLocationName,
+  );
+  const filteredRefreshments = currLocation
+    ? orderContext.state.refreshments.filter(
+        (refresh) => refresh.standort_id === currLocation.id,
+      )
+    : [];
+
+  const fullFiltered = date
+    ? filteredRefreshments.filter(
+        (refreshment) => refreshment.datum === format(date, "yyy-MM-dd"),
+      )
+    : [];
+
+  const selectedRooms =
+    locations.find((location) => location.name === selectedLocationName)
+      ?.raeume ?? [];
+
   return (
     <div className="flex flex-col py-4 px-4 gap-4  ">
       <div className="  grid grid-cols-2 self-center md:gap-5">
         <Select
-          value={selectedLocation}
-          onValueChange={(value) => setSelectedLocation(value ?? "")}
+          value={selectedLocationName}
+          onValueChange={(value) => setselectedLocationName(value ?? "")}
           items={locations.map((location) => ({
             label: location.name,
             value: location.name,
@@ -108,24 +110,33 @@ function DashboardEmployee() {
           </PopoverContent>
         </Popover>
       </div>
-      <RoomInfoCard roomStatus={selectedRoom} />
+      <RoomInfoCard room={selectedRooms} />
       <div className="w-full p-6  mx-auto flex flex-col bg-card/20 border border-border rounded-xl text-muted-foreground">
         <h2 className="text-lg font-bold p-4">Bewirtungen Heute</h2>
-        <div className="grid gap-1 grid-cols-1  max-h-75 overflow-y-auto md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid gap-10 grid-cols-1  max-h-75 overflow-y-auto md:grid-cols-3 lg:grid-cols-4">
           <Link
-            className="flex justify-start"
+            className="flex justify-start gap-2"
             to={`araDine/dashboard/refreshment-detail/${"2"}`}
           >
-            <RefreshmentCard
-              title="Müller"
-              startTime="12:00"
-              endTime="13:00"
-              numberPax={15}
-              date={new Date().toLocaleDateString("de-DE")}
-              room="214"
-              refresh={false}
-              refreshmentId="1"
-            ></RefreshmentCard>
+            {fullFiltered.map((refreshment) => (
+              <RefreshmentCard
+                key={refreshment.id}
+                title={refreshment.kunden_name}
+                startTime={refreshment.startzeit.slice(0, 5)}
+                endTime={refreshment.endzeit.slice(0, 5)}
+                numberPax={refreshment.personen_zahl}
+                date={new Date(refreshment.datum).toLocaleDateString("de-DE")}
+                room={orderContext.state.location.map(
+                  (location) =>
+                    location.raeume.find(
+                      (raum) => raum.id === refreshment.raum_id,
+                    )?.name,
+                )}
+                // hier muss noch das extra eingelesen werden
+                refresh={true}
+                refreshmentId={refreshment.id}
+              ></RefreshmentCard>
+            ))}
           </Link>
         </div>
       </div>
@@ -137,7 +148,7 @@ function DashboardEmployee() {
             <p>Aktion</p>
           </div>
 
-          <RoomStatusOverview roomOverview={selectedRoom} />
+          <RoomStatusOverview roomOverview={selectedRooms} />
         </div>
       </div>
     </div>

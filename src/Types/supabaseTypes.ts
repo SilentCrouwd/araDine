@@ -87,7 +87,7 @@ export type Database = {
           startzeit: string;
           status: Database["public"]["Enums"]["bewirtungs_status_enum"];
           teilnehmerliste: string | null;
-          anlass: string | null;
+          anlass?: string | null;
         };
         Insert: {
           abteilung?: string | null;
@@ -107,7 +107,7 @@ export type Database = {
           startzeit: string;
           status: Database["public"]["Enums"]["bewirtungs_status_enum"];
           teilnehmerliste?: string | null;
-          anlass: string | null;
+          anlass?: string | null;
         };
         Update: {
           abteilung?: string | null;
@@ -127,7 +127,7 @@ export type Database = {
           startzeit?: string;
           status?: Database["public"]["Enums"]["bewirtungs_status_enum"];
           teilnehmerliste?: string | null;
-          anlass: string | null;
+          anlass?: string | null;
         };
         Relationships: [
           {
@@ -150,16 +150,19 @@ export type Database = {
         Row: {
           id: string;
           name: string;
+          status: string;
           standort_id: string | null;
         };
         Insert: {
           id?: string;
           name: string;
+          status: string;
           standort_id?: string | null;
         };
         Update: {
           id?: string;
           name?: string;
+          status: string;
           standort_id?: string | null;
         };
         Relationships: [
