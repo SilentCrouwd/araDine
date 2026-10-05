@@ -3,9 +3,7 @@ import type { Raeume } from "@/Types/types";
 import { Link } from "react-router";
 
 function handleRoomStatus(roomStatus: string) {
-  if (roomStatus === "Belegt") {
-    return "bg-red-500 w-15 ";
-  } else if (roomStatus === "Fertig") {
+  if (roomStatus === "Fertig") {
     return "bg-blue-500 w-15";
   } else if (roomStatus === "Service") {
     return "bg-yellow-500 w-15";

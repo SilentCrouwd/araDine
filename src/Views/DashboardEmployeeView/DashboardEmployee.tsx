@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -27,32 +27,66 @@ import { useOrderContext } from "@/Context/RefreshmentContext";
 function DashboardEmployee() {
   const orderContext = useOrderContext();
   const locations = orderContext.state.location;
+
+  // Speichert den ausgewählten Standort und das ausgewählte Datum.
   const [selectedLocationName, setselectedLocationName] = useState<string>("");
   const [date, setDate] = useState<Date>();
   const [open, setOpen] = useState(false);
 
+  // Ermittelt den vollständigen Standort anhand des ausgewählten Namens.
   const currLocation = locations.find(
     (location) => location.name === selectedLocationName,
   );
-  const filteredRefreshments = currLocation
+
+  // Formatiert das Datum passend zum gespeicherten Format YYYY-MM-DD.
+  const selectedDate = date ? format(date, "yyyy-MM-dd") : undefined;
+
+  // Filtert die Bewirtungen zuerst nach dem ausgewählten Standort.
+  const refreshmentsAtSelectedLocation = currLocation
     ? orderContext.state.refreshments.filter(
-        (refresh) => refresh.standort_id === currLocation.id,
+        (refreshment) => refreshment.standort_id === currLocation.id,
       )
     : [];
 
-  const fullFiltered = date
-    ? filteredRefreshments.filter(
-        (refreshment) => refreshment.datum === format(date, "yyy-MM-dd"),
+  // Filtert die bereits nach Standort gefilterten Bewirtungen zusätzlich nach Datum.
+  // Ohne ausgewähltes Datum wird eine leere Liste angezeigt.
+  const refreshmentsForSelectedLocationAndDate = date
+    ? refreshmentsAtSelectedLocation.filter(
+        (refreshment) => refreshment.datum === selectedDate,
       )
     : [];
 
+  // Ermittelt die Räume des ausgewählten Standorts.
   const selectedRooms =
     locations.find((location) => location.name === selectedLocationName)
       ?.raeume ?? [];
 
+  // Räume filtern todo:
+
+  const refreshmentRoomIds = refreshmentsForSelectedLocationAndDate.map(
+    (refreshment) => refreshment.raum_id,
+  );
+  // wenn Heute bewirung in diesem raum dann Service
+  const now = new Date();
+  const today = format(now, "yyyy-MM-dd");
+  const currentTime = format(now, "HH:mm");
+
+  const isSelectedDateToday = selectedDate === today;
+
+  const updatedRooms = selectedRooms.map((room) =>
+    refreshmentRoomIds.includes(room.id)
+      ? { ...room, status: "Service" }
+      : room,
+  );
+
+  // wenn Uhrzeit < als Startzeit -30min dann Frei grün
+  // wenn Urzeit > als Startzeitund Uhrzeit kleiner als Endzeit +30 min dann Service HellRot
+  // wenn Uhrzeit > als Endzeit dann Fertig Orange
+
   return (
     <div className="flex flex-col py-4 px-4 gap-4  ">
       <div className="  grid grid-cols-2 self-center md:gap-5">
+        {/* Auswahl des Standorts */}
         <Select
           value={selectedLocationName}
           onValueChange={(value) => setselectedLocationName(value ?? "")}
@@ -77,6 +111,8 @@ function DashboardEmployee() {
             </SelectGroup>
           </SelectContent>
         </Select>
+
+        {/* Auswahl des Datums */}
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger
             render={
@@ -110,7 +146,10 @@ function DashboardEmployee() {
           </PopoverContent>
         </Popover>
       </div>
-      <RoomInfoCard room={selectedRooms} />
+
+      <RoomInfoCard room={updatedRooms} />
+
+      {/* Zeigt die Bewirtungen für den ausgewählten Standort und das Datum an. */}
       <div className="w-full p-6  mx-auto flex flex-col bg-card/20 border border-border rounded-xl text-muted-foreground">
         <h2 className="text-lg font-bold p-4">Bewirtungen Heute</h2>
         <div className="grid gap-10 grid-cols-1  max-h-75 overflow-y-auto md:grid-cols-3 lg:grid-cols-4">
@@ -118,7 +157,7 @@ function DashboardEmployee() {
             className="flex justify-start gap-2"
             to={`araDine/dashboard/refreshment-detail/${"2"}`}
           >
-            {fullFiltered.map((refreshment) => (
+            {refreshmentsForSelectedLocationAndDate.map((refreshment) => (
               <RefreshmentCard
                 key={refreshment.id}
                 title={refreshment.kunden_name}
@@ -132,7 +171,7 @@ function DashboardEmployee() {
                       (raum) => raum.id === refreshment.raum_id,
                     )?.name,
                 )}
-                // hier muss noch das extra eingelesen werden
+                // Hier muss noch das Extra eingelesen werden.
                 refresh={true}
                 refreshmentId={refreshment.id}
               ></RefreshmentCard>
@@ -140,6 +179,8 @@ function DashboardEmployee() {
           </Link>
         </div>
       </div>
+
+      {/* Übersicht über Räume und deren aktuellen Status */}
       <div className=" flex flex-col bg-card/20 border border-border py-4 px-6 rounded-xl text-muted-foreground">
         <h2 className="text-lg font-bold   ">Raum Übersicht</h2>
         <div className="flex flex-col px-1 ">
@@ -148,7 +189,7 @@ function DashboardEmployee() {
             <p>Aktion</p>
           </div>
 
-          <RoomStatusOverview roomOverview={selectedRooms} />
+          <RoomStatusOverview roomOverview={updatedRooms} />
         </div>
       </div>
     </div>
