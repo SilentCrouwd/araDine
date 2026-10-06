@@ -23,6 +23,7 @@ import { Link } from "react-router";
 import RoomInfoCard from "./components/RoomInfoCard";
 import RoomStatusOverview from "./components/RoomStatusOverview";
 import { useOrderContext } from "@/Context/RefreshmentContext";
+import type { Bewirtungen, Raeume } from "@/Types/types";
 
 function DashboardEmployee() {
   const orderContext = useOrderContext();
@@ -32,7 +33,7 @@ function DashboardEmployee() {
   const [selectedLocationName, setselectedLocationName] = useState<string>("");
   const [date, setDate] = useState<Date>();
   const [open, setOpen] = useState(false);
-
+  const [cleared, setCleard] = useState(true);
   // Ermittelt den vollständigen Standort anhand des ausgewählten Namens.
   const currLocation = locations.find(
     (location) => location.name === selectedLocationName,
@@ -50,7 +51,7 @@ function DashboardEmployee() {
 
   // Filtert die bereits nach Standort gefilterten Bewirtungen zusätzlich nach Datum.
   // Ohne ausgewähltes Datum wird eine leere Liste angezeigt.
-  const refreshmentsForSelectedLocationAndDate = date
+  const selectedRefreshments = date
     ? refreshmentsAtSelectedLocation.filter(
         (refreshment) => refreshment.datum === selectedDate,
       )
@@ -63,23 +64,41 @@ function DashboardEmployee() {
 
   // Räume filtern todo:
 
-  const refreshmentRoomIds = refreshmentsForSelectedLocationAndDate.map(
-    (refreshment) => refreshment.raum_id,
-  );
   // wenn Heute bewirung in diesem raum dann Service
-  const now = new Date();
-  const today = format(now, "yyyy-MM-dd");
-  const currentTime = format(now, "HH:mm");
 
-  const isSelectedDateToday = selectedDate === today;
+  function updateRoomStatus(selectedRefreshments: Bewirtungen, rooms: Raeume) {
+    const now = new Date();
+    const today = format(now, "yyyy-MM-dd");
+    const currentTime = format(now, "HH:mm");
 
-  const updatedRooms = selectedRooms.map((room) =>
-    refreshmentRoomIds.includes(room.id)
-      ? { ...room, status: "Service" }
-      : room,
-  );
+    return rooms.map((room) => {
+      const refreshment = selectedRefreshments.find(
+        (item) => item.raum_id === room.id,
+      );
 
-  // wenn Uhrzeit < als Startzeit -30min dann Frei grün
+      if (selectedDate && selectedDate < today) {
+        return { ...room, status: "Fertig" };
+      }
+
+      if (!refreshment) {
+        return { ...room, status: "Frei" };
+      }
+
+      if (selectedDate && selectedDate > today) {
+        return { ...room, status: "Service" };
+      }
+
+      const endTime = refreshment.endzeit.slice(0, 5);
+
+      if (currentTime > endTime) {
+        return { ...room, status: "Fertig" };
+      }
+
+      return { ...room, status: "Service" };
+    });
+  }
+
+  const updatedRooms = updateRoomStatus(selectedRefreshments, selectedRooms);
   // wenn Urzeit > als Startzeitund Uhrzeit kleiner als Endzeit +30 min dann Service HellRot
   // wenn Uhrzeit > als Endzeit dann Fertig Orange
 
@@ -157,7 +176,7 @@ function DashboardEmployee() {
             className="flex justify-start gap-2"
             to={`araDine/dashboard/refreshment-detail/${"2"}`}
           >
-            {refreshmentsForSelectedLocationAndDate.map((refreshment) => (
+            {selectedRefreshments.map((refreshment) => (
               <RefreshmentCard
                 key={refreshment.id}
                 title={refreshment.kunden_name}
