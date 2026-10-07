@@ -1,5 +1,5 @@
 import OrderPackageForm from "./OrderPackegeForm";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -15,11 +15,7 @@ import OrderExtraService from "./OrderExtraService";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 import { insertBewirtung } from "@/Hooks/SupaBaseAPI";
-import type {
-  NeueBewirtung,
-  NeueZusatzleistung,
-  StandorteMitRaeumen,
-} from "@/Types/types";
+import type { NeueBewirtung, NeueZusatzleistung } from "@/Types/types";
 import { useOrderContext } from "@/Context/RefreshmentContext";
 import type { Database } from "@/Types/supabaseTypes";
 
@@ -30,7 +26,6 @@ function getText(formData: FormData, key: string): string {
 
 function OrderForm() {
   // Zustände für die ausgewählten Werte in der Standort- und Raum-Auswahl.
-  const [locations, setLocations] = useState<StandorteMitRaeumen>([]);
 
   const [selectedPackage, setSelectedPackage] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<string>("");

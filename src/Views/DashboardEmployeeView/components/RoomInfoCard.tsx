@@ -1,4 +1,4 @@
-import { CheckCircle, Circle, Wrench } from "lucide-react";
+import { CheckCircle, Wrench } from "lucide-react";
 import type { Raeume } from "@/Types/types";
 
 function RoomInfoCard({ room }: { room: Raeume }) {
