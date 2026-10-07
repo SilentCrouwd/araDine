@@ -33,7 +33,6 @@ function DashboardEmployee() {
   const [selectedLocationName, setselectedLocationName] = useState<string>("");
   const [date, setDate] = useState<Date>();
   const [open, setOpen] = useState(false);
-  const [cleared, setCleard] = useState(true);
   // Ermittelt den vollständigen Standort anhand des ausgewählten Namens.
   const currLocation = locations.find(
     (location) => location.name === selectedLocationName,
@@ -77,7 +76,7 @@ function DashboardEmployee() {
       );
 
       if (selectedDate && selectedDate < today) {
-        return { ...room, status: "Fertig" };
+        return { ...room, status: "Frei" };
       }
 
       if (!refreshment) {
@@ -91,7 +90,7 @@ function DashboardEmployee() {
       const endTime = refreshment.endzeit.slice(0, 5);
 
       if (currentTime > endTime) {
-        return { ...room, status: "Fertig" };
+        return { ...room, status: "Frei" };
       }
 
       return { ...room, status: "Service" };
@@ -171,31 +170,22 @@ function DashboardEmployee() {
       {/* Zeigt die Bewirtungen für den ausgewählten Standort und das Datum an. */}
       <div className="w-full p-6  mx-auto flex flex-col bg-card/20 border border-border rounded-xl text-muted-foreground">
         <h2 className="text-lg font-bold p-4">Bewirtungen Heute</h2>
-        <div className="grid gap-10 grid-cols-1  max-h-75 overflow-y-auto md:grid-cols-3 lg:grid-cols-4">
-          <Link
-            className="flex justify-start gap-2"
-            to={`araDine/dashboard/refreshment-detail/${"2"}`}
-          >
-            {selectedRefreshments.map((refreshment) => (
+        <div className="grid gap-10 grid-cols-1   overflow-y-auto md:grid-cols-3 lg:grid-cols-4">
+          {selectedRefreshments.map((refreshment) => (
+            <Link
+              className="flex  w-full gap-2"
+              to={`araDine/dashboard/refreshment-detail/${refreshment.id}`}
+              key={refreshment.id}
+            >
               <RefreshmentCard
-                key={refreshment.id}
-                title={refreshment.kunden_name}
-                startTime={refreshment.startzeit.slice(0, 5)}
-                endTime={refreshment.endzeit.slice(0, 5)}
-                numberPax={refreshment.personen_zahl}
-                date={new Date(refreshment.datum).toLocaleDateString("de-DE")}
-                room={orderContext.state.location.map(
-                  (location) =>
-                    location.raeume.find(
-                      (raum) => raum.id === refreshment.raum_id,
-                    )?.name,
+                refreshment={refreshment}
+                rooms={selectedRooms}
+                extras={orderContext.state.extra.filter(
+                  (extra) => extra.bewirtung_id === refreshment.id,
                 )}
-                // Hier muss noch das Extra eingelesen werden.
-                refresh={true}
-                refreshmentId={refreshment.id}
               ></RefreshmentCard>
-            ))}
-          </Link>
+            </Link>
+          ))}
         </div>
       </div>
 
@@ -208,7 +198,7 @@ function DashboardEmployee() {
             <p>Aktion</p>
           </div>
 
-          <RoomStatusOverview roomOverview={updatedRooms} />
+          <RoomStatusOverview rooms={updatedRooms} refreshments={selectedRefreshments} />
         </div>
       </div>
     </div>

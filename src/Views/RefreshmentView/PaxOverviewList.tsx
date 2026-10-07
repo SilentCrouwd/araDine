@@ -22,7 +22,7 @@ function PaxOverviewList({
         {participants.map((participant, index) => (
           <div
             key={index}
-            className="grid grid-cols-2 gap-2 border-b border-border py-2 "
+            className="grid grid-cols-2 gap-2 border-b border-border/50 py-2 "
           >
             <p className="flex items-center">
               <User className="h-4 w-4 inline-block mr-2" /> {participant.name}

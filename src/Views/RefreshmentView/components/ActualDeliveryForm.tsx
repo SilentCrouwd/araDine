@@ -20,24 +20,24 @@ function ActualDeliveryForm() {
       </CardHeader>
       <CardContent className="text-base bg-card-foreground/30 text-muted-foreground shadow-2xl/20 rounded-xl m-2 p-2">
         <form>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
             <p>Kaffee:</p> <Input defaultValue="0" />
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
             <p>Tee:</p> <Input defaultValue="0" />
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
             <p>Wasser:</p> <Input defaultValue="0" />
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
             <p>Softdrinks:</p> <Input defaultValue="0" />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
             <p>Süßware:</p> <Input defaultValue="0" />
           </div>
-          <div className="grid grid-cols-2 gap-2 items-center">
-            <p>Servicepauschale:</p>
+          <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2 items-center">
+            <p>Service:</p>
             <Select>
               <SelectTrigger className="w-full  bg-card/20 hover:bg-transparent ">
                 <SelectValue

@@ -11,7 +11,11 @@ import {
   orderReducer,
   type OrderAction,
 } from "../Hooks/UseReducerOrder";
-import { fetchBewirtungen, fetchStandorte } from "@/Hooks/SupaBaseAPI";
+import {
+  fetchBewirtungen,
+  fetchExtras,
+  fetchStandorte,
+} from "@/Hooks/SupaBaseAPI";
 import type { StandorteMitRaeumen } from "@/Types/types";
 
 type OrderContextValue = {
@@ -33,8 +37,13 @@ export function OrderProvider({ children }: { children: ReactNode }) {
 
       dispatch({ type: "GET_REFRESHMENT", payload: refreshments ?? [] });
     }
+    async function loadExtras() {
+      const extras = await fetchExtras();
+      dispatch({ type: "GET_EXTRA_SERVICE", payload: extras ?? [] });
+    }
     loadStandorte();
     loadRefreshments();
+    loadExtras();
   }, []);
   return (
     <OrderContext.Provider value={{ state, dispatch }}>

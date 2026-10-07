@@ -193,24 +193,18 @@ export type Database = {
       zusatzleistungen: {
         Row: {
           bewirtung_id: string | null;
-          erneuerung: boolean | null;
-          erneuerung_uhrzeit: string | null;
           extra_name: string | null;
           extra_value: string | null;
           id: string;
         };
         Insert: {
           bewirtung_id?: string | null;
-          erneuerung?: boolean | null;
-          erneuerung_uhrzeit?: string | null;
           extra_name?: string | null;
           extra_value?: string | null;
           id?: string;
         };
         Update: {
           bewirtung_id?: string | null;
-          erneuerung?: boolean | null;
-          erneuerung_uhrzeit?: string | null;
           extra_name?: string | null;
           extra_value?: string | null;
           id?: string;

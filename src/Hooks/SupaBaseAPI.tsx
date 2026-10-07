@@ -21,6 +21,17 @@ export async function fetchBewirtungen() {
   return bewirtungen;
 }
 
+export async function fetchExtras() {
+  let { data: zusatzleistungen, error } = await supabase
+    .from("zusatzleistungen")
+    .select("*");
+
+  if (error) {
+    console.error(error);
+  }
+  return zusatzleistungen;
+}
+
 export async function insertBewirtung(
   newRefreshment: NeueBewirtung,
   extraServices: NeueZusatzleistung,

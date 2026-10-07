@@ -11,34 +11,34 @@ function RefreshmentInfoCard() {
         </h2>
       </CardHeader>
       <CardContent className=" text-base bg-card-foreground/30 text-muted-foreground shadow-2xl/20 rounded-xl m-2 p-2 ">
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 ">
           <p>Name:</p> <p>John Doe</p>
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 ">
           <p>Personen:</p> <p>15</p>
         </div>
-        <div className="grid grid-cols-2 wrap-break-word">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 wrap-break-word">
           <p>E-mail:</p> <p>john.doe@example.com</p>
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
           <p>Kostenstelle:</p> <p>KST-2401</p>
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
           <p>Standort:</p> <p>LHM</p>
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
           <p>Bewirtungsart:</p> <p>Kundenbewirtung</p>
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
           <p>Buchungskreis:</p> <p>1000</p>
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
           <p>Abteilung:</p> <p>Vertrieb</p>
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
           <p>Anlass:</p> <p>Jahresmeeting</p>
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
           <p>Mittagessen:</p>{" "}
           {mittagsverpflegung ? (
             <CircleCheckBig className=" h-5 text-green-500" />

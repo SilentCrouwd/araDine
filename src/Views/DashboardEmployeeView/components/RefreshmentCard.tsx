@@ -1,59 +1,67 @@
+import type { Bewirtungen, Raeume, Zusatzleistungen } from "@/Types/types";
 import {
   ArrowRightIcon,
   RefreshCcwDot,
   RefreshCwOff,
   Users,
 } from "lucide-react";
+type RefreshmentCardProps = Readonly<{
+  refreshment: Bewirtungen[number];
+  rooms: Raeume;
+  extras: Zusatzleistungen;
+}>;
 
-export interface RefreshmentCardProps {
-  title: string;
-  startTime: string;
-  endTime: string;
-  numberPax: number;
-  date: string;
-  room: (string | undefined)[];
-  refresh: boolean;
-  refreshmentId: string;
-}
+function RefreshmentCard({ refreshment, rooms, extras }: RefreshmentCardProps) {
+  const selectedRoom = rooms.find((room) => room.id === refreshment.raum_id);
 
-function RefreshmentCard({
-  title,
-  startTime,
-  endTime,
-  numberPax,
-  date,
-  room,
-  refresh,
-}: Readonly<RefreshmentCardProps>) {
   return (
-    <div className="refreshment-card w-fit h-60 flex flex-col justify-center  border border-border rounded-xl my-1 bg-card-foreground/25 ">
+    <div className="refreshment-card w-full h-fit py-2 flex flex-col justify-center  border border-border rounded-xl my-1 bg-card-foreground/25 text-base">
       <div className="flex items-center justify-between px-6">
         <h3 className="font-bold text-lg underline underline-offset-4">
-          {title}
+          {refreshment.kunden_name}
         </h3>{" "}
         <ArrowRightIcon />
       </div>
-      <div className="flex flex-col gap-2">
-        <div className="gap-1 py-3 px-6">
-          <p>Datum: {date}</p>
-          <p>
-            Uhrzeit: {startTime} - {endTime}
+      <div className="flex flex-col gap-2 w-full">
+        <div className="flex flex-col gap-1 py-3 px-6">
+          <p className="flex justify-between border-b border-border/50 p-1">
+            <span>Datum:</span>{" "}
+            <span>
+              {new Date(refreshment.datum).toLocaleDateString("de-De")}
+            </span>{" "}
           </p>
-          <p>Raum: {room}</p>
-        </div>
-        <div className="flex  justify-between py-2 gap-10  px-6">
-          <p className=" flex gap-2">
-            Erfrischung:{" "}
-            {refresh ? (
-              <RefreshCcwDot className="text-green-500" />
-            ) : (
-              <RefreshCwOff className="text-red-500" />
-            )}
+          <p className="flex justify-between border-b border-border/50 p-1 ">
+            <span>Uhrzeit:</span>
+            <span>
+              {refreshment.startzeit.slice(0, 5)} -
+              {refreshment.endzeit.slice(0, 5)}
+            </span>
           </p>
-
-          <p className="flex gap-2">
-            <Users />
-            {numberPax}
+          <p className="flex justify-between border-b border-border/50 p-1">
+            <span>Raum:</span>
+            <span>{selectedRoom?.name}</span>
+          </p>
+          <p className="flex justify-between border-b border-border/50 p-1">
+            <span>Status:</span>
+            <span>{refreshment.status}</span>
+          </p>
+          <p className="flex justify-between border-b border-border/50 p-1">
+            <span>Personen:</span>
+            <span className="flex gap-0.5">
+              {refreshment.personen_zahl}
+              <Users />
+            </span>
+          </p>
+          <p className=" flex justify-between gap-2">
+            <span> Erfrischung:</span>
+            <span>
+              {" "}
+              {extras.some((extra) => extra.extra_value === "nachbewirtung") ? (
+                <RefreshCcwDot className="text-green-500" />
+              ) : (
+                <RefreshCwOff className="text-red-500" />
+              )}
+            </span>
           </p>
         </div>
       </div>

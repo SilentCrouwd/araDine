@@ -18,35 +18,35 @@ function DeliveryDetailCard() {
         </p>
       </CardHeader>
       <CardContent className=" text-base bg-card-foreground/30 text-muted-foreground shadow-2xl/20 rounded-xl m-2 p-2 ">
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
           <p>Raum:</p> <p>12:00</p>
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
           <p>Startzeit:</p> <p>12:00</p>
         </div>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
           <p>Endzeit:</p> <p>13:00</p>
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
           <p>Paket:</p> <p>Paket 1</p>
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
           <p>Kaffee:</p> <p>Ja</p>
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
           <p>Tee:</p> <p>Ja</p>
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
           <p>Wasser:</p> <p>Ja</p>
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
           <p>Softdrinks:</p> <p>Nein</p>
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
           <p>Süßware:</p> <p>Ja</p>
         </div>
         {/* Hier wird ein Array mit map Raus gerändert maybe auch ein Obj mal schauen */}
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
           <p>Zusatz:</p>{" "}
           <p>Bitte 5 flaschen wasser und süßigkeiten um 16 uhr</p>
         </div>

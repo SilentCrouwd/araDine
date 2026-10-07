@@ -1,5 +1,6 @@
 import type {
   Bewirtungen,
+  Zusatzleistungen,
   NeueBewirtung,
   NeueZusatzleistung,
   StandorteMitRaeumen,
@@ -9,6 +10,7 @@ export type OrderState = {
   extraServices: NeueZusatzleistung[];
   location: StandorteMitRaeumen;
   refreshments: Bewirtungen;
+  extra: Zusatzleistungen;
 };
 
 export const initialOrderState: OrderState = {
@@ -16,12 +18,14 @@ export const initialOrderState: OrderState = {
   extraServices: [],
   location: [],
   refreshments: [],
+  extra: [],
 };
 export type OrderAction =
   | { type: "ADD_ORDER"; payload: NeueBewirtung }
   | { type: "ADD_EXTRA_SERVICE"; payload: NeueZusatzleistung }
   | { type: "GET_LOCATION"; payload: StandorteMitRaeumen }
-  | { type: "GET_REFRESHMENT"; payload: Bewirtungen };
+  | { type: "GET_REFRESHMENT"; payload: Bewirtungen }
+  | { type: "GET_EXTRA_SERVICE"; payload: Zusatzleistungen };
 export function orderReducer(state: OrderState, action: OrderAction) {
   switch (action.type) {
     case "ADD_ORDER":
@@ -44,6 +48,11 @@ export function orderReducer(state: OrderState, action: OrderAction) {
       return {
         ...state,
         refreshments: action.payload,
+      };
+    case "GET_EXTRA_SERVICE":
+      return {
+        ...state,
+        extra: action.payload,
       };
     default:
       return state;
