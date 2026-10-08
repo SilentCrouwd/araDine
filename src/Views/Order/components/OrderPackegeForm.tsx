@@ -6,7 +6,7 @@ type OrderPackageFormProps = {
   packageStatus: (status: boolean) => void;
 };
 function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
-  // Speichert das aktuell ausgewählte Paket.
+  // Steuert sowohl die markierte Radio-Option als auch die darunter angezeigte Beschreibung.
   const [selectedPackage, setSelectedPackage] = useState("");
 
   // Gibt je nach Auswahl eine kurze Paketbeschreibung zurück.
@@ -70,6 +70,7 @@ function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
           <Input
             onChange={() => {
               setSelectedPackage("paket-1");
+              // Meldet dem übergeordneten Formular, dass eine gültige Paketauswahl vorliegt.
               packageStatus(true);
             }}
             checked={selectedPackage === "paket-1"}

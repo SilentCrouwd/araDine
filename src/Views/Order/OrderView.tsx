@@ -5,6 +5,7 @@ function OrderView() {
   // Temporäre Login-Logik für die Bestellansicht.
   // Wenn ein Nutzer vorhanden ist, wird das Bestellformular angezeigt,
   // ansonsten die Login-Seite.
+  // Der feste Wert dient aktuell als Platzhalter für den späteren Authentifizierungsstatus.
   const user = true;
   if (user) {
     return <OrderForm />;

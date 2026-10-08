@@ -3,6 +3,7 @@ import type { Raeume } from "@/Types/types";
 
 function RoomInfoCard({ room }: { room: Raeume }) {
   return (
+    // Zählt die Räume je Status für die kompakte Übersicht oberhalb der Liste.
     <section className="grid grid-cols-1 gap-3 text-muted-foreground sm:grid-cols-3  ">
       <div className="flex items-center gap-4 rounded-xl border border-border bg-card/20 p-4 ">
         <Wrench className="h-8 w-8 text-yellow-500" />

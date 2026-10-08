@@ -3,6 +3,7 @@ import type { Bewirtungen, Raeume } from "@/Types/types";
 import { Link } from "react-router";
 
 function handleRoomStatus(roomStatus: string) {
+  // Ordnet jedem Status die passende Farbe für die Statusanzeige zu.
   if (roomStatus === "Fertig") {
     return "bg-blue-500 w-15";
   } else if (roomStatus === "Service") {
@@ -18,6 +19,7 @@ type roomsProps = {
 function RoomStatusOverview({ rooms, refreshments }: roomsProps) {
   return (
     <div className="text-base">
+      {/* Pro Raum werden Status und passende Bewirtungsdetails zusammengeführt. */}
       {rooms.map((room) => (
         <div
           className="grid grid-cols-4 border-b border-border content-center items-center py-0.5   "

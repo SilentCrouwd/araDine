@@ -2,6 +2,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 function OrderRefreshmentForm() {
+  // Konfiguration der Belegfelder; die Namen dienen OrderForm zum Auslesen per FormData.
   const refreshmentFields = [
     { id: "name", name: "main_kunden_name", label: "Name:", type: "text" },
     {

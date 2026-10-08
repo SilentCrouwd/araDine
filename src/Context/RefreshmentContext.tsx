@@ -32,18 +32,10 @@ export function OrderProvider({ children }: { children: ReactNode }) {
       const standorte: StandorteMitRaeumen = (await fetchStandorte()) ?? [];
       dispatch({ type: "GET_LOCATION", payload: standorte ?? [] });
     }
-    async function loadRefreshments() {
-      const refreshments = await fetchBewirtungen();
 
-      dispatch({ type: "GET_REFRESHMENT", payload: refreshments ?? [] });
-    }
-    async function loadExtras() {
-      const extras = await fetchExtras();
-      dispatch({ type: "GET_EXTRA_SERVICE", payload: extras ?? [] });
-    }
-    loadStandorte();
-    loadRefreshments();
-    loadExtras();
+    loadStandorte().catch((error) => {
+      console.error("Fehler beim Laden der Standorte", error);
+    });
   }, []);
   return (
     <OrderContext.Provider value={{ state, dispatch }}>

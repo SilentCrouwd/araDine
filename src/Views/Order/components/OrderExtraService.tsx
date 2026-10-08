@@ -4,7 +4,9 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 
 function OrderExtraService() {
+  // Steuert, ob nach Auswahl der Nachbewirtung zusätzlich eine Uhrzeit abgefragt wird.
   const [refresh, setRefresh] = useState(false);
+  // Diese Konfiguration erzeugt die Eingabefelder und ihre Namen für FormData.
   const extraServiceData = [
     {
       id: "extra_wasser",
@@ -84,6 +86,7 @@ function OrderExtraService() {
           ))}
         </div>
         {refresh && (
+          // Das Zeitfeld wird nur benötigt, wenn die Nachbewirtung aktiviert ist.
           <div className="flex gap-2 py-0.5 px-2 text-muted-foreground">
             <Label htmlFor="startzeit" className="w-1/2">
               Nachbewirtung:

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -23,12 +23,16 @@ import { Link } from "react-router";
 import RoomInfoCard from "./components/RoomInfoCard";
 import RoomStatusOverview from "./components/RoomStatusOverview";
 import { useOrderContext } from "@/Context/RefreshmentContext";
-import type { Bewirtungen, Raeume } from "@/Types/types";
+import type { Bewirtungen, BewirtungenMitExtras, Raeume } from "@/Types/types";
+import { fetchBewirtungDatumUndStandort } from "@/Hooks/SupaBaseAPI";
 
 function DashboardEmployee() {
   const orderContext = useOrderContext();
   const locations = orderContext.state.location;
-
+  // Enthält die vom Server geladenen Bewirtungen samt zugehörigen Zusatzleistungen.
+  const [selectedRefreshments, setSelectedRefreshments] = useState<
+    BewirtungenMitExtras[]
+  >([]);
   // Speichert den ausgewählten Standort und das ausgewählte Datum.
   const [selectedLocationName, setselectedLocationName] = useState<string>("");
   const [date, setDate] = useState<Date>();
@@ -36,25 +40,29 @@ function DashboardEmployee() {
   // Ermittelt den vollständigen Standort anhand des ausgewählten Namens.
   const currLocation = locations.find(
     (location) => location.name === selectedLocationName,
-  );
+  )?.id;
 
   // Formatiert das Datum passend zum gespeicherten Format YYYY-MM-DD.
   const selectedDate = date ? format(date, "yyyy-MM-dd") : undefined;
 
-  // Filtert die Bewirtungen zuerst nach dem ausgewählten Standort.
-  const refreshmentsAtSelectedLocation = currLocation
-    ? orderContext.state.refreshments.filter(
-        (refreshment) => refreshment.standort_id === currLocation.id,
-      )
-    : [];
-
-  // Filtert die bereits nach Standort gefilterten Bewirtungen zusätzlich nach Datum.
-  // Ohne ausgewähltes Datum wird eine leere Liste angezeigt.
-  const selectedRefreshments = date
-    ? refreshmentsAtSelectedLocation.filter(
-        (refreshment) => refreshment.datum === selectedDate,
-      )
-    : [];
+  // Lädt die Bewirtungen erneut, sobald Standort oder Datum geändert wurden.
+  useEffect(() => {
+    async function loadCurrBewirtungen() {
+      // Ohne beide Filterwerte wird keine Datenbankabfrage gestartet.
+      if (currLocation && selectedDate) {
+        const selRefrsh = await fetchBewirtungDatumUndStandort(
+          selectedDate,
+          currLocation,
+        );
+        if (selRefrsh) {
+          setSelectedRefreshments(selRefrsh);
+        }
+      }
+    }
+    loadCurrBewirtungen().catch((error) => {
+      console.error("Fehler beim Laden der Bewirtungen:", error);
+    });
+  }, [selectedDate, currLocation]);
 
   // Ermittelt die Räume des ausgewählten Standorts.
   const selectedRooms =
@@ -65,6 +73,7 @@ function DashboardEmployee() {
 
   // wenn Heute bewirung in diesem raum dann Service
 
+  // Leitet den angezeigten Raumstatus aus Datum, Bewirtung und Endzeit ab.
   function updateRoomStatus(selectedRefreshments: Bewirtungen, rooms: Raeume) {
     const now = new Date();
     const today = format(now, "yyyy-MM-dd");
@@ -87,6 +96,7 @@ function DashboardEmployee() {
         return { ...room, status: "Service" };
       }
 
+      // Bei heutigen Bewirtungen ist ein Raum nach der Endzeit wieder frei.
       const endTime = refreshment.endzeit.slice(0, 5);
 
       if (currentTime > endTime) {
@@ -168,6 +178,7 @@ function DashboardEmployee() {
       <RoomInfoCard room={updatedRooms} />
 
       {/* Zeigt die Bewirtungen für den ausgewählten Standort und das Datum an. */}
+      {/* Jede Karte erhält außerdem die Räume und Zusatzleistungen der Bewirtung. */}
       <div className="w-full p-6  mx-auto flex flex-col bg-card/20 border border-border rounded-xl text-muted-foreground">
         <h2 className="text-lg font-bold p-4">Bewirtungen Heute</h2>
         <div className="grid gap-10 grid-cols-1   overflow-y-auto md:grid-cols-3 lg:grid-cols-4">
@@ -180,9 +191,7 @@ function DashboardEmployee() {
               <RefreshmentCard
                 refreshment={refreshment}
                 rooms={selectedRooms}
-                extras={orderContext.state.extra.filter(
-                  (extra) => extra.bewirtung_id === refreshment.id,
-                )}
+                extras={refreshment.zusatzleistungen}
               ></RefreshmentCard>
             </Link>
           ))}
@@ -190,6 +199,7 @@ function DashboardEmployee() {
       </div>
 
       {/* Übersicht über Räume und deren aktuellen Status */}
+      {/* Die Übersicht verknüpft jeden Raum mit seiner Bewirtung für Details und Startzeit. */}
       <div className=" flex flex-col bg-card/20 border border-border py-4 px-6 rounded-xl text-muted-foreground">
         <h2 className="text-lg font-bold   ">Raum Übersicht</h2>
         <div className="flex flex-col px-1 ">
@@ -198,7 +208,10 @@ function DashboardEmployee() {
             <p>Aktion</p>
           </div>
 
-          <RoomStatusOverview rooms={updatedRooms} refreshments={selectedRefreshments} />
+          <RoomStatusOverview
+            rooms={updatedRooms}
+            refreshments={selectedRefreshments}
+          />
         </div>
       </div>
     </div>

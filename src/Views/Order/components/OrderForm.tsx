@@ -20,6 +20,7 @@ import { useOrderContext } from "@/Context/RefreshmentContext";
 import type { Database } from "@/Types/supabaseTypes";
 
 function getText(formData: FormData, key: string): string {
+  // Liefert nur Textwerte zurück und behandelt fehlende Formularfelder als leeren Text.
   const value = formData.get(key);
   return typeof value === "string" ? value : "";
 }
@@ -27,16 +28,19 @@ function getText(formData: FormData, key: string): string {
 function OrderForm() {
   // Zustände für die ausgewählten Werte in der Standort- und Raum-Auswahl.
 
+  // Der Paketstatus wird zusätzlich zum Radiowert verwendet, um das Absenden zu steuern.
   const [selectedPackage, setSelectedPackage] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<string>("");
   const orderContext = useOrderContext();
   const [selectedRoom, setSelectedRoom] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    // Verhindert das native Neuladen der Seite und liest alle benannten Formularfelder aus.
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
 
+    // Überführt die Formularwerte in das Datenbankformat der Bewirtung.
     const newRefreshment: NeueBewirtung = {
       kunden_name: getText(formData, "main_kunden_name"),
       personen_zahl: Number(getText(formData, "main_personen_zahl")),
@@ -59,11 +63,22 @@ function OrderForm() {
           .find((location) => location.name === selectedLocation)
           ?.raeume.find((raume) => raume.name === selectedRoom)?.id ?? null,
       status: "Ready",
-      teilnehmerliste: "",
+      // Mehrere gleichnamige Teilnehmerfelder werden als mehrzeiliger Text gespeichert.
+      teilnehmerliste: formData
+        .getAll("main_teilnehmerliste")
+        .filter(
+          (participant): participant is string =>
+            typeof participant === "string",
+        )
+        .join("\n"),
+      mittagsverpflegung: formData.get("main_mittagsverpflegung") === "on",
+      buchungskreis: getText(formData, "main_buchungskreis"),
+      abteilung: getText(formData, "main_abteilung"),
     };
 
     orderContext.dispatch({ type: "ADD_ORDER", payload: newRefreshment });
 
+    // Wandelt die Felder mit dem Präfix "extra_" in ein Objekt für die Zusatzleistungen um.
     const extraService: Record<string, FormDataEntryValue> = {};
     for (let [key, value] of formData.entries()) {
       if (key.startsWith("extra_")) {
@@ -83,10 +98,11 @@ function OrderForm() {
   }
 
   function handlePackageStatus(status: boolean) {
+    // Synchronisiert die Paketauswahl der Unterkomponente mit der Formularvalidierung.
     setSelectedPackage(status);
   }
 
-  // Holt den aktuell ausgewählten Standort inklusive seiner Räume.
+  // Dient dazu, im zweiten Auswahlfeld nur Räume des gewählten Standorts anzubieten.
   const selectedLocationItem = orderContext.state.location.find(
     (item) => item?.name === selectedLocation,
   );
@@ -99,6 +115,7 @@ function OrderForm() {
     >
       {/* Standort- und Raum-Auswahl */}
       <div className="flex p-4 w-full justify-between sm:justify-evenly">
+        {/* Die Standortauswahl speichert den Namen; beim Absenden wird daraus die Datenbank-ID ermittelt. */}
         <Select
           items={orderContext.state.location?.map((location) => ({
             label: location?.name,
@@ -126,6 +143,7 @@ function OrderForm() {
             </SelectGroup>
           </SelectContent>
         </Select>
+        {/* Die verfügbaren Räume hängen vom aktuell ausgewählten Standort ab. */}
         <Select
           items={selectedLocationItem?.raeume.map((room) => ({
             label: room.name,
@@ -164,6 +182,7 @@ function OrderForm() {
       </div>
       <Button
         type="submit"
+        // Erst absenden, wenn Standort, Raum und Verpflegungspaket gewählt wurden.
         disabled={!selectedLocation || !selectedRoom || !selectedPackage}
         variant="default"
         className="w-full mt-5 mx-auto p-5 text-lg flex items-center justify-center sm:w-120"

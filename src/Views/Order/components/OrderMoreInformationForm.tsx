@@ -8,9 +8,11 @@ function OrderMoreInformationForm() {
   // Der Toggle bestimmt, ob im Formular zusätzliche Teilnehmer- oder Zeitangaben
   // für die Mittagsverpflegung bzw. Nachbewirtung angezeigt werden.
   const [lunch, setLunch] = useState(false);
-
+  // Teilnehmer bleiben während der Formulareingabe als Liste im Komponentenstatus.
+  const [participants, setParticipants] = useState<string[]>([]);
   // Standardfelder für die Zusatzinformationen des Belegs.
   // Checkboxen schalten zusätzliche Abschnitte ein oder aus.
+  // Die Feldnamen entsprechen den Schlüsseln, die OrderForm beim Submit aus FormData liest.
   const additionalFields = [
     { id: "main_buchungskreis", label: "Buchungskreis:", type: "text" },
     { id: "main_abteilung", label: "Abteilung:", type: "text" },
@@ -24,6 +26,7 @@ function OrderMoreInformationForm() {
         setLunch(e.target.checked),
     },
   ];
+
   return (
     <div className="w-full  text-muted-foreground border border-border rounded-xl bg-card-foreground/20 p-3">
       <h2 className="text-xl font-bold p-2">Weitere Angaben</h2>
@@ -58,10 +61,22 @@ function OrderMoreInformationForm() {
           </p>
 
           <div className="flex gap-2 py-0.5 px-2">
-            <OrderParticipantsField />
+            <OrderParticipantsField
+              participants={participants}
+              onParticipantsChange={setParticipants}
+            />{" "}
           </div>
         </div>
       )}
+      {/* Versteckte Felder machen die Teilnehmerliste für FormData im übergeordneten Formular verfügbar. */}
+      {participants.map((participant, index) => (
+        <input
+          key={`${participant}-${index}`}
+          type="hidden"
+          name="main_teilnehmerliste"
+          value={participant}
+        />
+      ))}
     </div>
   );
 }

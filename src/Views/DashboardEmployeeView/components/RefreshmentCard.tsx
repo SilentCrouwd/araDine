@@ -12,6 +12,7 @@ type RefreshmentCardProps = Readonly<{
 }>;
 
 function RefreshmentCard({ refreshment, rooms, extras }: RefreshmentCardProps) {
+  // Sucht den Raum anhand der in der Bewirtung gespeicherten Raum-ID.
   const selectedRoom = rooms.find((room) => room.id === refreshment.raum_id);
 
   return (
@@ -56,7 +57,8 @@ function RefreshmentCard({ refreshment, rooms, extras }: RefreshmentCardProps) {
             <span> Erfrischung:</span>
             <span>
               {" "}
-              {extras.some((extra) => extra.extra_value === "nachbewirtung") ? (
+              {/* Das Vorhandensein des Zusatzleistungsnamens kennzeichnet eine Nachbewirtung. */}
+              {extras.some((extra) => extra.extra_name === "nachbewirtung") ? (
                 <RefreshCcwDot className="text-green-500" />
               ) : (
                 <RefreshCwOff className="text-red-500" />

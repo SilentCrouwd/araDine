@@ -66,3 +66,30 @@ export async function insertBewirtung(
 
   return data;
 }
+export async function fetchBewirtungDatumUndStandort(
+  currDate: string,
+  currLocationId: string,
+) {
+  const { data, error } = await supabase
+    .from("bewirtungen")
+    .select("*,zusatzleistungen(*)")
+    .eq("standort_id", currLocationId)
+    .eq("datum", currDate);
+  if (error) {
+    console.error(error);
+  }
+
+  return data;
+}
+
+export async function fetchCurrBewirtung(refreshmentId: string) {
+  let { data: BewirtungenMitExtras, error } = await supabase
+    .from("bewirtungen")
+    .select("*,zusatzleistungen(*)")
+    .eq("id", refreshmentId)
+    .single();
+  if (error) {
+    console.error(error);
+  }
+  return BewirtungenMitExtras;
+}

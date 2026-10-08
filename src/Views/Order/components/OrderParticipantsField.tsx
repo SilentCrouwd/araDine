@@ -1,22 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CheckIcon, DeleteIcon, PencilIcon } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 
-function OrderParticipantsField() {
-  const [participantName, setParticipantName] = useState<string[]>([]);
+type OrderParticipantsProps = Readonly<{
+  // Die Liste wird von der übergeordneten Komponente gehalten und hier angezeigt.
+  participants: string[];
+  // Änderungen werden an die Komponente zurückgemeldet, die den Listenstatus besitzt.
+  onParticipantsChange: (participants: string[]) => void;
+}>;
+
+function OrderParticipantsField({
+  participants,
+  onParticipantsChange,
+}: OrderParticipantsProps) {
+  // Temporärer Eingabewert, der erst mit der Bestätigung in die Teilnehmerliste übernommen wird.
   const [value, setValue] = useState<string>("");
-  
+
   function handleParticipantChange() {
     if (!value) return;
-    setParticipantName([...participantName, value]);
+    // Fügt den aktuellen Entwurf zur Liste hinzu und leert danach das Eingabefeld.
+    onParticipantsChange([...participants, value]);
     setValue("");
   }
   function handleParticipantDelete(participantToDelete: string) {
-    setParticipantName(
-      participantName.filter(
-        (participant) => participant !== participantToDelete,
-      ),
+    onParticipantsChange(
+      participants.filter((participant) => participant !== participantToDelete),
     );
   }
 
@@ -26,13 +35,14 @@ function OrderParticipantsField() {
         Teilnehmer:
       </label>
       <div>
-        {participantName.map((participant) => {
+        {participants.map((participant) => {
           return (
             <p className="flex items-center gap-2" key={participant}>
               {participant}
               <PencilIcon
                 className="h-4 w-4 ml-5 text-black cursor-pointer"
                 onClick={() => {
+                  // Lädt den Namen zum Bearbeiten zurück ins Eingabefeld und nimmt ihn aus der Liste.
                   setValue(participant);
                   handleParticipantDelete(participant);
                 }}
