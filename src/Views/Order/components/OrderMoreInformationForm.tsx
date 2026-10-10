@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from "react";
+import React, { useState, type ChangeEvent } from "react";
 import { Label } from "@/components/ui/label";
 import { AlertTriangle } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -8,8 +8,12 @@ function OrderMoreInformationForm() {
   // Der Toggle bestimmt, ob im Formular zusätzliche Teilnehmer- oder Zeitangaben
   // für die Mittagsverpflegung bzw. Nachbewirtung angezeigt werden.
   const [lunch, setLunch] = useState(false);
+
   // Teilnehmer bleiben während der Formulareingabe als Liste im Komponentenstatus.
-  const [participants, setParticipants] = useState<string[]>([]);
+  const [participants, setParticipants] = useState<
+    { name: string; abteilung: string }[]
+  >([]);
+
   // Standardfelder für die Zusatzinformationen des Belegs.
   // Checkboxen schalten zusätzliche Abschnitte ein oder aus.
   // Die Feldnamen entsprechen den Schlüsseln, die OrderForm beim Submit aus FormData liest.
@@ -68,15 +72,6 @@ function OrderMoreInformationForm() {
           </div>
         </div>
       )}
-      {/* Versteckte Felder machen die Teilnehmerliste für FormData im übergeordneten Formular verfügbar. */}
-      {participants.map((participant, index) => (
-        <input
-          key={`${participant}-${index}`}
-          type="hidden"
-          name="main_teilnehmerliste"
-          value={participant}
-        />
-      ))}
     </div>
   );
 }

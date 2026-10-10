@@ -71,7 +71,7 @@ export type Database = {
       bewirtungen: {
         Row: {
           abteilung: string | null;
-          kundenBewirtung: boolean;
+          anlass: string;
           buchungskreis: string | null;
           datum: string;
           endzeit: string;
@@ -79,6 +79,7 @@ export type Database = {
           kostenstelle: string;
           kunden_email: string;
           kunden_name: string;
+          kundenBewirtung: boolean | null;
           mittagsverpflegung: boolean | null;
           paket: Database["public"]["Enums"]["paket_enum"];
           personen_zahl: number;
@@ -86,12 +87,11 @@ export type Database = {
           standort_id: string | null;
           startzeit: string;
           status: Database["public"]["Enums"]["bewirtungs_status_enum"];
-          teilnehmerliste: string | null;
-          anlass?: string | null;
+          teilnehmer_id: string | null;
         };
         Insert: {
           abteilung?: string | null;
-          kundenBewirtung: boolean;
+          anlass: string;
           buchungskreis?: string | null;
           datum: string;
           endzeit: string;
@@ -99,6 +99,7 @@ export type Database = {
           kostenstelle: string;
           kunden_email: string;
           kunden_name: string;
+          kundenBewirtung?: boolean | null;
           mittagsverpflegung?: boolean | null;
           paket: Database["public"]["Enums"]["paket_enum"];
           personen_zahl: number;
@@ -106,19 +107,19 @@ export type Database = {
           standort_id?: string | null;
           startzeit: string;
           status: Database["public"]["Enums"]["bewirtungs_status_enum"];
-          teilnehmerliste?: string | null;
-          anlass?: string | null;
+          teilnehmer_id?: string | null;
         };
         Update: {
           abteilung?: string | null;
-          kundenBewirtung?: boolean;
+          anlass?: string;
           buchungskreis?: string | null;
-          datum: string;
+          datum?: string;
           endzeit?: string;
           id?: string;
           kostenstelle?: string;
           kunden_email?: string;
           kunden_name?: string;
+          kundenBewirtung?: boolean | null;
           mittagsverpflegung?: boolean | null;
           paket?: Database["public"]["Enums"]["paket_enum"];
           personen_zahl?: number;
@@ -126,8 +127,7 @@ export type Database = {
           standort_id?: string | null;
           startzeit?: string;
           status?: Database["public"]["Enums"]["bewirtungs_status_enum"];
-          teilnehmerliste?: string | null;
-          anlass?: string | null;
+          teilnehmer_id?: string | null;
         };
         Relationships: [
           {
@@ -150,20 +150,20 @@ export type Database = {
         Row: {
           id: string;
           name: string;
-          status: string;
           standort_id: string | null;
+          status: string;
         };
         Insert: {
           id?: string;
           name: string;
-          status: string;
           standort_id?: string | null;
+          status?: string;
         };
         Update: {
           id?: string;
           name?: string;
-          status: string;
           standort_id?: string | null;
+          status?: string;
         };
         Relationships: [
           {
@@ -189,6 +189,38 @@ export type Database = {
           name?: string;
         };
         Relationships: [];
+      };
+      teilnehmer: {
+        Row: {
+          abteilung: string | null;
+          bewirtung_id: string | null;
+          created_at: string;
+          id: string;
+          name: string | null;
+        };
+        Insert: {
+          abteilung?: string | null;
+          bewirtung_id?: string | null;
+          created_at?: string;
+          id?: string;
+          name?: string | null;
+        };
+        Update: {
+          abteilung?: string | null;
+          bewirtung_id?: string | null;
+          created_at?: string;
+          id?: string;
+          name?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "teilnehmer_bewirtung_id_fkey";
+            columns: ["bewirtung_id"];
+            isOneToOne: false;
+            referencedRelation: "bewirtungen";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       zusatzleistungen: {
         Row: {

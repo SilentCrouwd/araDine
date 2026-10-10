@@ -5,9 +5,14 @@ import React, { useState } from "react";
 
 type OrderParticipantsProps = Readonly<{
   // Die Liste wird von der übergeordneten Komponente gehalten und hier angezeigt.
-  participants: string[];
+  participants: { name: string; abteilung: string }[];
   // Änderungen werden an die Komponente zurückgemeldet, die den Listenstatus besitzt.
-  onParticipantsChange: (participants: string[]) => void;
+  onParticipantsChange: (
+    participants: {
+      name: string;
+      abteilung: string;
+    }[],
+  ) => void;
 }>;
 
 function OrderParticipantsField({
@@ -15,53 +20,87 @@ function OrderParticipantsField({
   onParticipantsChange,
 }: OrderParticipantsProps) {
   // Temporärer Eingabewert, der erst mit der Bestätigung in die Teilnehmerliste übernommen wird.
-  const [value, setValue] = useState<string>("");
+  const [valueName, setValueName] = useState<{
+    name: string;
+    abteilung: string;
+  }>();
 
   function handleParticipantChange() {
-    if (!value) return;
+    if (!valueName?.name.trim() || !valueName?.abteilung.trim()) return;
     // Fügt den aktuellen Entwurf zur Liste hinzu und leert danach das Eingabefeld.
-    onParticipantsChange([...participants, value]);
-    setValue("");
+    onParticipantsChange([
+      ...participants,
+      { name: valueName.name, abteilung: valueName.abteilung },
+    ]);
+
+    setValueName(undefined);
   }
-  function handleParticipantDelete(participantToDelete: string) {
+  function handleParticipantDelete(indexToDelete: number) {
     onParticipantsChange(
-      participants.filter((participant) => participant !== participantToDelete),
+      participants.filter((_, index) => index !== indexToDelete),
     );
   }
 
   return (
-    <div className="flex flex-col gap-2 py-0.5 px-2">
+    <div className="grid grid-cols-2 gap-2 py-0.5 px-2">
       <label htmlFor="teilnehmerName" className="w-1/2">
         Teilnehmer:
       </label>
-      <div>
-        {participants.map((participant) => {
+      <label htmlFor="abteilung" className="w-1/2">
+        Abteilung:
+      </label>
+
+      <div className="col-span-2">
+        {participants.map((participant, index) => {
           return (
-            <p className="flex items-center gap-2" key={participant}>
-              {participant}
-              <PencilIcon
-                className="h-4 w-4 ml-5 text-black cursor-pointer"
-                onClick={() => {
-                  // Lädt den Namen zum Bearbeiten zurück ins Eingabefeld und nimmt ihn aus der Liste.
-                  setValue(participant);
-                  handleParticipantDelete(participant);
-                }}
-              />
-              <DeleteIcon
-                className="h-4 w-4 text-red-600 cursor-pointer"
-                onClick={() => handleParticipantDelete(participant)}
-              />
-            </p>
+            <div className="grid grid-cols-2 items-center gap-2" key={index}>
+              <p>{participant.name}</p>
+              <div className="flex">
+                <p>{participant.abteilung}</p>
+                <div className="flex justify-end w-full gap-2">
+                  <PencilIcon
+                    className="h-4 w-4 ml-5 text-green-600 cursor-pointer"
+                    onClick={() => {
+                      // Lädt den Namen zum Bearbeiten zurück ins Eingabefeld und nimmt ihn aus der Liste.
+                      setValueName(participant);
+                      handleParticipantDelete(index);
+                    }}
+                  />
+                  <DeleteIcon
+                    className="h-4 w-4 text-red-600 cursor-pointer"
+                    onClick={() => handleParticipantDelete(index)}
+                  />
+                </div>
+              </div>
+            </div>
           );
         })}
       </div>
+
+      <Input
+        className="full"
+        type="text"
+        id="teilnehmerName"
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setValueName((current) => ({
+            name: e.target.value,
+            abteilung: current?.abteilung ?? "",
+          }))
+        }
+        value={valueName?.name ?? ""}
+      />
       <div className="flex items-center">
         <Input
           type="text"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setValue(e.target.value)
+          className="w-full"
+          id="abteilung"
+          onChange={(e) =>
+            setValueName((current) => ({
+              name: current?.name ?? "",
+              abteilung: e.target.value,
+            }))
           }
-          value={value}
+          value={valueName?.abteilung ?? ""}
         />
         <Button
           onClick={() => {

@@ -21,3 +21,5 @@ export type BewirtungenMitExtras = Bewirtungen[number] & {
 };
 
 export type StandorteMitRaeumen = StandortMitRaeumen[];
+
+export type Teilnehmer = Database["public"]["Tables"]["teilnehmer"][];
