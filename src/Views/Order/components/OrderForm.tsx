@@ -27,9 +27,8 @@ function getText(formData: FormData, key: string): string {
 
 function OrderForm() {
   // Zustände für die ausgewählten Werte in der Standort- und Raum-Auswahl.
-
   // Der Paketstatus wird zusätzlich zum Radiowert verwendet, um das Absenden zu steuern.
-  const [selectedPackage, setSelectedPackage] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState("");
   const [selectedLocation, setSelectedLocation] = useState<string>("");
   const orderContext = useOrderContext();
   const [selectedRoom, setSelectedRoom] = useState("");
@@ -63,14 +62,7 @@ function OrderForm() {
           .find((location) => location.name === selectedLocation)
           ?.raeume.find((raume) => raume.name === selectedRoom)?.id ?? null,
       status: "Ready",
-      // Mehrere gleichnamige Teilnehmerfelder werden als mehrzeiliger Text gespeichert.
-      teilnehmerliste: formData
-        .getAll("main_teilnehmerliste")
-        .filter(
-          (participant): participant is string =>
-            typeof participant === "string",
-        )
-        .join("\n"),
+
       mittagsverpflegung: formData.get("main_mittagsverpflegung") === "on",
       buchungskreis: getText(formData, "main_buchungskreis"),
       abteilung: getText(formData, "main_abteilung"),
@@ -94,12 +86,11 @@ function OrderForm() {
       payload: newExtraService,
     });
     // console.log(orderContext.state);
-    await insertBewirtung(newRefreshment, newExtraService);
-  }
-
-  function handlePackageStatus(status: boolean) {
-    // Synchronisiert die Paketauswahl der Unterkomponente mit der Formularvalidierung.
-    setSelectedPackage(status);
+    await insertBewirtung(
+      newRefreshment,
+      newExtraService,
+      orderContext.state.participants,
+    );
   }
 
   // Dient dazu, im zweiten Auswahlfeld nur Räume des gewählten Standorts anzubieten.
@@ -172,8 +163,11 @@ function OrderForm() {
       <div className="w-full flex flex-col items-center gap-4 sm:flex-row sm:items-start">
         <div className="flex w-full flex-col gap-4">
           <OrderRefreshmentForm />
-          <OrderPackageForm packageStatus={handlePackageStatus} />
-          <OrderExtraService />
+          <OrderPackageForm
+            currPackage={selectedPackage}
+            onCurrPackageChange={setSelectedPackage}
+          />
+          <OrderExtraService selectedPackage={selectedPackage} />
         </div>
         <div className="flex w-full flex-col gap-4">
           <OrderMoreInformationForm />

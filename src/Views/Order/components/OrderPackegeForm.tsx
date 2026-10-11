@@ -1,18 +1,21 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Coffee } from "lucide-react";
-import { useState } from "react";
-type OrderPackageFormProps = {
-  packageStatus: (status: boolean) => void;
+
+type OrdercurrPackageFormProps = {
+  currPackage: string;
+  onCurrPackageChange: (name: string) => void;
 };
-function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
+function OrdercurrPackageForm({
+  currPackage,
+  onCurrPackageChange,
+}: OrdercurrPackageFormProps) {
   // Steuert sowohl die markierte Radio-Option als auch die darunter angezeigte Beschreibung.
-  const [selectedPackage, setSelectedPackage] = useState("");
 
   // Gibt je nach Auswahl eine kurze Paketbeschreibung zurück.
   // Diese Info wird unter den Radio-Buttons angezeigt.
-  function handlePackageInfo() {
-    if (selectedPackage === "paket-1") {
+  function handlecurrPackageInfo() {
+    if (currPackage === "paket-1") {
       return (
         <p>
           <span>Paket-1: enthält die Standardverpflegung.</span>
@@ -24,7 +27,7 @@ function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
         </p>
       );
     }
-    if (selectedPackage === "paket-2") {
+    if (currPackage === "paket-2") {
       return (
         <p>
           <span className="tracking-tighter">
@@ -38,7 +41,7 @@ function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
         </p>
       );
     }
-    if (selectedPackage === "paket-3") {
+    if (currPackage === "paket-3") {
       return (
         <p>
           <span className="tracking-tighter">
@@ -69,11 +72,10 @@ function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
           </Label>
           <Input
             onChange={() => {
-              setSelectedPackage("paket-1");
+              onCurrPackageChange("paket-1");
               // Meldet dem übergeordneten Formular, dass eine gültige Paketauswahl vorliegt.
-              packageStatus(true);
             }}
-            checked={selectedPackage === "paket-1"}
+            checked={currPackage === "paket-1"}
             type="radio"
             name="main_paket"
             value="Paket_1"
@@ -91,10 +93,9 @@ function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
           </Label>
           <Input
             onChange={() => {
-              setSelectedPackage("paket-2");
-              packageStatus(true);
+              onCurrPackageChange("paket-2");
             }}
-            checked={selectedPackage === "paket-2"}
+            checked={currPackage === "paket-2"}
             type="radio"
             name="main_paket"
             value="Paket_2"
@@ -111,10 +112,9 @@ function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
           </Label>
           <Input
             onChange={() => {
-              setSelectedPackage("paket-3");
-              packageStatus(true);
+              onCurrPackageChange("paket-3");
             }}
-            checked={selectedPackage === "paket-3"}
+            checked={currPackage === "paket-3"}
             type="radio"
             name="main_paket"
             value="Paket_3"
@@ -123,13 +123,13 @@ function OrderPackageForm({ packageStatus }: OrderPackageFormProps) {
           />
         </div>
       </div>
-      {selectedPackage && (
+      {currPackage && (
         <div className="p-2 mt-5 bg-card-foreground/20 rounded-xl m-2">
-          {handlePackageInfo()}
+          {handlecurrPackageInfo()}
         </div>
       )}
     </div>
   );
 }
 
-export default OrderPackageForm;
+export default OrdercurrPackageForm;

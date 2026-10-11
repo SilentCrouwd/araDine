@@ -1,9 +1,9 @@
 import type {
-  Zusatzleistungen,
   NeueBewirtung,
   NeueZusatzleistung,
   StandorteMitRaeumen,
   Teilnehmer,
+  NeuerTeilnehmer,
 } from "@/Types/types";
 export type OrderState = {
   orders: NeueBewirtung[];
@@ -22,7 +22,7 @@ export type OrderAction =
   | { type: "ADD_ORDER"; payload: NeueBewirtung }
   | { type: "ADD_EXTRA_SERVICE"; payload: NeueZusatzleistung }
   | { type: "GET_LOCATION"; payload: StandorteMitRaeumen }
-  | { type: "GET_PARTICIPANT"; payload: Teilnehmer }
+  | { type: "SET_PARTICIPANT"; payload: NeuerTeilnehmer[number] }
   | { type: "DELETE_PARTICIPANT"; payload: number };
 export function orderReducer(state: OrderState, action: OrderAction) {
   switch (action.type) {
@@ -38,14 +38,16 @@ export function orderReducer(state: OrderState, action: OrderAction) {
         extraServices: [...state.extraServices, action.payload],
       };
     case "GET_LOCATION":
+
       return {
         ...state,
         location: action.payload,
+
       };
-    case "GET_PARTICIPANT":
+    case "SET_PARTICIPANT":
       return {
         ...state,
-        participants: action.payload,
+        participants:[...state.participants, action.payload],
       };
     case "DELETE_PARTICIPANT":
       return {

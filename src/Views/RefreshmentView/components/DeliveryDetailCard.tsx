@@ -1,7 +1,89 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { AlertTriangle } from "lucide-react";
+import { useOrderContext } from "@/Context/RefreshmentContext";
+import type { BewirtungenMitExtras } from "@/Types/types";
+import {
+  AlertTriangle,
+  BottleWine,
+  CheckCircle,
+  Croissant,
+  Milk,
+} from "lucide-react";
+type DeliveryDetailCardPros = {
+  refreshment: BewirtungenMitExtras;
+};
 
-function DeliveryDetailCard() {
+function handleExtraStatus(
+  extras: {
+    name: string | null;
+    menge: string | null;
+  },
+  pax: number,
+  selPackage: string,
+) {
+  if (extras.name === null) return;
+  else if (extras.menge === "on") {
+    return (
+      <div className="grid grid-cols-2 border-b border-border/50 p-2 ">
+        <p className="capitalize">{extras.name}:</p>
+        <CheckCircle className="text-green-500 w-5 h-5" />
+      </div>
+    );
+  } else if (extras.name === "nachbewirtungUhrzeit") {
+    if (extras.menge === null) return;
+    return (
+      <div className="grid grid-cols-2 border-b border-border/50 p-2 ">
+        <p className="capitalize">Uhrzeit:</p>
+        <p>{extras.menge.slice(0, 5)}</p>
+      </div>
+    );
+  } else if (extras.name === "wasser" || extras.name == "tee") {
+    return (
+      <div className="grid grid-cols-2 border-b border-border/50 p-2 ">
+        <p className="capitalize">{extras.name}:</p>
+        <p className="flex">
+          <span className="w-1/5">
+            {extras.menge === "" && selPackage !== "Paket_1"
+              ? Math.floor(pax / 4)
+              : extras.menge}
+          </span>
+          {extras.name === "tee" ? <Milk /> : <BottleWine />}
+        </p>
+      </div>
+    );
+  } else {
+    return (
+      <div className="grid grid-cols-2 border-b border-border/50 p-2 ">
+        <p className="capitalize">{extras.name}:</p>
+        <p className="flex">
+          <span className="w-1/5">
+            {extras.menge === "" && selPackage !== "Paket_1"
+              ? pax
+              : extras.menge}
+          </span>
+          {extras.name === "softdrinks" ? <BottleWine /> : <Croissant />}
+        </p>
+      </div>
+    );
+  }
+}
+
+function DeliveryDetailCard({ refreshment }: DeliveryDetailCardPros) {
+  const orderContext = useOrderContext();
+  const selectedPackage = refreshment.paket;
+  console.log(refreshment.paket);
+
+  const locationName = orderContext.state.location.find(
+    (location) => location.id === refreshment.standort_id,
+  )?.name;
+  const roomName = orderContext.state.location
+    .find((standort) => standort.id === refreshment.standort_id)
+    ?.raeume.find((room) => room.id === refreshment.raum_id)?.name;
+
+  const extraRows = refreshment.zusatzleistungen.map((extra) => ({
+    name: extra.extra_name,
+    menge: extra.extra_value,
+  }));
+
   return (
     <Card className=" h-fit  w-full border border-border bg-card/20 p-2">
       <CardHeader>
@@ -19,37 +101,40 @@ function DeliveryDetailCard() {
       </CardHeader>
       <CardContent className=" text-base bg-card-foreground/30 text-muted-foreground shadow-2xl/20 rounded-xl m-2 p-2 ">
         <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
-          <p>Raum:</p> <p>12:00</p>
+          <p>Raum:</p>{" "}
+          <p>
+            {locationName} {roomName}
+          </p>
         </div>
         <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
-          <p>Startzeit:</p> <p>12:00</p>
+          <p>Startzeit:</p> <p>{refreshment.startzeit.slice(0, 5)}</p>
         </div>
         <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
-          <p>Endzeit:</p> <p>13:00</p>
+          <p>Endzeit:</p> <p>{refreshment.endzeit.slice(0, 5)}</p>
         </div>
         <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
-          <p>Paket:</p> <p>Paket 1</p>
+          <p>Paket:</p> <p>{refreshment.paket.replace("_", " ")}</p>
         </div>
         <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
-          <p>Kaffee:</p> <p>Ja</p>
+          <p>Kaffee:</p>{" "}
+          <p className="flex">
+            <span className="w-1/5">
+              {Math.floor(refreshment.personen_zahl / 4)}{" "}
+            </span>{" "}
+            <Milk />
+          </p>
         </div>
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
-          <p>Tee:</p> <p>Ja</p>
-        </div>
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
-          <p>Wasser:</p> <p>Ja</p>
-        </div>
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
-          <p>Softdrinks:</p> <p>Nein</p>
-        </div>
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
-          <p>Süßware:</p> <p>Ja</p>
-        </div>
-        {/* Hier wird ein Array mit map Raus gerändert maybe auch ein Obj mal schauen */}
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
-          <p>Zusatz:</p>{" "}
-          <p>Bitte 5 flaschen wasser und süßigkeiten um 16 uhr</p>
-        </div>
+        {extraRows.map((extra, index) => {
+          return (
+            <div key={index}>
+              {handleExtraStatus(
+                extra,
+                Number(refreshment.personen_zahl),
+                selectedPackage,
+              )}
+            </div>
+          );
+        })}
       </CardContent>
     </Card>
   );

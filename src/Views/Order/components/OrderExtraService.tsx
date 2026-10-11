@@ -1,9 +1,13 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Divide } from "lucide-react";
 
 import { useState } from "react";
+type OrderExtraServiceProps = Readonly<{
+  selectedPackage: string;
+}>;
 
-function OrderExtraService() {
+function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
   // Steuert, ob nach Auswahl der Nachbewirtung zusätzlich eine Uhrzeit abgefragt wird.
   const [refresh, setRefresh] = useState(false);
   // Diese Konfiguration erzeugt die Eingabefelder und ihre Namen für FormData.
@@ -13,12 +17,14 @@ function OrderExtraService() {
       label: "Wasser:",
       value_id: "wasser_value",
       Placeholder: "Flaschen 0.75L",
+      hidden: selectedPackage !== "paket-1",
     },
     {
       id: "extra_tee",
       label: "Tee:",
       value_id: "Tee_value",
       Placeholder: "Kanne 4pax",
+      hidden: selectedPackage !== "paket-1",
     },
     {
       id: "extra_nuesse",
@@ -31,6 +37,7 @@ function OrderExtraService() {
       label: "Obst:",
       value_id: "obst_value",
       Placeholder: "Stück",
+      hidden: selectedPackage === "paket-3",
     },
     {
       id: "extra_suessware",
@@ -43,6 +50,7 @@ function OrderExtraService() {
       label: "Softdrinks:",
       value_id: "softdrinks_value",
       Placeholder: "Flaschen 0.33L ",
+      hidden: selectedPackage === "paket-3",
     },
     {
       id: "extra_nachbewirtung",
@@ -54,7 +62,27 @@ function OrderExtraService() {
       },
     },
   ];
+  // function handleSelectPackage(selectedPackage: string) {
+  //   if (selectedPackage === "paket-2") {
+  //     const newSelects = extraServiceData.filter(
+  //       (datas) => datas.label !== "Wasser:" && datas.label !== "Tee:",
+  //     );
+  //     return newSelects;
+  //   } else if (selectedPackage === "paket-3") {
+  //     const newSelects = extraServiceData.filter(
+  //       (datas) =>
+  //         datas.label !== "Wasser:" &&
+  //         datas.label !== "Tee:" &&
+  //         datas.label !== "Softdrinks:" &&
+  //         datas.label !== "Obst:",
+  //     );
+  //     return newSelects;
+  //   } else return extraServiceData;
+  // }
 
+  // const filteredSelects = handleSelectPackage(selectedPackage);
+  // console.log(selectedPackage);c
+  const filteredSelects = extraServiceData;
   return (
     <div className="w-full flex flex-col items-center gap-4 sm:flex-row sm:items-start border border-border rounded-xl bg-card-foreground/20 p-3">
       <div className="w-full flex flex-col gap-3">
@@ -62,28 +90,31 @@ function OrderExtraService() {
           Zusatzleistungen
         </h2>
         <div className="flex flex-col gap-2">
-          {extraServiceData.map((service) => (
-            <div
-              className="flex justify-between  gap-2 border-b border-border pb-2 "
-              key={service.id}
-            >
-              <Label
-                key={service.id}
-                className="cursor-pointer w-fit text-sm text-muted-foreground"
-                htmlFor={service.id}
-              >
-                {service.label}
-              </Label>
-              <Input
-                onChange={service.onChange}
-                type={service.type || "number"}
-                id={service.value_id}
-                placeholder={service.Placeholder}
-                name={service.id}
-                className="w-50 text-muted-foreground placeholder:text-muted "
-              />
-            </div>
-          ))}
+          {filteredSelects
+            ? filteredSelects.map((service) => (
+                <div
+                  className="flex justify-between  gap-2 border-b border-border pb-2 "
+                  key={service.id}
+                  hidden={service.hidden}
+                >
+                  <Label
+                    key={service.id}
+                    className="cursor-pointer w-fit text-sm text-muted-foreground"
+                    htmlFor={service.id}
+                  >
+                    {service.label}
+                  </Label>
+                  <Input
+                    onChange={service.onChange}
+                    type={service.type || "number"}
+                    id={service.value_id}
+                    placeholder={service.Placeholder}
+                    name={service.id}
+                    className="w-50 text-muted-foreground placeholder:text-muted "
+                  />
+                </div>
+              ))
+            : []}
         </div>
         {refresh && (
           // Das Zeitfeld wird nur benötigt, wenn die Nachbewirtung aktiviert ist.

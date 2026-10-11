@@ -1,5 +1,9 @@
 import { supabase } from "@/lib/supabaseClient";
-import type { NeueBewirtung, NeueZusatzleistung } from "@/Types/types";
+import type {
+  NeueBewirtung,
+  NeuerTeilnehmer,
+  NeueZusatzleistung,
+} from "@/Types/types";
 
 export async function fetchStandorte() {
   const { data, error } = await supabase
@@ -12,7 +16,7 @@ export async function fetchStandorte() {
   return data;
 }
 export async function fetchBewirtungen() {
-  let { data: bewirtungen, error } = await supabase
+  const { data: bewirtungen, error } = await supabase
     .from("bewirtungen")
     .select("*");
   if (error) {
@@ -22,7 +26,7 @@ export async function fetchBewirtungen() {
 }
 
 export async function fetchExtras() {
-  let { data: zusatzleistungen, error } = await supabase
+  const { data: zusatzleistungen, error } = await supabase
     .from("zusatzleistungen")
     .select("*");
 
@@ -35,6 +39,7 @@ export async function fetchExtras() {
 export async function insertBewirtung(
   newRefreshment: NeueBewirtung,
   extraServices: NeueZusatzleistung,
+  newPax: NeuerTeilnehmer,
 ) {
   const { data, error } = await supabase
     .from("bewirtungen")
@@ -51,6 +56,10 @@ export async function insertBewirtung(
     extra_name: name,
     extra_value: String(value),
   }));
+  const paxRows = newPax.map((pax) => ({
+    ...pax,
+    bewirtung_id: data.id,
+  }));
 
   if (extraRows.length > 0) {
     const { data: extraServiceData, error: extraServiceError } = await supabase
@@ -62,6 +71,18 @@ export async function insertBewirtung(
       console.error("Error inserting extra services:", extraServiceError);
     }
     console.log("Inserted extra services:", extraServiceData);
+  }
+  if (paxRows.length > 0) {
+    const { data: paxData, error: paxError } = await supabase
+      .from("teilnehmer")
+      .insert(paxRows)
+      .select();
+    if (paxError) {
+      console.error(paxError);
+    }
+    console.log(paxData);
+
+    return paxData;
   }
 
   return data;
@@ -83,7 +104,7 @@ export async function fetchBewirtungDatumUndStandort(
 }
 
 export async function fetchCurrBewirtung(refreshmentId: string) {
-  let { data: BewirtungenMitExtras, error } = await supabase
+  const { data: BewirtungenMitExtras, error } = await supabase
     .from("bewirtungen")
     .select("*,zusatzleistungen(*)")
     .eq("id", refreshmentId)
@@ -92,4 +113,17 @@ export async function fetchCurrBewirtung(refreshmentId: string) {
     console.error(error);
   }
   return BewirtungenMitExtras;
+}
+
+export async function fetchCurrTeilnehmer(bewirtung_id: string) {
+  const { data: teilnehmer, error } = await supabase
+    .from("teilnehmer")
+    .select("*")
+    .eq("bewirtung_id", bewirtung_id);
+
+  if (error) {
+    console.error(error);
+  }
+  console.log(teilnehmer);
+  return teilnehmer;
 }

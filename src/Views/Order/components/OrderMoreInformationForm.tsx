@@ -1,4 +1,4 @@
-import React, { useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent } from "react";
 import { Label } from "@/components/ui/label";
 import { AlertTriangle } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -65,10 +65,7 @@ function OrderMoreInformationForm() {
           </p>
 
           <div className="flex gap-2 py-0.5 px-2">
-            <OrderParticipantsField
-              participants={participants}
-              onParticipantsChange={setParticipants}
-            />{" "}
+            <OrderParticipantsField />{" "}
           </div>
         </div>
       )}

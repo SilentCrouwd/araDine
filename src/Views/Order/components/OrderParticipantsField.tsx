@@ -1,44 +1,32 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useOrderContext } from "@/Context/RefreshmentContext";
+import type { NeuerTeilnehmer } from "@/Types/types";
 import { CheckIcon, DeleteIcon, PencilIcon } from "lucide-react";
 import React, { useState } from "react";
 
-type OrderParticipantsProps = Readonly<{
-  // Die Liste wird von der übergeordneten Komponente gehalten und hier angezeigt.
-  participants: { name: string; abteilung: string }[];
-  // Änderungen werden an die Komponente zurückgemeldet, die den Listenstatus besitzt.
-  onParticipantsChange: (
-    participants: {
-      name: string;
-      abteilung: string;
-    }[],
-  ) => void;
-}>;
-
-function OrderParticipantsField({
-  participants,
-  onParticipantsChange,
-}: OrderParticipantsProps) {
+function OrderParticipantsField() {
   // Temporärer Eingabewert, der erst mit der Bestätigung in die Teilnehmerliste übernommen wird.
-  const [valueName, setValueName] = useState<{
-    name: string;
-    abteilung: string;
-  }>();
+  const [valueName, setValueName] = useState<NeuerTeilnehmer[number] | null>(
+    null,
+  );
+  const orderContext = useOrderContext();
 
   function handleParticipantChange() {
-    if (!valueName?.name.trim() || !valueName?.abteilung.trim()) return;
-    // Fügt den aktuellen Entwurf zur Liste hinzu und leert danach das Eingabefeld.
-    onParticipantsChange([
-      ...participants,
-      { name: valueName.name, abteilung: valueName.abteilung },
-    ]);
+    const name = valueName?.name?.trim();
+    const abteilung = valueName?.abteilung?.trim();
 
-    setValueName(undefined);
+    if (!name || !abteilung) return;
+
+    const newPax = { name, abteilung };
+    orderContext.dispatch({ type: "SET_PARTICIPANT", payload: newPax });
+    setValueName(null);
   }
   function handleParticipantDelete(indexToDelete: number) {
-    onParticipantsChange(
-      participants.filter((_, index) => index !== indexToDelete),
-    );
+    orderContext.dispatch({
+      type: "DELETE_PARTICIPANT",
+      payload: indexToDelete,
+    });
   }
 
   return (
@@ -51,7 +39,7 @@ function OrderParticipantsField({
       </label>
 
       <div className="col-span-2">
-        {participants.map((participant, index) => {
+        {orderContext.state.participants.map((participant, index) => {
           return (
             <div className="grid grid-cols-2 items-center gap-2" key={index}>
               <p>{participant.name}</p>
@@ -62,7 +50,10 @@ function OrderParticipantsField({
                     className="h-4 w-4 ml-5 text-green-600 cursor-pointer"
                     onClick={() => {
                       // Lädt den Namen zum Bearbeiten zurück ins Eingabefeld und nimmt ihn aus der Liste.
-                      setValueName(participant);
+                      setValueName({
+                        name: participant.name,
+                        abteilung: participant.abteilung,
+                      });
                       handleParticipantDelete(index);
                     }}
                   />

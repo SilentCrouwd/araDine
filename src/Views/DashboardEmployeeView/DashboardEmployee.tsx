@@ -34,7 +34,7 @@ function DashboardEmployee() {
     BewirtungenMitExtras[]
   >([]);
   // Speichert den ausgewählten Standort und das ausgewählte Datum.
-  const [selectedLocationName, setselectedLocationName] = useState<string>("");
+  const [selectedLocationName, setSelectedLocationName] = useState<string>("");
   const [date, setDate] = useState<Date>();
   const [open, setOpen] = useState(false);
   // Ermittelt den vollständigen Standort anhand des ausgewählten Namens.
@@ -117,7 +117,7 @@ function DashboardEmployee() {
         {/* Auswahl des Standorts */}
         <Select
           value={selectedLocationName}
-          onValueChange={(value) => setselectedLocationName(value ?? "")}
+          onValueChange={(value) => setSelectedLocationName(value ?? "")}
           items={locations.map((location) => ({
             label: location.name,
             value: location.name,

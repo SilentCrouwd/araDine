@@ -1,11 +1,11 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import type { Teilnehmer } from "@/Types/types";
 import { User } from "lucide-react";
+type PaxOverviewProps = Readonly<{
+  pax: Teilnehmer;
+}>;
 
-function PaxOverviewList({
-  participants,
-}: {
-  participants: { name: string; department: string }[];
-}) {
+function PaxOverviewList({ pax }: PaxOverviewProps) {
   return (
     <Card className="h-fit w-full border border-border bg-card/20 p-2">
       <CardHeader>
@@ -19,15 +19,16 @@ function PaxOverviewList({
           <p>Abteilung</p>
         </div>
         {/* Ab hier wird dasnn mit map dynamisch eingelesen erst speichern als Array von Personen  */}
-        {participants.map((participant, index) => (
+        {pax.map((participant, index) => (
           <div
             key={index}
             className="grid grid-cols-2 gap-2 border-b border-border/50 py-2 "
           >
-            <p className="flex items-center">
-              <User className="h-4 w-4 inline-block mr-2" /> {participant.name}
+            <p className=" grid grid-cols-3 items-center capitalize ">
+              <User className="col-span-1  text-green-500" />{" "}
+              <span className="col-span-2">{participant.name}</span>
             </p>
-            <p>{participant.department}</p>
+            <p className="capitalize">{participant.abteilung}</p>
           </div>
         ))}
       </CardContent>
