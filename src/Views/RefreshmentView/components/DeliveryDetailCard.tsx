@@ -32,13 +32,23 @@ function handleExtraStatus(extras: {
         <p>{extras.menge.slice(0, 5)}</p>
       </div>
     );
-  } else if (extras.name === "wasser" || extras.name == "tee") {
+  } else if (extras.name === "wasser") {
     return (
       <div className="grid grid-cols-2 border-b border-border/50 p-2 ">
         <p className="capitalize">{extras.name}:</p>
         <p className="flex">
           <span className="w-1/5">{extras.menge}</span>
-          {extras.name === "tee" ? <Milk /> : <BottleWine />}
+          <BottleWine />
+        </p>
+      </div>
+    );
+  } else if (extras.name === "tee" || extras.name === "kaffee") {
+    return (
+      <div className="grid grid-cols-2 border-b border-border/50 p-2 ">
+        <p className="capitalize">{extras.name}:</p>
+        <p className="flex">
+          <span className="w-1/5">{extras.menge}</span>
+          <Milk />
         </p>
       </div>
     );
@@ -108,15 +118,7 @@ function DeliveryDetailCard({ refreshment }: DeliveryDetailCardPros) {
         <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
           <p>Paket:</p> <p>{refreshment.paket.replace("_", " ")}</p>
         </div>
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
-          <p>Kaffee:</p>{" "}
-          <p className="flex">
-            <span className="w-1/5">
-              {Math.ceil(refreshment.personen_zahl / 4)}{" "}
-            </span>{" "}
-            <Milk />
-          </p>
-        </div>
+
         {extraRows.map((extra, index) => {
           return <div key={index}>{handleExtraStatus(extra)}</div>;
         })}

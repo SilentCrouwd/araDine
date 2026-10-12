@@ -124,6 +124,6 @@ export async function fetchCurrTeilnehmer(bewirtung_id: string) {
   if (error) {
     console.error(error);
   }
-  console.log(teilnehmer);
+
   return teilnehmer;
 }

@@ -81,11 +81,17 @@ function OrderForm() {
 
       // Hier ist die neueZusatzleistung als Objekt vom Typ NeueZusatzleistung.
     }
+    if (selectedPackage === "paket-1") {
+      extraService.kaffee = String(Math.ceil(newRefreshment.personen_zahl / 4));
+    }
+
     if (selectedPackage === "paket-2") {
+      extraService.kaffee = String(Math.ceil(newRefreshment.personen_zahl / 4));
       extraService.wasser = String(Math.ceil(newRefreshment.personen_zahl / 4));
       extraService.tee = String(Math.ceil(newRefreshment.personen_zahl / 4));
     }
     if (selectedPackage === "paket-3") {
+      extraService.kaffee = String(Math.ceil(newRefreshment.personen_zahl / 4));
       extraService.wasser = String(Math.ceil(newRefreshment.personen_zahl / 4));
       extraService.tee = String(Math.ceil(newRefreshment.personen_zahl / 4));
       extraService.obst = String(newRefreshment.personen_zahl);

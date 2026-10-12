@@ -14,7 +14,54 @@ import type { BewirtungenMitExtras } from "@/Types/types";
 type ActualDeliveryFormProps = Readonly<{
   refreshment: BewirtungenMitExtras;
 }>;
-function ActualDeliveryForm(_props: ActualDeliveryFormProps) {
+
+const actualDeliveryFields = [
+  {
+    id: "actual_kaffee",
+    name: "actual_kaffee",
+    type: "number",
+    label: "Kaffee:",
+  },
+  { id: "actual_tee", name: "actual_tee", type: "number", label: "Tee:" },
+  {
+    id: "actual_wasser",
+    name: "actual_wasser",
+    type: "number",
+    label: "Wasser:",
+  },
+  {
+    id: "actual_softdrinks",
+    name: "actual_softdrinks",
+    type: "number",
+    label: "Softdrinks:",
+  },
+  {
+    id: "actual_suessware",
+    name: "actual_suessware",
+    type: "number",
+    label: "Süßware:",
+  },
+] as const;
+
+function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
+  const newExtraRows = refreshment.zusatzleistungen
+    .filter(
+      (extra) =>
+        extra.extra_name !== "nachbewirtung" &&
+        extra.extra_name !== "nachbewirtungUhrzeit",
+    )
+    .map((extra) => {
+      const extraName = extra.extra_name ?? "";
+
+      return {
+        name: "actual_" + extraName,
+        label: extraName.charAt(0).toUpperCase() + extraName.slice(1) + ":",
+        id: extraName,
+        value: extra.extra_value,
+        type: extraName === "sonstige" ? "text" : "number",
+      };
+    });
+
   return (
     <Card className="h-fit w-full border border-border bg-card/20 p-2">
       <CardHeader>
@@ -24,22 +71,24 @@ function ActualDeliveryForm(_props: ActualDeliveryFormProps) {
       </CardHeader>
       <CardContent className="text-base bg-card-foreground/30 text-muted-foreground shadow-2xl/20 rounded-xl m-2 p-2">
         <form>
-          <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
-            <p>Kaffee:</p> <Input defaultValue="0" />
-          </div>
-          <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
-            <p>Tee:</p> <Input defaultValue="0" />
-          </div>
-          <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
-            <p>Wasser:</p> <Input defaultValue="0" />
-          </div>
-          <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
-            <p>Softdrinks:</p> <Input defaultValue="0" />
-          </div>
-
-          <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2">
-            <p>Süßware:</p> <Input defaultValue="0" />
-          </div>
+          {newExtraRows.map((field) => (
+            <div
+              key={field.id}
+              className="grid grid-cols-2 gap-2 border-b border-border/50 p-2"
+            >
+              <p>{field.label}</p>
+              <Input
+                id={field.id}
+                name={field.name}
+                type={field.type}
+                defaultValue={
+                  field.type === "number"
+                    ? Number(field.value ?? 0)
+                    : (field.value ?? "")
+                }
+              />
+            </div>
+          ))}
           <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2 items-center">
             <p>Service:</p>
             <Select>

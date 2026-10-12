@@ -12,6 +12,13 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
   // Diese Konfiguration erzeugt die Eingabefelder und ihre Namen für FormData.
   const extraServiceData = [
     {
+      id: "extra_kaffee",
+      label: "Kaffee:",
+      value_id: "kaffee_value",
+      Placeholder: "Kanne 4pax",
+      hidden: true,
+    },
+    {
       id: "extra_wasser",
       label: "Wasser:",
       value_id: "wasser_value",
@@ -25,6 +32,7 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
       Placeholder: "Kanne 4pax",
       hidden: selectedPackage !== "paket-1",
     },
+
     {
       id: "extra_nuesse",
       label: "Nüsse:",
