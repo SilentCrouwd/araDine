@@ -39,7 +39,7 @@ function DashboardEmployee() {
   );
   const [date, setDate] = useState<Date | undefined>(() => {
     const storedDate = sessionStorage.getItem("araDine.dashboard.date");
-    return storedDate ? parseISO(storedDate) : undefined;
+    return storedDate ? parseISO(storedDate) : new Date();
   });
   const [open, setOpen] = useState(false);
   // Ermittelt den vollständigen Standort anhand des ausgewählten Namens.
