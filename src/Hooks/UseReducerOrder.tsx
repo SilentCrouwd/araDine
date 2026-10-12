@@ -2,14 +2,13 @@ import type {
   NeueBewirtung,
   NeueZusatzleistung,
   StandorteMitRaeumen,
-  Teilnehmer,
   NeuerTeilnehmer,
 } from "@/Types/types";
 export type OrderState = {
   orders: NeueBewirtung[];
   extraServices: NeueZusatzleistung[];
   location: StandorteMitRaeumen;
-  participants: Teilnehmer;
+  participants: NeuerTeilnehmer;
 };
 
 export const initialOrderState: OrderState = {
@@ -38,16 +37,14 @@ export function orderReducer(state: OrderState, action: OrderAction) {
         extraServices: [...state.extraServices, action.payload],
       };
     case "GET_LOCATION":
-
       return {
         ...state,
         location: action.payload,
-
       };
     case "SET_PARTICIPANT":
       return {
         ...state,
-        participants:[...state.participants, action.payload],
+        participants: [...state.participants, action.payload],
       };
     case "DELETE_PARTICIPANT":
       return {

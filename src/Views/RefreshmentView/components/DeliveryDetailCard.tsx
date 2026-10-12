@@ -12,14 +12,10 @@ type DeliveryDetailCardPros = {
   refreshment: BewirtungenMitExtras;
 };
 
-function handleExtraStatus(
-  extras: {
-    name: string | null;
-    menge: string | null;
-  },
-  pax: number,
-  selPackage: string,
-) {
+function handleExtraStatus(extras: {
+  name: string | null;
+  menge: string | null;
+}) {
   if (extras.name === null) return;
   else if (extras.menge === "on") {
     return (
@@ -41,13 +37,16 @@ function handleExtraStatus(
       <div className="grid grid-cols-2 border-b border-border/50 p-2 ">
         <p className="capitalize">{extras.name}:</p>
         <p className="flex">
-          <span className="w-1/5">
-            {extras.menge === "" && selPackage !== "Paket_1"
-              ? Math.floor(pax / 4)
-              : extras.menge}
-          </span>
+          <span className="w-1/5">{extras.menge}</span>
           {extras.name === "tee" ? <Milk /> : <BottleWine />}
         </p>
+      </div>
+    );
+  } else if (extras.name === "sonstige") {
+    return (
+      <div className="grid grid-cols-2 border-b border-border/50 p-2 ">
+        <p className="capitalize">{extras.name}:</p>
+        <p>{extras.menge}</p>
       </div>
     );
   } else {
@@ -55,11 +54,7 @@ function handleExtraStatus(
       <div className="grid grid-cols-2 border-b border-border/50 p-2 ">
         <p className="capitalize">{extras.name}:</p>
         <p className="flex">
-          <span className="w-1/5">
-            {extras.menge === "" && selPackage !== "Paket_1"
-              ? pax
-              : extras.menge}
-          </span>
+          <span className="w-1/5">{extras.menge}</span>
           {extras.name === "softdrinks" ? <BottleWine /> : <Croissant />}
         </p>
       </div>
@@ -69,8 +64,6 @@ function handleExtraStatus(
 
 function DeliveryDetailCard({ refreshment }: DeliveryDetailCardPros) {
   const orderContext = useOrderContext();
-  const selectedPackage = refreshment.paket;
-  console.log(refreshment.paket);
 
   const locationName = orderContext.state.location.find(
     (location) => location.id === refreshment.standort_id,
@@ -119,21 +112,13 @@ function DeliveryDetailCard({ refreshment }: DeliveryDetailCardPros) {
           <p>Kaffee:</p>{" "}
           <p className="flex">
             <span className="w-1/5">
-              {Math.floor(refreshment.personen_zahl / 4)}{" "}
+              {Math.ceil(refreshment.personen_zahl / 4)}{" "}
             </span>{" "}
             <Milk />
           </p>
         </div>
         {extraRows.map((extra, index) => {
-          return (
-            <div key={index}>
-              {handleExtraStatus(
-                extra,
-                Number(refreshment.personen_zahl),
-                selectedPackage,
-              )}
-            </div>
-          );
+          return <div key={index}>{handleExtraStatus(extra)}</div>;
         })}
       </CardContent>
     </Card>

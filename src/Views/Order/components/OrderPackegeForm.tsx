@@ -50,7 +50,7 @@ function OrdercurrPackageForm({
           <span className="flex items-start gap-2 tracking-tight">
             <Coffee className="shrink-0" />
             <span>
-              Kaffee, Tee, Milch, Zucker, Wasser, Obst, Snacks und Softdrinks
+              Kaffee, Tee, Milch, Zucker, Wasser, Obst und Softdrinks
             </span>
           </span>
         </p>

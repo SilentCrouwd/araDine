@@ -14,7 +14,7 @@ import type { BewirtungenMitExtras } from "@/Types/types";
 type ActualDeliveryFormProps = Readonly<{
   refreshment: BewirtungenMitExtras;
 }>;
-function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
+function ActualDeliveryForm(_props: ActualDeliveryFormProps) {
   return (
     <Card className="h-fit w-full border border-border bg-card/20 p-2">
       <CardHeader>

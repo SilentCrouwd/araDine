@@ -1,6 +1,5 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Divide } from "lucide-react";
 
 import { useState } from "react";
 type OrderExtraServiceProps = Readonly<{
@@ -51,6 +50,13 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
       value_id: "softdrinks_value",
       Placeholder: "Flaschen 0.33L ",
       hidden: selectedPackage === "paket-3",
+    },
+    {
+      id: "extra_sonstige",
+      label: "Sonstige:",
+      value_id: "sonstige_value",
+      Placeholder: "Sonstiges",
+      type: "text",
     },
     {
       id: "extra_nachbewirtung",

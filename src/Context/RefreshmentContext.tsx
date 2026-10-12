@@ -11,11 +11,7 @@ import {
   orderReducer,
   type OrderAction,
 } from "../Hooks/UseReducerOrder";
-import {
-  fetchBewirtungen,
-  fetchExtras,
-  fetchStandorte,
-} from "@/Hooks/SupaBaseAPI";
+import { fetchStandorte } from "@/Hooks/SupaBaseAPI";
 import type { StandorteMitRaeumen } from "@/Types/types";
 
 type OrderContextValue = {

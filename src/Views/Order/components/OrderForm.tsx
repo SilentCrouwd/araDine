@@ -78,8 +78,20 @@ function OrderForm() {
         const cleanKey = key.replace("extra_", "");
         extraService[cleanKey] = value;
       }
+
       // Hier ist die neueZusatzleistung als Objekt vom Typ NeueZusatzleistung.
     }
+    if (selectedPackage === "paket-2") {
+      extraService.wasser = String(Math.ceil(newRefreshment.personen_zahl / 4));
+      extraService.tee = String(Math.ceil(newRefreshment.personen_zahl / 4));
+    }
+    if (selectedPackage === "paket-3") {
+      extraService.wasser = String(Math.ceil(newRefreshment.personen_zahl / 4));
+      extraService.tee = String(Math.ceil(newRefreshment.personen_zahl / 4));
+      extraService.obst = String(newRefreshment.personen_zahl);
+      extraService.softdrinks = String(newRefreshment.personen_zahl);
+    }
+
     const newExtraService: NeueZusatzleistung = extraService;
     orderContext.dispatch({
       type: "ADD_EXTRA_SERVICE",

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -34,8 +34,13 @@ function DashboardEmployee() {
     BewirtungenMitExtras[]
   >([]);
   // Speichert den ausgewählten Standort und das ausgewählte Datum.
-  const [selectedLocationName, setSelectedLocationName] = useState<string>("");
-  const [date, setDate] = useState<Date>();
+  const [selectedLocationName, setSelectedLocationName] = useState(
+    () => sessionStorage.getItem("araDine.dashboard.location") ?? "",
+  );
+  const [date, setDate] = useState<Date | undefined>(() => {
+    const storedDate = sessionStorage.getItem("araDine.dashboard.date");
+    return storedDate ? parseISO(storedDate) : undefined;
+  });
   const [open, setOpen] = useState(false);
   // Ermittelt den vollständigen Standort anhand des ausgewählten Namens.
   const currLocation = locations.find(
@@ -117,11 +122,11 @@ function DashboardEmployee() {
         {/* Auswahl des Standorts */}
         <Select
           value={selectedLocationName}
-          onValueChange={(value) => setSelectedLocationName(value ?? "")}
-          items={locations.map((location) => ({
-            label: location.name,
-            value: location.name,
-          }))}
+          onValueChange={(value) => {
+            const locationName = value ?? "";
+            setSelectedLocationName(locationName);
+            sessionStorage.setItem("araDine.dashboard.location", locationName);
+          }}
         >
           <SelectTrigger className="w-fit p-5 bg-card/20 hover:bg-transparent ">
             <SelectValue
@@ -166,8 +171,18 @@ function DashboardEmployee() {
             <Calendar
               mode="single"
               selected={date}
-              onSelect={(date) => {
-                setDate(date);
+              onSelect={(selectedDate) => {
+                setDate(selectedDate);
+
+                if (selectedDate) {
+                  sessionStorage.setItem(
+                    "araDine.dashboard.date",
+                    format(selectedDate, "yyyy-MM-dd"),
+                  );
+                } else {
+                  sessionStorage.removeItem("araDine.dashboard.date");
+                }
+
                 setOpen(false);
               }}
             />

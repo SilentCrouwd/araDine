@@ -9,11 +9,6 @@ function OrderMoreInformationForm() {
   // für die Mittagsverpflegung bzw. Nachbewirtung angezeigt werden.
   const [lunch, setLunch] = useState(false);
 
-  // Teilnehmer bleiben während der Formulareingabe als Liste im Komponentenstatus.
-  const [participants, setParticipants] = useState<
-    { name: string; abteilung: string }[]
-  >([]);
-
   // Standardfelder für die Zusatzinformationen des Belegs.
   // Checkboxen schalten zusätzliche Abschnitte ein oder aus.
   // Die Feldnamen entsprechen den Schlüsseln, die OrderForm beim Submit aus FormData liest.
