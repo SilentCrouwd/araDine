@@ -127,3 +127,20 @@ export async function fetchCurrTeilnehmer(bewirtung_id: string) {
 
   return teilnehmer;
 }
+
+export async function fetchBewirtungenByStandortUndRaum(
+  room_id: string,
+  date: string,
+) {
+  const { data: bewirtungen, error } = await supabase
+    .from("bewirtungen")
+    .select("*")
+    .eq("raum_id", room_id)
+    .eq("datum", date);
+  if (error) {
+    console.error(error);
+  }
+  console.log(bewirtungen);
+
+  return bewirtungen;
+}

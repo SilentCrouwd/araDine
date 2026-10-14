@@ -1,8 +1,11 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
-function OrderRefreshmentForm() {
-  // Konfiguration der Belegfelder; die Namen dienen OrderForm zum Auslesen per FormData.
+type OrderRefreshmentFormProps = Readonly<{
+  onChangeDate: (date: string) => void;
+}>;
+
+function OrderRefreshmentForm({ onChangeDate }: OrderRefreshmentFormProps) {
   const refreshmentFields = [
     { id: "name", name: "main_kunden_name", label: "Name:", type: "text" },
     {
@@ -19,14 +22,19 @@ function OrderRefreshmentForm() {
       type: "time",
     },
     { id: "endzeit", name: "main_endzeit", label: "Endzeit:", type: "time" },
-    { id: "datum", name: "main_datum", label: "Datum:", type: "date" },
+    {
+      id: "datum",
+      name: "main_datum",
+      label: "Datum:",
+      type: "date",
+    },
     {
       id: "kundenbewirtung",
       name: "main_kundenBewirtung",
       label: "Kundenbewirtung:",
       type: "checkbox",
     },
-  ] as const;
+  ];
 
   return (
     <div className="w-full flex flex-col gap-3 text-muted-foreground border border-border rounded-xl bg-card-foreground/20 p-3">
@@ -48,9 +56,14 @@ function OrderRefreshmentForm() {
               id={field.id}
               name={field.name}
               type={field.type}
-              required
+              onChange={
+                field.type === "date"
+                  ? (e) => onChangeDate(e.currentTarget.value)
+                  : undefined
+              }
+              required={field.name !== "main_kundenBewirtung"}
               className={
-                field.type === "time" || "date"
+                field.type === "time" || field.type === "date"
                   ? "w-50 [&::-webkit-calendar-picker-indicator]:invert"
                   : "w-50 text-muted-foreground placeholder:text-muted"
               }

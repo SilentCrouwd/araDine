@@ -13,9 +13,19 @@ function OrderMoreInformationForm() {
   // Checkboxen schalten zusätzliche Abschnitte ein oder aus.
   // Die Feldnamen entsprechen den Schlüsseln, die OrderForm beim Submit aus FormData liest.
   const additionalFields = [
-    { id: "main_buchungskreis", label: "Buchungskreis:", type: "text" },
+    {
+      id: "main_buchungskreis",
+      label: "Buchungskreis:",
+      type: "text",
+      required: true,
+    },
     { id: "main_abteilung", label: "Abteilung:", type: "text" },
-    { id: "main_kostenstelle", label: "Kostenstelle:", type: "text" },
+    {
+      id: "main_kostenstelle",
+      label: "Kostenstelle:",
+      type: "text",
+      required: true,
+    },
     { id: "main_anlass", label: "Anlass:", type: "text" },
     {
       id: "main_mittagsverpflegung",
@@ -43,6 +53,7 @@ function OrderMoreInformationForm() {
             id={field.id}
             className={`w-50 ${field.type === "checkbox" ? "w-40  p-0" : ""}`}
             name={field.id.toLowerCase()}
+            required={field.required ?? false}
           />
         </div>
       ))}

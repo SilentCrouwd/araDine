@@ -14,20 +14,17 @@ import OrderMoreInformationForm from "./OrderMoreInformationForm";
 import OrderExtraService from "./OrderExtraService";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
-import { insertBewirtung } from "@/Hooks/SupaBaseAPI";
+import {
+  fetchBewirtungenByStandortUndRaum,
+  insertBewirtung,
+} from "@/Hooks/SupaBaseAPI";
 import type { NeueBewirtung, NeueZusatzleistung } from "@/Types/types";
 import { useOrderContext } from "@/Context/RefreshmentContext";
-import type { Database } from "@/Types/supabaseTypes";
-
-function getText(formData: FormData, key: string): string {
-  // Liefert nur Textwerte zurück und behandelt fehlende Formularfelder als leeren Text.
-  const value = formData.get(key);
-  return typeof value === "string" ? value : "";
-}
 
 function OrderForm() {
   // Zustände für die ausgewählten Werte in der Standort- und Raum-Auswahl.
   // Der Paketstatus wird zusätzlich zum Radiowert verwendet, um das Absenden zu steuern.
+  const [currDate, setCurrDate] = useState<string>("");
   const [selectedPackage, setSelectedPackage] = useState("");
   const [selectedLocation, setSelectedLocation] = useState<string>("");
   const orderContext = useOrderContext();
@@ -40,33 +37,30 @@ function OrderForm() {
     const formData = new FormData(e.currentTarget);
 
     // Überführt die Formularwerte in das Datenbankformat der Bewirtung.
-    const newRefreshment: NeueBewirtung = {
-      kunden_name: getText(formData, "main_kunden_name"),
-      personen_zahl: Number(getText(formData, "main_personen_zahl")),
-      kunden_email: getText(formData, "main_kunden_email"),
-      startzeit: getText(formData, "main_startzeit"),
-      endzeit: getText(formData, "main_endzeit"),
-      datum: getText(formData, "main_datum"),
-      kundenBewirtung: formData.get("main_kundenBewirtung") === "on",
-      kostenstelle: getText(formData, "main_kostenstelle"),
-      paket: formData.get(
-        "main_paket",
-      ) as Database["public"]["Enums"]["paket_enum"],
-      anlass: getText(formData, "main_anlass") || null,
-      standort_id:
-        orderContext.state.location.find(
-          (locaton) => locaton.name === selectedLocation,
-        )?.id ?? null,
-      raum_id:
-        orderContext.state.location
-          .find((location) => location.name === selectedLocation)
-          ?.raeume.find((raume) => raume.name === selectedRoom)?.id ?? null,
-      status: "Ready",
+    // Alle Felder mit Präfix "main_" einsammeln (Präfix wird entfernt).
+    const main: Record<string, FormDataEntryValue> = {};
+    for (const [key, value] of formData.entries()) {
+      if (key.startsWith("main_")) {
+        main[key.slice("main_".length)] = value;
+      }
+    }
 
-      mittagsverpflegung: formData.get("main_mittagsverpflegung") === "on",
-      buchungskreis: getText(formData, "main_buchungskreis"),
-      abteilung: getText(formData, "main_abteilung"),
-    };
+    const location = orderContext.state.location.find(
+      (loc) => loc.name === selectedLocation,
+    );
+
+    const newRefreshment = {
+      ...main,
+      personen_zahl: Number(main.personen_zahl),
+      // Nicht angehakte Checkboxen fehlen in FormData.
+      kundenBewirtung: main.kundenBewirtung === "on",
+      mittagsverpflegung: main.mittagsverpflegung === "on",
+      anlass: String(main.anlass ?? "") || null,
+      standort_id: location?.id ?? null,
+      raum_id:
+        location?.raeume.find((r) => r.name === selectedRoom)?.id ?? null,
+      status: "Ready",
+    } as NeueBewirtung;
 
     orderContext.dispatch({ type: "ADD_ORDER", payload: newRefreshment });
 
@@ -81,6 +75,7 @@ function OrderForm() {
 
       // Hier ist die neueZusatzleistung als Objekt vom Typ NeueZusatzleistung.
     }
+
     if (selectedPackage === "paket-1") {
       extraService.kaffee = String(Math.ceil(newRefreshment.personen_zahl / 4));
     }
@@ -103,12 +98,30 @@ function OrderForm() {
       type: "ADD_EXTRA_SERVICE",
       payload: newExtraService,
     });
-    // console.log(orderContext.state);
-    await insertBewirtung(
-      newRefreshment,
-      newExtraService,
-      orderContext.state.participants,
+
+    const filteredRoomId = orderContext.state.location
+      .find((location) => location.name === selectedLocation)
+      ?.raeume.find((room) => room.name === selectedRoom)?.id;
+
+    const currBew = await fetchBewirtungenByStandortUndRaum(
+      filteredRoomId ?? "",
+      currDate,
     );
+    const conflict = currBew?.find(
+      (bew) =>
+        newRefreshment.startzeit < bew.startzeit &&
+        bew.endzeit > newRefreshment.startzeit,
+    );
+    if (conflict) {
+      alert("Der Raum ist zu dieser Zeit leider schon belegt");
+    } else {
+      await insertBewirtung(
+        newRefreshment,
+        newExtraService,
+        orderContext.state.participants,
+      );
+      alert("Das hat Funktioniert ");
+    }
   }
 
   // Dient dazu, im zweiten Auswahlfeld nur Räume des gewählten Standorts anzubieten.
@@ -180,7 +193,7 @@ function OrderForm() {
       </div>
       <div className="w-full flex flex-col items-center gap-4 sm:flex-row sm:items-start">
         <div className="flex w-full flex-col gap-4">
-          <OrderRefreshmentForm />
+          <OrderRefreshmentForm onChangeDate={setCurrDate} />
           <OrderPackageForm
             currPackage={selectedPackage}
             onCurrPackageChange={setSelectedPackage}

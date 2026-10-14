@@ -71,8 +71,8 @@ export type Database = {
       bewirtungen: {
         Row: {
           abteilung: string | null;
-          anlass?: string | null;
-          buchungskreis: string | null;
+          anlass: string | null;
+          buchungskreis: string;
           datum: string;
           endzeit: string;
           id: string;
@@ -92,7 +92,7 @@ export type Database = {
         Insert: {
           abteilung?: string | null;
           anlass?: string | null;
-          buchungskreis?: string | null;
+          buchungskreis: string;
           datum: string;
           endzeit: string;
           id?: string;
@@ -112,7 +112,7 @@ export type Database = {
         Update: {
           abteilung?: string | null;
           anlass?: string | null;
-          buchungskreis?: string | null;
+          buchungskreis?: string;
           datum?: string;
           endzeit?: string;
           id?: string;

@@ -15,34 +15,6 @@ type ActualDeliveryFormProps = Readonly<{
   refreshment: BewirtungenMitExtras;
 }>;
 
-const actualDeliveryFields = [
-  {
-    id: "actual_kaffee",
-    name: "actual_kaffee",
-    type: "number",
-    label: "Kaffee:",
-  },
-  { id: "actual_tee", name: "actual_tee", type: "number", label: "Tee:" },
-  {
-    id: "actual_wasser",
-    name: "actual_wasser",
-    type: "number",
-    label: "Wasser:",
-  },
-  {
-    id: "actual_softdrinks",
-    name: "actual_softdrinks",
-    type: "number",
-    label: "Softdrinks:",
-  },
-  {
-    id: "actual_suessware",
-    name: "actual_suessware",
-    type: "number",
-    label: "Süßware:",
-  },
-] as const;
-
 function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
   const newExtraRows = refreshment.zusatzleistungen
     .filter(
