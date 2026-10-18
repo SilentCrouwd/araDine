@@ -1,6 +1,26 @@
+import { supabase } from "@/lib/supabaseClient";
+import React, { useState } from "react";
+
 import { Link } from "react-router";
 
+async function signInWithEmail(userMail: string, userPassword: string) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: userMail,
+    password: userPassword,
+  });
+  if (error) {
+    console.error(error);
+  }
+  console.log("Willkomen" + userMail);
+
+  return data;
+}
+
 function Login() {
+  const [userMail, setUserMail] = useState("");
+
+  const [userPassword, setUserPassword] = useState("");
+
   return (
     <div className="p-6">
       <form
@@ -26,6 +46,10 @@ function Login() {
               name="email"
               type="email"
               autoComplete="email"
+              value={userMail}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setUserMail(e.currentTarget.value)
+              }
               placeholder="name@beispiel.de"
               required
             />
@@ -52,6 +76,10 @@ function Login() {
               name="password"
               type="password"
               autoComplete="current-password"
+              value={userPassword}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setUserPassword(e.currentTarget.value)
+              }
               required
             />
           </div>
@@ -59,14 +87,15 @@ function Login() {
 
         <button
           className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground hover:opacity-90"
-          type="submit"
+          type="button"
+          onClick={async () => await signInWithEmail(userMail, userPassword)}
         >
           Anmelden
         </button>
         <p className="text-center text-sm text-muted">
           Noch kein Konto?{" "}
           <Link
-            to="/araDine/order/signup/frank"
+            to="/araDine/order/signup/"
             className="text-primary hover:underline"
           >
             Jetzt registrieren

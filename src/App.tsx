@@ -8,6 +8,8 @@ import Login from "./Views/Root/components/Login";
 import RefreshmentDetail from "./Views/RefreshmentView/RefreshmentDetail";
 import DashboardEmployee from "./Views/DashboardEmployeeView/DashboardEmployee";
 import OrderView from "./Views/Order/OrderView";
+import RoomViewLayout from "./Views/Layouts/RoomViewLayout";
+import RoomView from "./Views/RoomView/RoomView";
 
 function App() {
   return (
@@ -18,8 +20,8 @@ function App() {
 
       <Route path="araDine/order" element={<Order />}>
         <Route index element={<OrderView />} />
-        <Route path="login/:roll" element={<Login />} />
-        <Route path="signup/:roll" element={<SignUp />} />
+        <Route path="login/" element={<Login />} />
+        <Route path="signup/" element={<SignUp />} />
       </Route>
       <Route path="araDine/dashboard" element={<Dashboard />}>
         <Route index element={<DashboardEmployee />} />
@@ -28,6 +30,9 @@ function App() {
           path="araDine/dashboard/refreshment-detail/:refreshmentId"
           element={<RefreshmentDetail />}
         />
+        <Route path="room-view/:roomId" element={<RoomViewLayout />}>
+          <Route index element={<RoomView />} />
+        </Route>
       </Route>
     </Routes>
   );

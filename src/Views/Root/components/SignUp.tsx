@@ -1,6 +1,28 @@
+import { supabase } from "@/lib/supabaseClient";
+import React, { useState } from "react";
 import { Link } from "react-router";
 
+async function signUpNewUser(userMail: string, userPassword: string) {
+  const { data, error } = await supabase.auth.signUp({
+    email: userMail,
+    password: userPassword,
+    options: {
+      emailRedirectTo: "http://localhost:5173/araDine/order",
+    },
+  });
+  if (error) {
+    console.error(error);
+  }
+  console.log("Willkomen" + userMail);
+
+  return data;
+}
+
 function SignUp() {
+  const [userMail, setUserMail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [userPasswordConfirm, setUserPasswordConfirm] = useState("");
+
   return (
     <div className="p-6">
       <form
@@ -30,6 +52,10 @@ function SignUp() {
               id="signup-email"
               name="email"
               type="email"
+              value={userMail}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setUserMail(e.currentTarget.value)
+              }
               autoComplete="email"
               placeholder="name@beispiel.de"
               required
@@ -48,6 +74,10 @@ function SignUp() {
               id="signup-password"
               name="password"
               type="password"
+              value={userPassword}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setUserPassword(e.currentTarget.value)
+              }
               autoComplete="new-password"
               minLength={8}
               required
@@ -66,6 +96,10 @@ function SignUp() {
               id="signup-password-confirmation"
               name="password_confirmation"
               type="password"
+              value={userPasswordConfirm}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setUserPasswordConfirm(e.currentTarget.value)
+              }
               autoComplete="new-password"
               minLength={8}
               required
@@ -76,14 +110,21 @@ function SignUp() {
 
         <button
           className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground hover:opacity-90"
-          type="submit"
+          type="button"
+          onClick={async () => {
+            if (userPassword === userPasswordConfirm) {
+              await signUpNewUser(userMail, userPassword);
+            } else {
+              alert("Passwort stimmt nicht Überein");
+            }
+          }}
         >
           Registrieren
         </button>
         <p className="text-center text-sm text-muted-foreground">
           Bereits registriert?{" "}
           <Link
-            to="/araDine/order/login/kunde"
+            to="/araDine/order/login/"
             className="text-primary hover:underline"
           >
             Jetzt anmelden

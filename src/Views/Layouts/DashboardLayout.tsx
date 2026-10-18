@@ -1,14 +1,25 @@
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { ArrowBigLeft } from "lucide-react";
+import { useAuthContext } from "@/Context/AuthContetxt";
+import Login from "../Root/components/Login";
 
 function Dashboard() {
   const navigate = useNavigate();
   const location = useLocation();
-
+  const { user, loading } = useAuthContext();
   const pageTitle = location.pathname.includes("refreshment-detail")
     ? "Refreshment Detail"
     : "Dashboard";
+
+  const content = loading ? (
+    <p className="p-6">Session wird geprüft ...</p>
+  ) : user ? (
+    <Outlet />
+  ) : (
+    <Login />
+  );
+
   return (
     <div className="min-h-screen bg-background text-foreground lg:max-w-350 lg:mx-auto border border-border lg:text-xl">
       <header className=" flex justify-between items-center border-b border-l border-r border-border bg-background px-6 py-4 ">
@@ -24,8 +35,7 @@ function Dashboard() {
           AraDine
         </h1>
       </header>
-
-      <Outlet />
+      {content}
     </div>
   );
 }

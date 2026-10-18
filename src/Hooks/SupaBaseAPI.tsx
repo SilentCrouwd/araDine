@@ -144,3 +144,20 @@ export async function fetchBewirtungenByStandortUndRaum(
 
   return bewirtungen;
 }
+
+export async function fetchRefreshmentsByRoomIdAndDate(
+  roomId: string,
+  currDate: string,
+) {
+  const { data: refreshment, error } = await supabase
+    .from("bewirtungen")
+    .select("*")
+    .eq("raum_id", roomId)
+    .eq("datum", currDate);
+
+  if (error) {
+    console.error(error);
+  }
+
+  return refreshment;
+}

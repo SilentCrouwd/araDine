@@ -37,7 +37,12 @@ function RoomStatusOverview({ rooms, refreshments }: roomsProps) {
             {room.status}
           </p>
           <Link
-            to={`araDine/dashboard/refreshment-detail/${refreshments.find((refreshment) => refreshment.raum_id === room.id)?.id}`}
+            to={{
+              pathname: `/araDine/dashboard/room-view/${room.id}`,
+              search: room
+                ? `?date=${refreshments.find((ref) => ref.raum_id === room.id)?.datum}`
+                : "",
+            }}
           >
             <Button
               className="w-fit "
