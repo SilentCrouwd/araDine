@@ -27,7 +27,7 @@ function App() {
         <Route index element={<DashboardEmployee />} />
 
         <Route
-          path="araDine/dashboard/refreshment-detail/:refreshmentId"
+          path="refreshment-detail/:refreshmentId"
           element={<RefreshmentDetail />}
         />
         <Route path="room-view/:roomId" element={<RoomViewLayout />}>

@@ -86,7 +86,7 @@ export type Database = {
           raum_id: string | null;
           standort_id: string | null;
           startzeit: string;
-          status: Database["public"]["Enums"]["bewirtungs_status_enum"];
+          status: string;
           teilnehmer_id: string | null;
         };
         Insert: {
@@ -106,7 +106,7 @@ export type Database = {
           raum_id?: string | null;
           standort_id?: string | null;
           startzeit: string;
-          status: Database["public"]["Enums"]["bewirtungs_status_enum"];
+          status: string;
           teilnehmer_id?: string | null;
         };
         Update: {
@@ -126,7 +126,7 @@ export type Database = {
           raum_id?: string | null;
           standort_id?: string | null;
           startzeit?: string;
-          status?: Database["public"]["Enums"]["bewirtungs_status_enum"];
+          status: string;
           teilnehmer_id?: string | null;
         };
         Relationships: [

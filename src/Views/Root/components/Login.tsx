@@ -64,7 +64,7 @@ function Login() {
                 Passwort
               </label>
               <a
-                className="text-sm text-primary hover:underline"
+                className="inline-block text-sm text-primary transition-transform hover:scale-98 hover:underline"
                 href="#forgot-password"
               >
                 Passwort vergessen?
@@ -96,7 +96,7 @@ function Login() {
           Noch kein Konto?{" "}
           <Link
             to="/araDine/order/signup/"
-            className="text-primary hover:underline"
+            className="inline-block text-primary transition-transform hover:scale-98 hover:underline"
           >
             Jetzt registrieren
           </Link>

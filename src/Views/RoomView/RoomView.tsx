@@ -1,13 +1,24 @@
 import { fetchRefreshmentsByRoomIdAndDate } from "@/Hooks/SupaBaseAPI";
 import type { Bewirtungen } from "@/Types/types";
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "react-router";
+import { Link, useParams, useSearchParams } from "react-router";
+import RoomRefreshmentItem from "./components/RoomRefreshmentItem";
+
+function updateRoomStatus(currRefreshments: Bewirtungen): Bewirtungen {
+  const now = new Date();
+
+  return currRefreshments.map((ref) => {
+    const endDateTime = new Date(`${ref.datum}T${ref.endzeit}`);
+
+    return endDateTime <= now ? { ...ref, status: "Done" } : ref;
+  });
+}
 
 function RoomView() {
   const { roomId } = useParams();
   const [searchParams] = useSearchParams();
   const selectedDate = searchParams.get("date");
-  const [refreshments, setRefreshemnts] = useState<Bewirtungen>();
+  const [refreshments, setRefreshments] = useState<Bewirtungen>([]);
   useEffect(() => {
     async function loadCurrRefreshment() {
       if (!roomId || !selectedDate) return;
@@ -16,7 +27,7 @@ function RoomView() {
         selectedDate,
       );
       if (fetchedRefreshments) {
-        setRefreshemnts(fetchedRefreshments);
+        setRefreshments(updateRoomStatus(fetchedRefreshments));
       }
     }
     loadCurrRefreshment().catch((error) => {
@@ -25,12 +36,21 @@ function RoomView() {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col gap-4 py-4 px-6 bg-accent/20 border border-border/50 min-h-120 mx-4 rounded-lg">
       {refreshments?.map((ref) => {
         return (
-          <div key={ref.id}>
-            <h1>{ref.kunden_name}</h1>
-          </div>
+          <Link
+            className="transition-transform hover:scale-98"
+            key={ref.id}
+            to={`/araDine/dashboard/refreshment-detail/${ref.id}`}
+          >
+            <RoomRefreshmentItem
+              name={ref.kunden_name}
+              startTime={ref.startzeit}
+              endTime={ref.endzeit}
+              status={ref.status}
+            />
+          </Link>
         );
       }) ?? []}
     </div>

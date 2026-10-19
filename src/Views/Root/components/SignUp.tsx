@@ -125,7 +125,7 @@ function SignUp() {
           Bereits registriert?{" "}
           <Link
             to="/araDine/order/login/"
-            className="text-primary hover:underline"
+            className="inline-block text-primary transition-transform hover:scale-98 hover:underline"
           >
             Jetzt anmelden
           </Link>

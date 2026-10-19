@@ -12,13 +12,13 @@ function Root() {
       <div className=" flex flex-col items-center gap-4 px-10">
         <Link
           to="/araDine/order"
-          className=" w-40 text-center text-xl bg-accent-foreground text-accent px-4 py-2 rounded-md hover:bg-accent-foreground/70"
+          className="inline-block w-40 text-center text-xl bg-accent-foreground text-accent px-4 py-2 rounded-md transition-transform hover:scale-98 hover:bg-accent-foreground/70"
         >
           <p>Place Order</p>
         </Link>
         <Link
           to="/araDine/dashboard"
-          className=" w-40 text-center text-xl bg-accent-foreground text-accent px-4 py-2 rounded-md hover:bg-accent-foreground/70"
+          className="inline-block w-40 text-center text-xl bg-accent-foreground text-accent px-4 py-2 rounded-md transition-transform hover:scale-98 hover:bg-accent-foreground/70"
         >
           To Dashboard
         </Link>

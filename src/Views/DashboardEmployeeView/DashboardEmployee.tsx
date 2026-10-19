@@ -199,8 +199,8 @@ function DashboardEmployee() {
         <div className="grid gap-10 grid-cols-1   overflow-y-auto md:grid-cols-3 lg:grid-cols-4">
           {selectedRefreshments.map((refreshment) => (
             <Link
-              className="flex  w-full gap-2"
-              to={`araDine/dashboard/refreshment-detail/${refreshment.id}`}
+              className="flex w-full gap-2 transition-transform hover:scale-98"
+              to={`/araDine/dashboard/refreshment-detail/${refreshment.id}`}
               key={refreshment.id}
             >
               <RefreshmentCard
