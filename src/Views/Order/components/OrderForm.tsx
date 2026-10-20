@@ -59,7 +59,7 @@ function OrderForm() {
       standort_id: location?.id ?? null,
       raum_id:
         location?.raeume.find((r) => r.name === selectedRoom)?.id ?? null,
-      status: "Ready",
+      status: "Geplant",
     } as NeueBewirtung;
 
     orderContext.dispatch({ type: "ADD_ORDER", payload: newRefreshment });

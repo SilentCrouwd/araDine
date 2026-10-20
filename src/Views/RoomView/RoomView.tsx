@@ -1,17 +1,29 @@
-import { fetchRefreshmentsByRoomIdAndDate } from "@/Hooks/SupaBaseAPI";
+import {
+  fetchRefreshmentsByRoomIdAndDate,
+  updateRefreshmentStatus,
+} from "@/Hooks/SupaBaseAPI";
 import type { Bewirtungen } from "@/Types/types";
 import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
 import RoomRefreshmentItem from "./components/RoomRefreshmentItem";
 
-function updateRoomStatus(currRefreshments: Bewirtungen): Bewirtungen {
+async function updateRoomStatus(
+  currRefreshments: Bewirtungen,
+): Promise<Bewirtungen> {
   const now = new Date();
 
-  return currRefreshments.map((ref) => {
-    const endDateTime = new Date(`${ref.datum}T${ref.endzeit}`);
+  return Promise.all(
+    currRefreshments.map(async (ref) => {
+      const endDateTime = new Date(`${ref.datum}T${ref.endzeit}`);
 
-    return endDateTime <= now ? { ...ref, status: "Done" } : ref;
-  });
+      if (ref.status === "Geplant" && endDateTime <= now) {
+        await updateRefreshmentStatus("Erledigt", ref.id);
+        return { ...ref, status: "Erledigt" };
+      }
+
+      return ref;
+    }),
+  );
 }
 
 function RoomView() {
@@ -27,7 +39,7 @@ function RoomView() {
         selectedDate,
       );
       if (fetchedRefreshments) {
-        setRefreshments(updateRoomStatus(fetchedRefreshments));
+        setRefreshments(await updateRoomStatus(fetchedRefreshments));
       }
     }
     loadCurrRefreshment().catch((error) => {

@@ -161,3 +161,19 @@ export async function fetchRefreshmentsByRoomIdAndDate(
 
   return refreshment;
 }
+export async function updateRefreshmentStatus(
+  newStatus: string,
+  currRefreshmentId: string,
+) {
+  const { data, error } = await supabase
+    .from("bewirtungen")
+    .update({ status: newStatus })
+    .eq("id", currRefreshmentId)
+    .select();
+  if (error) {
+    console.error(error);
+
+    console.log(data);
+    return data;
+  }
+}

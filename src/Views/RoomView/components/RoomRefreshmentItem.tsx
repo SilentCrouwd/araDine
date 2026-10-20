@@ -31,7 +31,7 @@ function RoomRefreshmentItem({
           </p>
         </div>
         <p
-          className={`${status === "Done" ? "bg-rose-700" : "bg-green-500"} rounded-xl px-2 `}
+          className={`${status === "Erledigt" ? "bg-orange-400" : "bg-green-500"} rounded-xl px-2 `}
         >
           {status}
         </p>

@@ -126,7 +126,7 @@ export type Database = {
           raum_id?: string | null;
           standort_id?: string | null;
           startzeit?: string;
-          status: string;
+          status?: string;
           teilnehmer_id?: string | null;
         };
         Relationships: [
@@ -259,12 +259,6 @@ export type Database = {
       [_ in never]: never;
     };
     Enums: {
-      bewirtungs_status_enum:
-        | "Ready"
-        | "Running"
-        | "inPast"
-        | "Abrechnungsfaehig"
-        | "Abgeschlossen";
       paket_enum: "Paket_1" | "Paket_2" | "Paket_3";
     };
     CompositeTypes: {
@@ -399,13 +393,7 @@ export const Constants = {
   },
   public: {
     Enums: {
-      bewirtungs_status_enum: [
-        "Ready",
-        "Running",
-        "inPast",
-        "Abrechnungsfaehig",
-        "Abgeschlossen",
-      ],
+    
       paket_enum: ["Paket_1", "Paket_2", "Paket_3"],
     },
   },

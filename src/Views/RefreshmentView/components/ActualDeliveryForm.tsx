@@ -10,12 +10,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { BewirtungenMitExtras } from "@/Types/types";
+import React, { useState } from "react";
 
 type ActualDeliveryFormProps = Readonly<{
   refreshment: BewirtungenMitExtras;
 }>;
 
 function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
+  const [servicePax, setServicePax] = useState<string | undefined>();
+
   const newExtraRows = refreshment.zusatzleistungen
     .filter(
       (extra) =>
@@ -33,7 +36,26 @@ function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
         type: extraName === "sonstige" ? "text" : "number",
       };
     });
+  const canEdit = ["Erledigt", "Abrechnungsbereit"].includes(
+    refreshment.status,
+  );
 
+  async function handleOnSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    const actual: Record<string, FormDataEntryValue> = {};
+    for (const [key, value] of formData.entries()) {
+      if (key.startsWith("actual_")) {
+        actual[key.slice("actual_".length)] = value;
+      }
+    }
+    console.log(actual);
+
+    // await für UpdateExtras
+    // Werden wieder Neu Gesetzt falls Nachbewirtung ist kann es doppelt geupdatetd werden
+    // await für UpsertAbrechenbar
+  }
   return (
     <Card className="h-fit w-full border border-border bg-card/20 p-2">
       <CardHeader>
@@ -42,7 +64,7 @@ function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
         </h2>
       </CardHeader>
       <CardContent className="text-base bg-card-foreground/30 text-muted-foreground shadow-2xl/20 rounded-xl m-2 p-2">
-        <form>
+        <form onSubmit={handleOnSubmit}>
           {newExtraRows.map((field) => (
             <div
               key={field.id}
@@ -63,7 +85,10 @@ function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
           ))}
           <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2 items-center">
             <p>Service:</p>
-            <Select>
+            <Select
+              value={servicePax}
+              onValueChange={(value) => setServicePax(value ?? "")}
+            >
               <SelectTrigger className="w-full  bg-card/20 hover:bg-transparent ">
                 <SelectValue
                   placeholder="Personen"
@@ -85,8 +110,9 @@ function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
               variant="outline"
               className=" w-50  px-4 my-2"
               type="submit"
+              disabled={!canEdit || servicePax === undefined}
             >
-              Abschließen
+              Speichern
             </Button>
           </div>
         </form>
