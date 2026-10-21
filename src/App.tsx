@@ -10,7 +10,7 @@ import DashboardEmployee from "./Views/DashboardEmployeeView/DashboardEmployee";
 import OrderView from "./Views/Order/OrderView";
 import RoomViewLayout from "./Views/Layouts/RoomViewLayout";
 import RoomView from "./Views/RoomView/RoomView";
-import { Toast, Toaster } from "./components/ui/toast";
+import { Toaster } from "./components/ui/toast";
 
 function App() {
   return (

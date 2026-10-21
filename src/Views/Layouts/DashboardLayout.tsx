@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowBigLeft } from "lucide-react";
 import { useAuthContext } from "@/Context/AuthContetxt";
 import Login from "../Root/components/Login";
-import { Toaster } from "@/components/ui/toast";
 
 function Dashboard() {
   const navigate = useNavigate();
