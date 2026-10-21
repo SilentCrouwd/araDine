@@ -7,10 +7,7 @@ type RefreshmentInfoCardProps = Readonly<{
 }>;
 
 function RefreshmentInfoCard({ refreshment }: RefreshmentInfoCardProps) {
-  // Hier
-  // ist
-  // noch
-  // Baustelle
+
 
   return (
     <Card className=" h-fit w-full border border-border bg-card/20 p-2 ">

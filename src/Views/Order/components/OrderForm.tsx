@@ -20,10 +20,20 @@ import {
 } from "@/Hooks/SupaBaseAPI";
 import type { NeueBewirtung, NeueZusatzleistung } from "@/Types/types";
 import { useOrderContext } from "@/Context/RefreshmentContext";
+import { toast } from "@/components/ui/toast";
+import { useNavigate } from "react-router";
+
+function toaster(type: string, description: string) {
+  toast.add({
+    type: type,
+    description: description,
+  });
+}
 
 function OrderForm() {
   // Zustände für die ausgewählten Werte in der Standort- und Raum-Auswahl.
   // Der Paketstatus wird zusätzlich zum Radiowert verwendet, um das Absenden zu steuern.
+  const navigate = useNavigate();
   const [currDate, setCurrDate] = useState<string>("");
   const [selectedPackage, setSelectedPackage] = useState("");
   const [selectedLocation, setSelectedLocation] = useState<string>("");
@@ -107,21 +117,23 @@ function OrderForm() {
       filteredRoomId ?? "",
       currDate,
     );
-    const conflict = currBew?.find(
+    const conflict = currBew?.some(
       (bew) =>
-        newRefreshment.startzeit < bew.startzeit &&
-        bew.endzeit > newRefreshment.startzeit,
+        newRefreshment.startzeit < bew.endzeit &&
+        newRefreshment.endzeit > bew.startzeit,
     );
     if (conflict) {
-      alert("Der Raum ist zu dieser Zeit leider schon belegt");
+      toaster("error", "Zeit Konflikt bitte andere Uhrzeit auswählen ");
+      return;
     } else {
       await insertBewirtung(
         newRefreshment,
         newExtraService,
         orderContext.state.participants,
       );
-      alert("Das hat Funktioniert ");
+      toaster("success", "Danke! Wir haben ihren Termin gebucht");
     }
+    await navigate(-1);
   }
 
   // Dient dazu, im zweiten Auswahlfeld nur Räume des gewählten Standorts anzubieten.
@@ -198,11 +210,10 @@ function OrderForm() {
             currPackage={selectedPackage}
             onCurrPackageChange={setSelectedPackage}
           />
-          <OrderExtraService selectedPackage={selectedPackage} />
         </div>
         <div className="flex w-full flex-col gap-4">
           <OrderMoreInformationForm />
-          <div></div>
+          <OrderExtraService selectedPackage={selectedPackage} />
         </div>
       </div>
       <Button

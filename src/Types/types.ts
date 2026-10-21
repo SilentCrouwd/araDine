@@ -26,3 +26,6 @@ export type Teilnehmer = Database["public"]["Tables"]["teilnehmer"]["Row"][];
 
 export type NeuerTeilnehmer =
   Database["public"]["Tables"]["teilnehmer"]["Insert"][];
+
+export type NewBillingInfo =
+  Database["public"]["Tables"]["abrechnungsdetails"]["Insert"];

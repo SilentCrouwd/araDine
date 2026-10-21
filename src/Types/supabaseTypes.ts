@@ -43,20 +43,20 @@ export type Database = {
         Row: {
           bewirtung_id: string | null;
           id: string;
-          servicepauschale: number | null;
-          total_delivered: Json | null;
+          name: string | null;
+          value: string | null;
         };
         Insert: {
           bewirtung_id?: string | null;
           id?: string;
-          servicepauschale?: number | null;
-          total_delivered?: Json | null;
+          name?: string | null;
+          value?: string | null;
         };
         Update: {
           bewirtung_id?: string | null;
           id?: string;
-          servicepauschale?: number | null;
-          total_delivered?: Json | null;
+          name?: string | null;
+          value?: string | null;
         };
         Relationships: [
           {
@@ -393,7 +393,6 @@ export const Constants = {
   },
   public: {
     Enums: {
-    
       paket_enum: ["Paket_1", "Paket_2", "Paket_3"],
     },
   },

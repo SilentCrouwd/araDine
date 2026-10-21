@@ -3,6 +3,7 @@ import type {
   NeueBewirtung,
   NeuerTeilnehmer,
   NeueZusatzleistung,
+  NewBillingInfo,
 } from "@/Types/types";
 
 export async function fetchStandorte() {
@@ -176,4 +177,24 @@ export async function updateRefreshmentStatus(
     console.log(data);
     return data;
   }
+}
+
+export async function upsertActualDelivered(
+  billingInfos: NewBillingInfo,
+  refreshmentId: string,
+) {
+  const extraRows = Object.entries(billingInfos).map(([name, value]) => ({
+    bewirtung_id: refreshmentId,
+    name: name,
+    value: String(value),
+  }));
+  const { data, error } = await supabase
+    .from("abrechnungsdetails")
+    .upsert(extraRows, { onConflict: "bewirtung_id,name" })
+    .select();
+  if (error) {
+    console.error(error);
+  }
+
+  return data;
 }

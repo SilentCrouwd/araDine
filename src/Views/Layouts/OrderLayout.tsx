@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/toast";
 import { ArrowBigLeft } from "lucide-react";
 import { Link, Outlet } from "react-router";
 
@@ -23,6 +24,7 @@ function Order() {
         </h1>
       </header>
       <Outlet />
+  
     </div>
   );
 }

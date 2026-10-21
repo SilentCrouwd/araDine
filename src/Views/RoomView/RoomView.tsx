@@ -48,11 +48,11 @@ function RoomView() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4 py-4 px-6 bg-accent/20 border border-border/50 min-h-120 mx-4 rounded-lg">
+    <div className="flex flex-col gap-4 py-4 px-6 bg-accent/20 border border-border/50 min-h-fit mx-4 rounded-xl md:flex-row md:justify-center flex-wrap overflow-hidden">
       {refreshments?.map((ref) => {
         return (
           <Link
-            className="transition-transform hover:scale-98"
+            className="transition-transform hover:scale-98 h-fit"
             key={ref.id}
             to={`/araDine/dashboard/refreshment-detail/${ref.id}`}
           >

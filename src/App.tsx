@@ -10,31 +10,33 @@ import DashboardEmployee from "./Views/DashboardEmployeeView/DashboardEmployee";
 import OrderView from "./Views/Order/OrderView";
 import RoomViewLayout from "./Views/Layouts/RoomViewLayout";
 import RoomView from "./Views/RoomView/RoomView";
+import { Toast, Toaster } from "./components/ui/toast";
 
 function App() {
   return (
-    // Zentrale Routen-Definition der Anwendung:
-    // Startseite -> Root, Bestellprozess -> Order, Dashboard -> Mitarbeiterbereich
-    <Routes>
-      <Route path="araDine/" element={<Root />} />
+    <>
+      <Routes>
+        <Route path="araDine/" element={<Root />} />
 
-      <Route path="araDine/order" element={<Order />}>
-        <Route index element={<OrderView />} />
-        <Route path="login/" element={<Login />} />
-        <Route path="signup/" element={<SignUp />} />
-      </Route>
-      <Route path="araDine/dashboard" element={<Dashboard />}>
-        <Route index element={<DashboardEmployee />} />
-
-        <Route
-          path="refreshment-detail/:refreshmentId"
-          element={<RefreshmentDetail />}
-        />
-        <Route path="room-view/:roomId" element={<RoomViewLayout />}>
-          <Route index element={<RoomView />} />
+        <Route path="araDine/order" element={<Order />}>
+          <Route index element={<OrderView />} />
+          <Route path="login/" element={<Login />} />
+          <Route path="signup/" element={<SignUp />} />
         </Route>
-      </Route>
-    </Routes>
+        <Route path="araDine/dashboard" element={<Dashboard />}>
+          <Route index element={<DashboardEmployee />} />
+
+          <Route
+            path="refreshment-detail/:refreshmentId"
+            element={<RefreshmentDetail />}
+          />
+          <Route path="room-view/:roomId" element={<RoomViewLayout />}>
+            <Route index element={<RoomView />} />
+          </Route>
+        </Route>
+      </Routes>
+      <Toaster />
+    </>
   );
 }
 

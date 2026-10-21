@@ -9,16 +9,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "@/components/ui/toast";
+import {
+  updateRefreshmentStatus,
+  upsertActualDelivered,
+} from "@/Hooks/SupaBaseAPI";
 import type { BewirtungenMitExtras } from "@/Types/types";
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 
 type ActualDeliveryFormProps = Readonly<{
   refreshment: BewirtungenMitExtras;
 }>;
 
 function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
-  const [servicePax, setServicePax] = useState<string | undefined>();
-
+  const navigate = useNavigate();
+  const [servicePax, setServicePax] = useState<string | null>(null);
   const newExtraRows = refreshment.zusatzleistungen
     .filter(
       (extra) =>
@@ -50,11 +56,11 @@ function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
         actual[key.slice("actual_".length)] = value;
       }
     }
-    console.log(actual);
 
-    // await für UpdateExtras
-    // Werden wieder Neu Gesetzt falls Nachbewirtung ist kann es doppelt geupdatetd werden
-    // await für UpsertAbrechenbar
+    await upsertActualDelivered(actual, refreshment.id);
+    refreshment.status = "Abrechnungsbereit";
+    await updateRefreshmentStatus(refreshment.status, refreshment.id);
+    await navigate(-1);
   }
   return (
     <Card className="h-fit w-full border border-border bg-card/20 p-2">
@@ -86,8 +92,9 @@ function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
           <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2 items-center">
             <p>Service:</p>
             <Select
+              name="actual_service"
               value={servicePax}
-              onValueChange={(value) => setServicePax(value ?? "")}
+              onValueChange={setServicePax}
             >
               <SelectTrigger className="w-full  bg-card/20 hover:bg-transparent ">
                 <SelectValue
@@ -109,8 +116,14 @@ function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
             <Button
               variant="outline"
               className=" w-50  px-4 my-2"
+              onClick={() => {
+                toast.add({
+                  type: "success",
+                  description: "Leistungen Abgeschickt",
+                });
+              }}
               type="submit"
-              disabled={!canEdit || servicePax === undefined}
+              disabled={!canEdit || servicePax === null}
             >
               Speichern
             </Button>

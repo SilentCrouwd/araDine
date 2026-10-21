@@ -42,7 +42,7 @@ function RefreshmentCard({ refreshment, rooms, extras }: RefreshmentCardProps) {
             <span>Raum:</span>
             <span>{selectedRoom?.name}</span>
           </p>
-          <p className="flex justify-between border-b border-border/50 p-1">
+          <p className="flex justify-between  border-b border-border/50 p-1 overflow-hidden flex-wrap">
             <span>Status:</span>
             <span>{refreshment.status}</span>
           </p>
