@@ -14,17 +14,23 @@ import {
   updateRefreshmentStatus,
   upsertActualDelivered,
 } from "@/Hooks/SupaBaseAPI";
-import type { BewirtungenMitExtras } from "@/Types/types";
+import type { BewirtungenMitExtras, NewBillingInfo } from "@/Types/types";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 
 type ActualDeliveryFormProps = Readonly<{
   refreshment: BewirtungenMitExtras;
+  billingInfos: NewBillingInfo[];
 }>;
 
-function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
+function ActualDeliveryForm({
+  refreshment,
+  billingInfos,
+}: ActualDeliveryFormProps) {
   const navigate = useNavigate();
   const [servicePax, setServicePax] = useState<string | null>(null);
+  const savedServicePax =
+    billingInfos.find((info) => info.name === "service")?.value ?? null;
   const newExtraRows = refreshment.zusatzleistungen
     .filter(
       (extra) =>
@@ -38,7 +44,9 @@ function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
         name: "actual_" + extraName,
         label: extraName.charAt(0).toUpperCase() + extraName.slice(1) + ":",
         id: extraName,
-        value: extra.extra_value,
+        value:
+          billingInfos.find((info) => info.name === extra.extra_name)?.value ??
+          extra.extra_value,
         type: extraName === "sonstige" ? "text" : "number",
       };
     });
@@ -60,6 +68,7 @@ function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
     await upsertActualDelivered(actual, refreshment.id);
     refreshment.status = "Abrechnungsbereit";
     await updateRefreshmentStatus(refreshment.status, refreshment.id);
+
     await navigate(-1);
   }
   return (
@@ -81,11 +90,8 @@ function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
                 id={field.id}
                 name={field.name}
                 type={field.type}
-                defaultValue={
-                  field.type === "number"
-                    ? Number(field.value ?? 0)
-                    : (field.value ?? "")
-                }
+                defaultValue={field.value ?? ""}
+                required
               />
             </div>
           ))}
@@ -93,7 +99,7 @@ function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
             <p>Service:</p>
             <Select
               name="actual_service"
-              value={servicePax}
+              value={servicePax ?? savedServicePax}
               onValueChange={setServicePax}
             >
               <SelectTrigger className="w-full  bg-card/20 hover:bg-transparent ">
@@ -123,8 +129,7 @@ function ActualDeliveryForm({ refreshment }: ActualDeliveryFormProps) {
                 });
               }}
               type="submit"
-              disabled={!canEdit || servicePax === null}
-            >
+           disabled={!canEdit || (servicePax ?? savedServicePax) === null} >
               Speichern
             </Button>
           </div>

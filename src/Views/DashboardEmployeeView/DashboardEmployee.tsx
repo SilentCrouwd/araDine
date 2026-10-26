@@ -24,7 +24,10 @@ import RoomInfoCard from "./components/RoomInfoCard";
 import RoomStatusOverview from "./components/RoomStatusOverview";
 import { useOrderContext } from "@/Context/RefreshmentContext";
 import type { Bewirtungen, BewirtungenMitExtras, Raeume } from "@/Types/types";
-import { fetchBewirtungDatumUndStandort } from "@/Hooks/SupaBaseAPI";
+import {
+  fetchBewirtungDatumUndStandort,
+  updateRefreshmentStatus,
+} from "@/Hooks/SupaBaseAPI";
 
 function DashboardEmployee() {
   const orderContext = useOrderContext();
@@ -60,7 +63,31 @@ function DashboardEmployee() {
           currLocation,
         );
         if (selRefrsh) {
-          setSelectedRefreshments(selRefrsh);
+          const today = format(new Date(), "yyyy-MM-dd");
+          const currentTime = format(new Date(), "HH:mm");
+         
+         
+          const toMarkDone = selRefrsh.filter(
+            (ref) =>
+              ref.status === "Geplant" &&
+              (selectedDate < today ||
+                (selectedDate === today &&
+                  ref.endzeit.slice(0, 5) <= currentTime)),
+          );
+
+          await Promise.all(
+            toMarkDone.map((ref) =>
+              updateRefreshmentStatus("Erledigt", ref.id),
+            ),
+          );
+
+          const idsToMarkDone = new Set(toMarkDone.map((ref) => ref.id));
+
+          const updatedRefreshments = selRefrsh.map((ref) =>
+            idsToMarkDone.has(ref.id) ? { ...ref, status: "Erledigt" } : ref,
+          );
+
+          setSelectedRefreshments(updatedRefreshments);
         }
       }
     }
@@ -74,11 +101,6 @@ function DashboardEmployee() {
     locations.find((location) => location.name === selectedLocationName)
       ?.raeume ?? [];
 
-  // Räume filtern todo:
-
-  // wenn Heute bewirung in diesem raum dann Service
-
-  // Leitet den angezeigten Raumstatus aus Datum, Bewirtung und Endzeit ab.
   function updateRoomStatus(selectedRefreshments: Bewirtungen, rooms: Raeume) {
     const now = new Date();
     const today = format(now, "yyyy-MM-dd");

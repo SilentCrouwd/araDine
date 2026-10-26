@@ -162,6 +162,19 @@ export async function fetchRefreshmentsByRoomIdAndDate(
 
   return refreshment;
 }
+
+export async function fetchBillingInfos(refreshmentId: string) {
+  const { data: abrechnungsdetails, error } = await supabase
+    .from("abrechnungsdetails")
+    .select("*")
+    .eq("bewirtung_id", refreshmentId);
+
+  if (error) {
+    console.error(error);
+  }
+  return abrechnungsdetails;
+}
+
 export async function updateRefreshmentStatus(
   newStatus: string,
   currRefreshmentId: string,
