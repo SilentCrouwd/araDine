@@ -13,8 +13,8 @@ import { toast } from "@/components/ui/toast";
 import {
   updateRefreshmentStatus,
   upsertActualDelivered,
-} from "@/Hooks/SupaBaseAPI";
-import type { BewirtungenMitExtras, NewBillingInfo } from "@/Types/types";
+} from "@/hooks/SupaBaseAPI";
+import type { BewirtungenMitExtras, NewBillingInfo } from "@/types/types";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -129,7 +129,8 @@ function ActualDeliveryForm({
                 });
               }}
               type="submit"
-           disabled={!canEdit || (servicePax ?? savedServicePax) === null} >
+              disabled={!canEdit || (servicePax ?? savedServicePax) === null}
+            >
               Speichern
             </Button>
           </div>

@@ -2,19 +2,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Coffee } from "lucide-react";
 
-type OrdercurrPackageFormProps = {
+type OrderCurrPackageFormProps = Readonly<{
   currPackage: string;
   onCurrPackageChange: (name: string) => void;
-};
+}>;
 function OrdercurrPackageForm({
   currPackage,
   onCurrPackageChange,
-}: OrdercurrPackageFormProps) {
+}: OrderCurrPackageFormProps) {
   // Steuert sowohl die markierte Radio-Option als auch die darunter angezeigte Beschreibung.
 
   // Gibt je nach Auswahl eine kurze Paketbeschreibung zurück.
   // Diese Info wird unter den Radio-Buttons angezeigt.
-  function handlecurrPackageInfo() {
+  function handleCurrPackageInfo() {
     if (currPackage === "paket-1") {
       return (
         <p>
@@ -49,9 +49,7 @@ function OrdercurrPackageForm({
           </span>
           <span className="flex items-start gap-2 tracking-tight">
             <Coffee className="shrink-0" />
-            <span>
-              Kaffee, Tee, Milch, Zucker, Wasser, Obst und Softdrinks
-            </span>
+            <span>Kaffee, Tee, Milch, Zucker, Wasser, Obst und Softdrinks</span>
           </span>
         </p>
       );
@@ -125,7 +123,7 @@ function OrdercurrPackageForm({
       </div>
       {currPackage && (
         <div className="p-2 mt-5 bg-card-foreground/20 rounded-xl m-2">
-          {handlecurrPackageInfo()}
+          {handleCurrPackageInfo()}
         </div>
       )}
     </div>

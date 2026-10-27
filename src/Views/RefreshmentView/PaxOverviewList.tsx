@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import type { Teilnehmer } from "@/Types/types";
+import type { Teilnehmer } from "@/types/types";
 import { User } from "lucide-react";
 type PaxOverviewProps = Readonly<{
   pax: Teilnehmer;

@@ -7,13 +7,13 @@ import {
   fetchBillingInfos,
   fetchCurrBewirtung,
   fetchCurrTeilnehmer,
-} from "@/Hooks/SupaBaseAPI";
+} from "@/hooks/SupaBaseAPI";
 import { useParams } from "react-router";
 import type {
   BewirtungenMitExtras,
   NewBillingInfo,
   Teilnehmer,
-} from "@/Types/types";
+} from "@/types/types";
 
 function RefreshmentDetail() {
   const { refreshmentId } = useParams();

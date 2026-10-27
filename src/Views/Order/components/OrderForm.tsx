@@ -17,9 +17,9 @@ import { Send } from "lucide-react";
 import {
   fetchBewirtungenByStandortUndRaum,
   insertBewirtung,
-} from "@/Hooks/SupaBaseAPI";
-import type { NeueBewirtung, NeueZusatzleistung } from "@/Types/types";
-import { useOrderContext } from "@/Context/RefreshmentContext";
+} from "@/hooks/SupaBaseAPI";
+import type { NeueBewirtung, NeueZusatzleistung } from "@/types/types";
+import { useOrderContext } from "@/context/RefreshmentContext";
 import { toast } from "@/components/ui/toast";
 import { useNavigate } from "react-router";
 

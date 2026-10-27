@@ -22,6 +22,12 @@ function Root() {
         >
           To Dashboard
         </Link>
+        <Link
+          to="/araDine/billingDashboard"
+          className="inline-block w-40 text-center text-xl bg-accent-foreground text-accent px-4 py-2 rounded-md transition-transform hover:scale-98 hover:bg-accent-foreground/70"
+        >
+          To Billings
+        </Link>
       </div>
     </div>
   );

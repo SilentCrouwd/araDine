@@ -4,7 +4,7 @@ import type {
   NeuerTeilnehmer,
   NeueZusatzleistung,
   NewBillingInfo,
-} from "@/Types/types";
+} from "@/types/types";
 
 export async function fetchStandorte() {
   const { data, error } = await supabase

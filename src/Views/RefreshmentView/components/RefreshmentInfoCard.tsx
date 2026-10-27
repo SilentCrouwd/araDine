@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import type { BewirtungenMitExtras } from "@/Types/types";
+import type { BewirtungenMitExtras } from "@/types/types";
 import { Ban, CircleCheckBig } from "lucide-react";
 
 type RefreshmentInfoCardProps = Readonly<{
@@ -7,8 +7,6 @@ type RefreshmentInfoCardProps = Readonly<{
 }>;
 
 function RefreshmentInfoCard({ refreshment }: RefreshmentInfoCardProps) {
-
-
   return (
     <Card className=" h-fit w-full border border-border bg-card/20 p-2 ">
       <CardHeader>

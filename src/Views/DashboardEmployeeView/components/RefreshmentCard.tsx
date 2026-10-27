@@ -1,4 +1,4 @@
-import type { Bewirtungen, Raeume, Zusatzleistungen } from "@/Types/types";
+import type { Bewirtungen, Raeume, Zusatzleistungen } from "@/types/types";
 import {
   ArrowRightIcon,
   RefreshCcwDot,

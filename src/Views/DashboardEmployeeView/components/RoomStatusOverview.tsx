@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import type { Bewirtungen, Raeume } from "@/Types/types";
+import type { Bewirtungen, Raeume } from "@/types/types";
 import { Link } from "react-router";
 
 function handleRoomStatus(roomStatus: string) {
@@ -12,11 +12,11 @@ function handleRoomStatus(roomStatus: string) {
     return "bg-green-500 w-15";
   }
 }
-type roomsProps = {
+type roomProps = Readonly<{
   rooms: Raeume;
   refreshments: Bewirtungen;
-};
-function RoomStatusOverview({ rooms, refreshments }: roomsProps) {
+}>;
+function RoomStatusOverview({ rooms, refreshments }: roomProps) {
   return (
     <div className="text-base">
       {/* Pro Raum werden Status und passende Bewirtungsdetails zusammengeführt. */}

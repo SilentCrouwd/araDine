@@ -10,9 +10,9 @@ import {
   initialOrderState,
   orderReducer,
   type OrderAction,
-} from "../Hooks/UseReducerOrder";
-import { fetchStandorte } from "@/Hooks/SupaBaseAPI";
-import type { StandorteMitRaeumen } from "@/Types/types";
+} from "../hooks/UseReducerOrder";
+import { fetchStandorte } from "@/hooks/SupaBaseAPI";
+import type { StandorteMitRaeumen } from "@/types/types";
 
 type OrderContextValue = {
   state: typeof initialOrderState;

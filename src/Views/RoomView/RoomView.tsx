@@ -1,8 +1,5 @@
-import {
-  fetchRefreshmentsByRoomIdAndDate,
-
-} from "@/Hooks/SupaBaseAPI";
-import type { Bewirtungen } from "@/Types/types";
+import { fetchRefreshmentsByRoomIdAndDate } from "@/hooks/SupaBaseAPI";
+import type { Bewirtungen } from "@/types/types";
 import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
 import RoomRefreshmentItem from "./components/RoomRefreshmentItem";

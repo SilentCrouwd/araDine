@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { useOrderContext } from "@/Context/RefreshmentContext";
-import type { BewirtungenMitExtras } from "@/Types/types";
+import { useOrderContext } from "@/context/RefreshmentContext";
+import type { BewirtungenMitExtras } from "@/types/types";
 import {
   AlertTriangle,
   BottleWine,
@@ -8,9 +8,9 @@ import {
   Croissant,
   Milk,
 } from "lucide-react";
-type DeliveryDetailCardPros = {
+type DeliveryDetailCardProps = Readonly<{
   refreshment: BewirtungenMitExtras;
-};
+}>;
 
 function handleExtraStatus(extras: {
   name: string | null;
@@ -72,7 +72,7 @@ function handleExtraStatus(extras: {
   }
 }
 
-function DeliveryDetailCard({ refreshment }: DeliveryDetailCardPros) {
+function DeliveryDetailCard({ refreshment }: DeliveryDetailCardProps) {
   const orderContext = useOrderContext();
 
   const locationName = orderContext.state.location.find(

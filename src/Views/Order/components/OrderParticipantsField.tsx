@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useOrderContext } from "@/Context/RefreshmentContext";
-import type { NeuerTeilnehmer } from "@/Types/types";
+import { useOrderContext } from "@/context/RefreshmentContext";
+import type { NeuerTeilnehmer } from "@/types/types";
 import { CheckIcon, DeleteIcon, PencilIcon } from "lucide-react";
 import React, { useState } from "react";
 

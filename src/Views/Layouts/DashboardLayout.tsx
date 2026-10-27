@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { ArrowBigLeft } from "lucide-react";
-import { useAuthContext } from "@/Context/AuthContetxt";
+import { useAuthContext } from "@/context/AuthContetxt";
 import Login from "../Root/components/Login";
 
 function Dashboard() {
@@ -36,7 +36,6 @@ function Dashboard() {
         </h1>
       </header>
       {content}
-
     </div>
   );
 }

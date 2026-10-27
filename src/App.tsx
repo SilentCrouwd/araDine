@@ -11,7 +11,9 @@ import OrderView from "./Views/Order/OrderView";
 import RoomViewLayout from "./Views/Layouts/RoomViewLayout";
 import RoomView from "./Views/RoomView/RoomView";
 import { Toaster } from "./components/ui/toast";
-
+import BillingDashboard from "./Views/BillingDashboard/BillingDashboard";
+import BillingDashboardLayout from "./Views/Layouts/BillingDashboardLayout";
+import BillingDetailView from "./Views/BillingsDetailView/BillingDetailView";
 function App() {
   return (
     <>
@@ -33,6 +35,16 @@ function App() {
           <Route path="room-view/:roomId" element={<RoomViewLayout />}>
             <Route index element={<RoomView />} />
           </Route>
+        </Route>
+        <Route
+          path="araDine/BillingDashboard"
+          element={<BillingDashboardLayout />}
+        >
+          <Route index element={<BillingDashboard />} />
+          <Route
+            path="details/:refreshmentId"
+            element={<BillingDetailView />}
+          />
         </Route>
       </Routes>
       <Toaster />

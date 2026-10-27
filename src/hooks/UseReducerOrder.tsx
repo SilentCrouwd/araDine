@@ -3,7 +3,7 @@ import type {
   NeueZusatzleistung,
   StandorteMitRaeumen,
   NeuerTeilnehmer,
-} from "@/Types/types";
+} from "@/types/types";
 export type OrderState = {
   orders: NeueBewirtung[];
   extraServices: NeueZusatzleistung[];

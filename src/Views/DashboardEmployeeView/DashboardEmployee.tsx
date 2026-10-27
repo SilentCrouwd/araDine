@@ -22,12 +22,12 @@ import RefreshmentCard from "./components/RefreshmentCard";
 import { Link } from "react-router";
 import RoomInfoCard from "./components/RoomInfoCard";
 import RoomStatusOverview from "./components/RoomStatusOverview";
-import { useOrderContext } from "@/Context/RefreshmentContext";
-import type { Bewirtungen, BewirtungenMitExtras, Raeume } from "@/Types/types";
+import { useOrderContext } from "@/context/RefreshmentContext";
+import type { Bewirtungen, BewirtungenMitExtras, Raeume } from "@/types/types";
 import {
   fetchBewirtungDatumUndStandort,
   updateRefreshmentStatus,
-} from "@/Hooks/SupaBaseAPI";
+} from "@/hooks/SupaBaseAPI";
 
 function DashboardEmployee() {
   const orderContext = useOrderContext();
@@ -58,16 +58,15 @@ function DashboardEmployee() {
     async function loadCurrBewirtungen() {
       // Ohne beide Filterwerte wird keine Datenbankabfrage gestartet.
       if (currLocation && selectedDate) {
-        const selRefrsh = await fetchBewirtungDatumUndStandort(
+        const selectedRefresh = await fetchBewirtungDatumUndStandort(
           selectedDate,
           currLocation,
         );
-        if (selRefrsh) {
+        if (selectedRefresh) {
           const today = format(new Date(), "yyyy-MM-dd");
           const currentTime = format(new Date(), "HH:mm");
-         
-         
-          const toMarkDone = selRefrsh.filter(
+
+          const toMarkDone = selectedRefresh.filter(
             (ref) =>
               ref.status === "Geplant" &&
               (selectedDate < today ||
@@ -83,7 +82,7 @@ function DashboardEmployee() {
 
           const idsToMarkDone = new Set(toMarkDone.map((ref) => ref.id));
 
-          const updatedRefreshments = selRefrsh.map((ref) =>
+          const updatedRefreshments = selectedRefresh.map((ref) =>
             idsToMarkDone.has(ref.id) ? { ...ref, status: "Erledigt" } : ref,
           );
 
