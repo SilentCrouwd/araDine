@@ -37,40 +37,45 @@ function OrderMoreInformationForm() {
   ];
 
   return (
-    <div className="w-full  text-muted-foreground border border-border rounded-xl bg-card-foreground/20 p-3">
-      <h2 className="text-xl font-bold p-2">Weitere Angaben</h2>
-      {additionalFields.map((field) => (
-        <div
-          key={field.id}
-          className="flex gap-2 justify-between  px-2 border-b border-border py-2"
-        >
-          <Label htmlFor={field.id} className="w-1/2">
-            {field.label}
-          </Label>
-          <Input
-            onChange={field.onChange}
-            type={field.type}
-            id={field.id}
-            className={`w-50 ${field.type === "checkbox" ? "w-40  p-0" : ""}`}
-            name={field.id.toLowerCase()}
-            required={field.required ?? false}
-          />
-        </div>
-      ))}
+    <div className="h-fit w-full rounded-xl border border-border bg-card/20 p-2 text-muted-foreground">
+      <h2 className="p-2 text-xl font-bold">Weitere Angaben</h2>
+      <div className="rounded-xl bg-accent-foreground/50 p-3">
+        {additionalFields.map((field) => (
+          <div
+            key={field.id}
+            className="flex flex-col gap-1.5 border-b border-border/50 py-2 last:border-b-0"
+          >
+            <Label
+              htmlFor={field.id}
+              className="text-xs uppercase tracking-wider text-muted-foreground/80"
+            >
+              {field.label}
+            </Label>
+            <Input
+              onChange={field.onChange}
+              type={field.type}
+              id={field.id}
+              className={field.type === "checkbox" ? "w-40 p-0" : "w-full"}
+              name={field.id.toLowerCase()}
+              required={field.required ?? false}
+            />
+          </div>
+        ))}
+      </div>
       {/* Wird nur bei aktivierter Mittagsverpflegung angezeigt */}
       {lunch && (
-        <div className="w-full flex flex-col  text-muted-foreground rounded-xl">
-          <h2 className="text-xl font-bold p-2">Personen Angaben</h2>
-          <p className=" px-2 flex items-center gap-2 text-foreground text-sm">
+        <div className="mt-3 flex w-full flex-col rounded-xl bg-accent-foreground/50 p-3">
+          <h2 className="pb-2 text-xl font-bold">Personen Angaben</h2>
+          <p className="flex items-center gap-2 text-sm text-foreground">
             <AlertTriangle className="h-4 w-4 text-red-600" /> Bitte nur Externe
             Teilnehmer eintragen.
           </p>
-          <p className=" px-2 flex items-center gap-2 text-foreground text-sm">
+          <p className="flex items-center gap-2 text-sm text-foreground">
             <AlertTriangle className="h-4 w-4 text-red-600" />
             Bitte nur einen Teilnehmer pro Zeile
           </p>
 
-          <div className="flex gap-2 py-0.5 px-2">
+          <div className="flex gap-2 py-0.5">
             <OrderParticipantsField />{" "}
           </div>
         </div>

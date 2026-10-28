@@ -1,4 +1,5 @@
 import type { Bewirtungen, Raeume, Zusatzleistungen } from "@/types/types";
+import DetailRow from "@/components/DetailRow";
 import {
   ArrowRightIcon,
   RefreshCcwDot,
@@ -16,57 +17,35 @@ function RefreshmentCard({ refreshment, rooms, extras }: RefreshmentCardProps) {
   const selectedRoom = rooms.find((room) => room.id === refreshment.raum_id);
 
   return (
-    <div className="refreshment-card w-full h-fit py-2 flex flex-col justify-center  border border-border rounded-xl my-1 bg-card-foreground/25 text-base">
-      <div className="flex items-center justify-between px-6">
-        <h3 className="font-bold text-lg underline underline-offset-4">
+    <div className="refreshment-card w-full h-fit flex flex-col rounded-xl my-1 bg-accent-foreground/50 p-3 text-muted-foreground">
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <h3 className="wrap-break-word text-lg font-bold">
           {refreshment.kunden_name}
-        </h3>{" "}
-        <ArrowRightIcon />
+        </h3>
+        <ArrowRightIcon className="shrink-0" />
       </div>
-      <div className="flex flex-col gap-2 w-full">
-        <div className="flex flex-col gap-1 py-3 px-6">
-          <p className="flex justify-between border-b border-border/50 p-1">
-            <span>Datum:</span>{" "}
-            <span>
-              {new Date(refreshment.datum).toLocaleDateString("de-De")}
-            </span>{" "}
-          </p>
-          <p className="flex justify-between border-b border-border/50 p-1 ">
-            <span>Uhrzeit:</span>
-            <span>
-              {refreshment.startzeit.slice(0, 5)} -
-              {refreshment.endzeit.slice(0, 5)}
-            </span>
-          </p>
-          <p className="flex justify-between border-b border-border/50 p-1">
-            <span>Raum:</span>
-            <span>{selectedRoom?.name}</span>
-          </p>
-          <p className="flex justify-between  border-b border-border/50 p-1 overflow-hidden flex-wrap">
-            <span>Status:</span>
-            <span>{refreshment.status}</span>
-          </p>
-          <p className="flex justify-between border-b border-border/50 p-1">
-            <span>Personen:</span>
-            <span className="flex gap-0.5">
-              {refreshment.personen_zahl}
-              <Users />
-            </span>
-          </p>
-          <p className=" flex justify-between gap-2">
-            <span> Erfrischung:</span>
-            <span>
-              {" "}
-              {/* Das Vorhandensein des Zusatzleistungsnamens kennzeichnet eine Nachbewirtung. */}
-              {extras.some((extra) => extra.extra_name === "nachbewirtung") ? (
-                <RefreshCcwDot className="text-green-500" />
-              ) : (
-                <RefreshCwOff className="text-red-500" />
-              )}
-            </span>
-          </p>
-        </div>
-      </div>
+      <DetailRow label="Datum">
+        {new Date(refreshment.datum).toLocaleDateString("de-DE")}
+      </DetailRow>
+      <DetailRow label="Uhrzeit">
+        {refreshment.startzeit.slice(0, 5)} - {refreshment.endzeit.slice(0, 5)}
+      </DetailRow>
+      <DetailRow label="Raum">{selectedRoom?.name}</DetailRow>
+      <DetailRow label="Status">{refreshment.status}</DetailRow>
+      <DetailRow label="Personen">
+        <span className="flex items-center gap-2">
+          {refreshment.personen_zahl}
+          <Users className="size-5" />
+        </span>
+      </DetailRow>
+      <DetailRow label="Erfrischung">
+        {/* Das Vorhandensein des Zusatzleistungsnamens kennzeichnet eine Nachbewirtung. */}
+        {extras.some((extra) => extra.extra_name === "nachbewirtung") ? (
+          <RefreshCcwDot className="text-green-500" />
+        ) : (
+          <RefreshCwOff className="text-red-500" />
+        )}
+      </DetailRow>
     </div>
   );
 }

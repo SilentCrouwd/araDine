@@ -16,6 +16,7 @@ import {
 } from "@/hooks/SupaBaseAPI";
 import type { BewirtungenMitExtras, NewBillingInfo } from "@/types/types";
 import React, { useState } from "react";
+import { PackageCheck } from "lucide-react";
 import { useNavigate } from "react-router";
 
 type ActualDeliveryFormProps = Readonly<{
@@ -74,49 +75,62 @@ function ActualDeliveryForm({
   return (
     <Card className="h-fit w-full border border-border bg-card/20 p-2">
       <CardHeader>
-        <h2 className="text-xl underline underline-offset-3 font-bold text-muted-foreground">
-          Lieferung tatsächlich:
+        <h2 className="text-xl font-bold text-muted-foreground">
+          Lieferung tatsächlich
         </h2>
       </CardHeader>
-      <CardContent className="text-base bg-card-foreground/30 text-muted-foreground shadow-2xl/20 rounded-xl m-2 p-2">
-        <form onSubmit={handleOnSubmit}>
-          {newExtraRows.map((field) => (
-            <div
-              key={field.id}
-              className="grid grid-cols-2 gap-2 border-b border-border/50 p-2"
-            >
-              <p>{field.label}</p>
-              <Input
-                id={field.id}
-                name={field.name}
-                type={field.type}
-                defaultValue={field.value ?? ""}
-                required
-              />
-            </div>
-          ))}
-          <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 gap-2 items-center">
-            <p>Service:</p>
-            <Select
-              name="actual_service"
-              value={servicePax ?? savedServicePax}
-              onValueChange={setServicePax}
-            >
-              <SelectTrigger className="w-full  bg-card/20 hover:bg-transparent ">
-                <SelectValue
-                  placeholder="Personen"
-                  className="text-muted-foreground text-base lg:text-xl"
+      <CardContent>
+        <form onSubmit={handleOnSubmit} className="flex flex-col gap-3">
+          <div className="rounded-xl bg-accent-foreground/50 p-3 text-muted-foreground">
+            <h3 className="mb-2 flex items-center gap-2 font-bold">
+              <PackageCheck className="size-5" />
+              Gelieferte Leistungen
+            </h3>
+            {newExtraRows.map((field) => (
+              <div
+                key={field.id}
+                className="flex flex-col gap-1.5 border-b border-border/50 py-2"
+              >
+                <label
+                  htmlFor={field.id}
+                  className="text-xs uppercase tracking-wider text-muted-foreground/80"
+                >
+                  {field.label}
+                </label>
+                <Input
+                  id={field.id}
+                  name={field.name}
+                  type={field.type}
+                  defaultValue={field.value ?? ""}
+                  required
                 />
-              </SelectTrigger>
-              <SelectContent side="left" align="start" sideOffset={2}>
-                <SelectGroup>
-                  <SelectItem value="0">0Pax</SelectItem>
-                  <SelectItem value="10">10Pax</SelectItem>
-                  <SelectItem value="20">20Pax</SelectItem>
-                  <SelectItem value="50">50Pax</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+              </div>
+            ))}
+            <div className="flex flex-col gap-1.5 py-2">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground/80">
+                Service:
+              </p>
+              <Select
+                name="actual_service"
+                value={servicePax ?? savedServicePax}
+                onValueChange={setServicePax}
+              >
+                <SelectTrigger className="w-full bg-card/20 hover:bg-transparent">
+                  <SelectValue
+                    placeholder="Personen"
+                    className="text-muted-foreground text-base lg:text-xl"
+                  />
+                </SelectTrigger>
+                <SelectContent side="left" align="start" sideOffset={2}>
+                  <SelectGroup>
+                    <SelectItem value="0">0Pax</SelectItem>
+                    <SelectItem value="10">10Pax</SelectItem>
+                    <SelectItem value="20">20Pax</SelectItem>
+                    <SelectItem value="50">50Pax</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <div className="flex justify-center">
             <Button

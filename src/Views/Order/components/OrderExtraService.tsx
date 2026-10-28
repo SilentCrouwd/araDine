@@ -98,50 +98,50 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
   // console.log(selectedPackage);c
   const filteredSelects = extraServiceData;
   return (
-    <div className="w-full flex flex-col items-center gap-4 sm:flex-row sm:items-start border border-border rounded-xl bg-card-foreground/20 p-3">
-      <div className="w-full flex flex-col gap-3">
-        <h2 className="text-xl font-bold text-muted-foreground">
-          Zusatzleistungen
-        </h2>
-        <div className="flex flex-col gap-2">
-          {filteredSelects
-            ? filteredSelects.map((service) => (
-                <div
-                  className="flex justify-between  gap-2 border-b border-border pb-2 "
-                  key={service.id}
-                  hidden={service.hidden}
-                >
-                  <Label
-                    key={service.id}
-                    className="cursor-pointer w-fit text-sm text-muted-foreground"
-                    htmlFor={service.id}
-                  >
-                    {service.label}
-                  </Label>
-                  <Input
-                    onChange={service.onChange}
-                    type={service.type || "number"}
-                    id={service.value_id}
-                    placeholder={service.Placeholder}
-                    name={service.id}
-                    className="w-50 text-muted-foreground placeholder:text-muted "
-                  />
-                </div>
-              ))
-            : []}
-        </div>
+    <div className="h-fit w-full rounded-xl border border-border bg-card/20 p-2 text-muted-foreground">
+      <h2 className="p-2 text-xl font-bold">Zusatzleistungen</h2>
+      <div className="rounded-xl bg-accent-foreground/50 p-3">
+        {filteredSelects.map((service) => (
+          <div
+            className="flex flex-col gap-1.5 border-b border-border/50 py-2 last:border-b-0"
+            key={service.id}
+            hidden={service.hidden}
+          >
+            <Label
+              className="cursor-pointer text-xs uppercase tracking-wider text-muted-foreground/80"
+              htmlFor={service.value_id}
+            >
+              {service.label}
+            </Label>
+            <Input
+              onChange={service.onChange}
+              type={service.type || "number"}
+              id={service.value_id}
+              placeholder={service.Placeholder}
+              name={service.id}
+              className={
+                service.type === "checkbox"
+                  ? "w-40 p-0"
+                  : "w-full text-muted-foreground placeholder:text-muted"
+              }
+            />
+          </div>
+        ))}
         {refresh && (
           // Das Zeitfeld wird nur benötigt, wenn die Nachbewirtung aktiviert ist.
-          <div className="flex gap-2 py-0.5 px-2 text-muted-foreground">
-            <Label htmlFor="startzeit" className="w-1/2">
-              Nachbewirtung:
+          <div className="flex flex-col gap-1.5 py-2">
+            <Label
+              htmlFor="startzeit"
+              className="text-xs uppercase tracking-wider text-muted-foreground/80"
+            >
+              Nachbewirtung Uhrzeit:
             </Label>
             <Input
               type="time"
               id="startzeit"
               name="extra_nachbewirtungUhrzeit"
               required
-              className="w-50 [&::-webkit-calendar-picker-indicator]:invert"
+              className="w-full [&::-webkit-calendar-picker-indicator]:invert"
             />
           </div>
         )}

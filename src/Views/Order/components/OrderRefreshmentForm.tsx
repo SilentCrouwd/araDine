@@ -37,18 +37,18 @@ function OrderRefreshmentForm({ onChangeDate }: OrderRefreshmentFormProps) {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-3 text-muted-foreground border border-border rounded-xl bg-card-foreground/20 p-3">
-      <h2 className="text-xl font-bold">Bewirtungsbeleg</h2>
+    <div className="h-fit w-full rounded-xl border border-border bg-card/20 p-2 text-muted-foreground">
+      <h2 className="p-2 text-xl font-bold">Bewirtungsbeleg</h2>
 
-      <div className="flex flex-col gap-2">
+      <div className="rounded-xl bg-accent-foreground/50 p-3">
         {refreshmentFields.map((field) => (
           <div
             key={field.id}
-            className=" flex items-center justify-between gap-2 border-b border-border px-2 pb-2"
+            className="flex flex-col gap-1.5 border-b border-border/50 py-2 last:border-b-0"
           >
             <Label
               htmlFor={field.id}
-              className="cursor-pointer w-1/2 text-sm text-muted-foreground"
+              className="cursor-pointer text-xs uppercase tracking-wider text-muted-foreground/80"
             >
               {field.label}
             </Label>
@@ -64,8 +64,8 @@ function OrderRefreshmentForm({ onChangeDate }: OrderRefreshmentFormProps) {
               required={field.name !== "main_kundenBewirtung"}
               className={
                 field.type === "time" || field.type === "date"
-                  ? "w-50 [&::-webkit-calendar-picker-indicator]:invert"
-                  : "w-50 text-muted-foreground placeholder:text-muted"
+                  ? "w-full [&::-webkit-calendar-picker-indicator]:invert"
+                  : "w-full text-muted-foreground placeholder:text-muted"
               }
             />
           </div>

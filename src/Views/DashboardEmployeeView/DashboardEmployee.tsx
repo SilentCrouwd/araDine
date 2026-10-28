@@ -211,7 +211,7 @@ function DashboardEmployee() {
         </Popover>
       </div>
 
-      <RoomInfoCard room={updatedRooms} />
+      <RoomInfoCard room={updatedRooms} refreshments={selectedRefreshments} />
 
       {/* Zeigt die Bewirtungen für den ausgewählten Standort und das Datum an. */}
       {/* Jede Karte erhält außerdem die Räume und Zusatzleistungen der Bewirtung. */}

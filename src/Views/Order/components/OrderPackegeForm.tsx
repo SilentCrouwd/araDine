@@ -58,74 +58,76 @@ function OrdercurrPackageForm({
   }
   return (
     // Auswahl der Verpflegungspakete mit erläuternder Vorschau.
-    <div className="w-full text-muted-foreground border border-border rounded-xl bg-card-foreground/20 p-3">
-      <h2 className="text-xl font-bold p-2 ">Pakete</h2>
-      <div className=" w-full flex justify-center">
-        <div className="flex flex-col p-2 w-fit items-center ">
-          <Label
-            htmlFor="paket-1"
-            className="text-base underline underline-offset-2"
-          >
-            Paket 1:
-          </Label>
-          <Input
-            onChange={() => {
-              onCurrPackageChange("paket-1");
-              // Meldet dem übergeordneten Formular, dass eine gültige Paketauswahl vorliegt.
-            }}
-            checked={currPackage === "paket-1"}
-            type="radio"
-            name="main_paket"
-            value="Paket_1"
-            required
-            id="paket-1"
-            className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
-          />
+    <div className="h-fit w-full rounded-xl border border-border bg-card/20 p-2 text-muted-foreground">
+      <h2 className="p-2 text-xl font-bold">Pakete</h2>
+      <div className="rounded-xl bg-accent-foreground/50 p-3">
+        <div className="flex w-full justify-center">
+          <div className="flex flex-col p-2 w-fit items-center ">
+            <Label
+              htmlFor="paket-1"
+              className="text-base underline underline-offset-2"
+            >
+              Paket 1:
+            </Label>
+            <Input
+              onChange={() => {
+                onCurrPackageChange("paket-1");
+                // Meldet dem übergeordneten Formular, dass eine gültige Paketauswahl vorliegt.
+              }}
+              checked={currPackage === "paket-1"}
+              type="radio"
+              name="main_paket"
+              value="Paket_1"
+              required
+              id="paket-1"
+              className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
+            />
+          </div>
+          <div className="flex flex-col p-2 w-fit items-center ">
+            <Label
+              htmlFor="main_paket-2"
+              className="text-base underline underline-offset-2"
+            >
+              Paket 2:
+            </Label>
+            <Input
+              onChange={() => {
+                onCurrPackageChange("paket-2");
+              }}
+              checked={currPackage === "paket-2"}
+              type="radio"
+              name="main_paket"
+              value="Paket_2"
+              id="paket-2"
+              className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
+            />
+          </div>
+          <div className="flex flex-col p-2 w-fit items-center ">
+            <Label
+              htmlFor="paket-3"
+              className="text-base underline underline-offset-2"
+            >
+              Paket 3:
+            </Label>
+            <Input
+              onChange={() => {
+                onCurrPackageChange("paket-3");
+              }}
+              checked={currPackage === "paket-3"}
+              type="radio"
+              name="main_paket"
+              value="Paket_3"
+              id="paket-3"
+              className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
+            />
+          </div>
         </div>
-        <div className="flex flex-col p-2 w-fit items-center ">
-          <Label
-            htmlFor="main_paket-2"
-            className="text-base underline underline-offset-2"
-          >
-            Paket 2:
-          </Label>
-          <Input
-            onChange={() => {
-              onCurrPackageChange("paket-2");
-            }}
-            checked={currPackage === "paket-2"}
-            type="radio"
-            name="main_paket"
-            value="Paket_2"
-            id="paket-2"
-            className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
-          />
-        </div>
-        <div className="flex flex-col p-2 w-fit items-center ">
-          <Label
-            htmlFor="paket-3"
-            className="text-base underline underline-offset-2"
-          >
-            Paket 3:
-          </Label>
-          <Input
-            onChange={() => {
-              onCurrPackageChange("paket-3");
-            }}
-            checked={currPackage === "paket-3"}
-            type="radio"
-            name="main_paket"
-            value="Paket_3"
-            id="paket-3"
-            className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
-          />
-        </div>
+        {currPackage && (
+          <div className="mt-3 rounded-xl border border-border/50 p-2">
+            {handleCurrPackageInfo()}
+          </div>
+        )}
       </div>
-      {currPackage && (
-        <div className="p-2 mt-5 bg-card-foreground/20 rounded-xl m-2">
-          {handleCurrPackageInfo()}
-        </div>
-      )}
     </div>
   );
 }

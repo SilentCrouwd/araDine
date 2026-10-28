@@ -1,53 +1,89 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import DetailRow from "@/components/DetailRow";
 import type { BewirtungenMitExtras } from "@/types/types";
-import { Ban, CircleCheckBig } from "lucide-react";
+import { Ban, CalendarDays, CircleCheckBig, Receipt, User } from "lucide-react";
 
 type RefreshmentInfoCardProps = Readonly<{
   refreshment: BewirtungenMitExtras;
 }>;
 
+// Badge-Farben je Status, als volle Tailwind-Klassen.
+const statusColors: Record<string, string> = {
+  Geplant: "bg-blue-500/20 text-blue-500",
+  Erledigt: "bg-green-500/20 text-green-500",
+  Abrechnungsbereit: "bg-amber-500/20 text-amber-500",
+};
+
 function RefreshmentInfoCard({ refreshment }: RefreshmentInfoCardProps) {
-  return (
-    <Card className=" h-fit w-full border border-border bg-card/20 p-2 ">
-      <CardHeader>
-        <h2 className="text-xl underline underline-offset-3 font-bold text-muted-foreground ">
-          Bewirtungsdaten:
-        </h2>
-      </CardHeader>
-      <CardContent className=" text-base bg-card-foreground/30 text-muted-foreground shadow-2xl/20 rounded-xl m-2 p-2 ">
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 ">
-          <p>Name:</p> <p>{refreshment.kunden_name}</p>
-        </div>
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 ">
-          <p>Personen:</p> <p>{refreshment.personen_zahl}</p>
-        </div>
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2 wrap-break-word">
-          <p>E-mail:</p> <p>{refreshment.kunden_email}</p>
-        </div>
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
-          <p>Kostenstelle:</p> <p>{refreshment.kostenstelle || "-"}</p>
-        </div>
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
-          <p>Bewirtungsart:</p>
-          <p>{refreshment.kundenBewirtung ? "Kundenbewirtung" : "Intern"}</p>
-        </div>
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
-          <p>Buchungskreis:</p> <p>{refreshment.buchungskreis || "-"}</p>
-        </div>
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
-          <p>Abteilung:</p> <p>{refreshment.abteilung || "-"}</p>
-        </div>
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
-          <p>Anlass:</p> <p>{refreshment.anlass || "-"}</p>
-        </div>
-        <div className="grid grid-cols-2 gap-2 border-b border-border/50 p-2">
-          <p>Mittagessen:</p>{" "}
-          {refreshment.mittagsverpflegung ? (
-            <CircleCheckBig className=" h-5 text-green-500" />
+  const sections = [
+    {
+      title: "Kunde",
+      Icon: User,
+      rows: [
+        ["Name", refreshment.kunden_name],
+        ["E-Mail", refreshment.kunden_email],
+      ],
+    },
+    {
+      title: "Bewirtung",
+      Icon: CalendarDays,
+      rows: [
+        ["Personen", refreshment.personen_zahl],
+        [
+          "Bewirtungsart",
+          refreshment.kundenBewirtung ? "Kundenbewirtung" : "Intern",
+        ],
+        ["Anlass", refreshment.anlass || "-"],
+        [
+          "Mittagessen",
+          refreshment.mittagsverpflegung ? (
+            <CircleCheckBig className="h-5 text-green-500" />
           ) : (
-            <Ban className=" h-5 text-red-500" />
-          )}
-        </div>
+            <Ban className="h-5 text-red-500" />
+          ),
+        ],
+      ],
+    },
+    {
+      title: "Abrechnung",
+      Icon: Receipt,
+      rows: [
+        ["Kostenstelle", refreshment.kostenstelle || "-"],
+        ["Buchungskreis", refreshment.buchungskreis || "-"],
+        ["Abteilung", refreshment.abteilung || "-"],
+      ],
+    },
+  ];
+
+  return (
+    <Card className="h-fit w-full border border-border bg-card/20 p-2">
+      <CardHeader className="flex flex-row items-center justify-between gap-2">
+        <h2 className="text-xl font-bold text-muted-foreground">
+          Bewirtungsdaten
+        </h2>
+        <span
+          className={`rounded-full px-3 py-1 text-sm font-bold ${statusColors[refreshment.status] ?? "bg-muted text-muted-foreground"}`}
+        >
+          {refreshment.status}
+        </span>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-3">
+        {sections.map((section) => (
+          <div
+            key={section.title}
+            className="rounded-xl bg-accent-foreground/50 p-3 text-muted-foreground"
+          >
+            <h3 className="mb-2 flex items-center gap-2 font-bold">
+              <section.Icon className="size-5" />
+              {section.title}
+            </h3>
+            {section.rows.map(([label, value]) => (
+              <DetailRow key={label as string} label={label as string}>
+                {value}
+              </DetailRow>
+            ))}
+          </div>
+        ))}
       </CardContent>
     </Card>
   );
