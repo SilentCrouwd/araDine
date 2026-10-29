@@ -1,5 +1,5 @@
-import { fetchRefreshmentsByRoomIdAndDate } from "@/hooks/SupaBaseAPI";
-import type { Bewirtungen } from "@/types/types";
+import { fetchRefreshmentsByRoomAndDate } from "@/hooks/SupaBaseAPI";
+import type { Refreshments } from "@/types/types";
 import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
 import RoomRefreshmentItem from "./components/RoomRefreshmentItem";
@@ -8,11 +8,11 @@ function RoomView() {
   const { roomId } = useParams();
   const [searchParams] = useSearchParams();
   const selectedDate = searchParams.get("date");
-  const [refreshments, setRefreshments] = useState<Bewirtungen>([]);
+  const [refreshments, setRefreshments] = useState<Refreshments>([]);
   useEffect(() => {
     async function loadCurrRefreshment() {
       if (!roomId || !selectedDate) return;
-      const fetchedRefreshments = await fetchRefreshmentsByRoomIdAndDate(
+      const fetchedRefreshments = await fetchRefreshmentsByRoomAndDate(
         roomId,
         selectedDate,
       );
@@ -21,7 +21,7 @@ function RoomView() {
       }
     }
     loadCurrRefreshment().catch((error) => {
-      console.error("Fehler beim Laden der Bewirtungen:", error);
+      console.error("Fehler beim Laden der Refreshments:", error);
     });
   }, []);
 
@@ -35,9 +35,9 @@ function RoomView() {
             to={`/araDine/dashboard/refreshment-detail/${ref.id}`}
           >
             <RoomRefreshmentItem
-              name={ref.kunden_name}
-              startTime={ref.startzeit}
-              endTime={ref.endzeit}
+              name={ref.customer_name}
+              startTime={ref.start_time}
+              endTime={ref.end_time}
               status={ref.status}
             />
           </Link>

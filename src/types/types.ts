@@ -1,31 +1,31 @@
 import type { Database } from "./supabaseTypes";
 
-export type Bewirtungen = Database["public"]["Tables"]["bewirtungen"]["Row"][];
-export type NeueBewirtung =
-  Database["public"]["Tables"]["bewirtungen"]["Insert"];
-export type Raeume = Database["public"]["Tables"]["raeume"]["Row"][];
+export type Refreshments = Database["public"]["Tables"]["refreshments"]["Row"][];
+export type NewRefreshment =
+  Database["public"]["Tables"]["refreshments"]["Insert"];
+export type Rooms = Database["public"]["Tables"]["rooms"]["Row"][];
 
-export type Standorte = Database["public"]["Tables"]["standorte"]["Row"][];
+export type Locations = Database["public"]["Tables"]["locations"]["Row"][];
 
-export type Zusatzleistungen =
-  Database["public"]["Tables"]["zusatzleistungen"]["Row"][];
+export type AdditionalServices =
+  Database["public"]["Tables"]["additional_services"]["Row"][];
 
-export type NeueZusatzleistung =
-  Database["public"]["Tables"]["zusatzleistungen"]["Insert"];
+export type NewAdditionalService =
+  Database["public"]["Tables"]["additional_services"]["Insert"];
 
-export type StandortMitRaeumen = Standorte[number] & {
-  raeume: Raeume;
+export type LocationWithRooms = Locations[number] & {
+  rooms: Rooms;
 };
-export type BewirtungenMitExtras = Bewirtungen[number] & {
-  zusatzleistungen: Zusatzleistungen;
+export type RefreshmentWithAdditionalServices = Refreshments[number] & {
+  additional_services: AdditionalServices;
 };
 
-export type StandorteMitRaeumen = StandortMitRaeumen[];
+export type LocationsWithRooms = LocationWithRooms[];
 
-export type Teilnehmer = Database["public"]["Tables"]["teilnehmer"]["Row"][];
+export type Participants = Database["public"]["Tables"]["participants"]["Row"][];
 
-export type NeuerTeilnehmer =
-  Database["public"]["Tables"]["teilnehmer"]["Insert"][];
+export type NewParticipant =
+  Database["public"]["Tables"]["participants"]["Insert"][];
 
-export type NewBillingInfo =
-  Database["public"]["Tables"]["abrechnungsdetails"]["Insert"];
+export type BillingDetailInsert =
+  Database["public"]["Tables"]["billing_details"]["Insert"];

@@ -23,14 +23,14 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
       label: "Wasser:",
       value_id: "wasser_value",
       Placeholder: "Flaschen 0.75L",
-      hidden: selectedPackage !== "paket-1",
+      hidden: selectedPackage !== "package-1",
     },
     {
       id: "extra_tee",
       label: "Tee:",
       value_id: "Tee_value",
       Placeholder: "Kanne 4pax",
-      hidden: selectedPackage !== "paket-1",
+      hidden: selectedPackage !== "package-1",
     },
 
     {
@@ -44,7 +44,7 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
       label: "Obst:",
       value_id: "obst_value",
       Placeholder: "Stück",
-      hidden: selectedPackage === "paket-3",
+      hidden: selectedPackage === "package-3",
     },
     {
       id: "extra_suessware",
@@ -57,7 +57,7 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
       label: "Softdrinks:",
       value_id: "softdrinks_value",
       Placeholder: "Flaschen 0.33L ",
-      hidden: selectedPackage === "paket-3",
+      hidden: selectedPackage === "package-3",
     },
     {
       id: "extra_sonstige",
@@ -77,12 +77,12 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
     },
   ];
   // function handleSelectPackage(selectedPackage: string) {
-  //   if (selectedPackage === "paket-2") {
+  //   if (selectedPackage === "package-2") {
   //     const newSelects = extraServiceData.filter(
   //       (datas) => datas.label !== "Wasser:" && datas.label !== "Tee:",
   //     );
   //     return newSelects;
-  //   } else if (selectedPackage === "paket-3") {
+  //   } else if (selectedPackage === "package-3") {
   //     const newSelects = extraServiceData.filter(
   //       (datas) =>
   //         datas.label !== "Wasser:" &&
@@ -131,14 +131,14 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
           // Das Zeitfeld wird nur benötigt, wenn die Nachbewirtung aktiviert ist.
           <div className="flex flex-col gap-1.5 py-2">
             <Label
-              htmlFor="startzeit"
+              htmlFor="start_time"
               className="text-xs uppercase tracking-wider text-muted-foreground/80"
             >
               Nachbewirtung Uhrzeit:
             </Label>
             <Input
               type="time"
-              id="startzeit"
+              id="start_time"
               name="extra_nachbewirtungUhrzeit"
               required
               className="w-full [&::-webkit-calendar-picker-indicator]:invert"

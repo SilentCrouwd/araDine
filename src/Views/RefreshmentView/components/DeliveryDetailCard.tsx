@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Fragment } from "react";
 import DetailRow from "@/components/DetailRow";
 import { useOrderContext } from "@/context/RefreshmentContext";
-import type { BewirtungenMitExtras } from "@/types/types";
+import type { RefreshmentWithAdditionalServices } from "@/types/types";
 import {
   AlertTriangle,
   BottleWine,
@@ -13,7 +13,7 @@ import {
   Truck,
 } from "lucide-react";
 type DeliveryDetailCardProps = Readonly<{
-  refreshment: BewirtungenMitExtras;
+  refreshment: RefreshmentWithAdditionalServices;
 }>;
 
 function handleExtraStatus(extras: {
@@ -66,15 +66,15 @@ function DeliveryDetailCard({ refreshment }: DeliveryDetailCardProps) {
   const orderContext = useOrderContext();
 
   const locationName = orderContext.state.location.find(
-    (location) => location.id === refreshment.standort_id,
+    (location) => location.id === refreshment.location_id,
   )?.name;
   const roomName = orderContext.state.location
-    .find((standort) => standort.id === refreshment.standort_id)
-    ?.raeume.find((room) => room.id === refreshment.raum_id)?.name;
+    .find((standort) => standort.id === refreshment.location_id)
+    ?.rooms.find((room) => room.id === refreshment.room_id)?.name;
 
-  const extraRows = refreshment.zusatzleistungen.map((extra) => ({
-    name: extra.extra_name,
-    menge: extra.extra_value,
+  const extraRows = refreshment.additional_services.map((extra) => ({
+    name: extra.service_name,
+    menge: extra.service_value,
   }));
 
   return (
@@ -102,13 +102,13 @@ function DeliveryDetailCard({ refreshment }: DeliveryDetailCardProps) {
             {locationName} {roomName}
           </DetailRow>
           <DetailRow label="Startzeit">
-            {refreshment.startzeit.slice(0, 5)}
+            {refreshment.start_time.slice(0, 5)}
           </DetailRow>
           <DetailRow label="Endzeit">
-            {refreshment.endzeit.slice(0, 5)}
+            {refreshment.end_time.slice(0, 5)}
           </DetailRow>
           <DetailRow label="Paket">
-            {refreshment.paket.replace("_", " ")}
+            {refreshment.package.replace("_", " ")}
           </DetailRow>
         </div>
 

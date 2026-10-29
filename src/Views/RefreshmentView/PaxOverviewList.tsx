@@ -1,8 +1,8 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import type { Teilnehmer } from "@/types/types";
+import type { Participants } from "@/types/types";
 import { User, Utensils } from "lucide-react";
 type PaxOverviewProps = Readonly<{
-  pax: Teilnehmer;
+  pax: Participants;
 }>;
 
 function PaxOverviewList({ pax }: PaxOverviewProps) {
@@ -34,7 +34,7 @@ function PaxOverviewList({ pax }: PaxOverviewProps) {
                 <span className="wrap-break-word">{participant.name}</span>
               </p>
               <p className="wrap-break-word capitalize">
-                {participant.abteilung}
+                {participant.department}
               </p>
             </div>
           ))}

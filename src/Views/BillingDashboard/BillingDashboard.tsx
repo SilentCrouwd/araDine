@@ -1,7 +1,7 @@
 import { useOrderContext } from "@/context/RefreshmentContext";
 import BillingItem from "./components/BillingItem";
-import { fetchBewirtungen } from "@/hooks/SupaBaseAPI";
-import type { Bewirtungen } from "@/types/types";
+import { fetchRefreshments } from "@/hooks/SupaBaseAPI";
+import type { Refreshments } from "@/types/types";
 import { useEffect, useState } from "react";
 import {
   BadgeCheck,
@@ -56,11 +56,11 @@ const sections = [
 
 function BillingDashboard() {
   const orderContext = useOrderContext();
-  const [refreshmentData, setRefreshmentData] = useState<Bewirtungen>([]);
+  const [refreshmentData, setRefreshmentData] = useState<Refreshments>([]);
 
   useEffect(() => {
     async function fetchBillingsData() {
-      const responseRefreshmentData = await fetchBewirtungen();
+      const responseRefreshmentData = await fetchRefreshments();
       if (!responseRefreshmentData) {
         console.error("Failed to fetch refreshment data");
         return;
@@ -99,7 +99,7 @@ function BillingDashboard() {
     ...new Set([
       now.getFullYear(),
       ...refreshmentData.map((refreshment) =>
-        new Date(refreshment.datum).getFullYear(),
+        new Date(refreshment.date).getFullYear(),
       ),
     ]),
   ]
@@ -177,19 +177,19 @@ function BillingDashboard() {
                 refreshmentData.filter(
                   (ref) =>
                     ref.status === section.status &&
-                    isInSelectedMonth(ref.datum),
+                    isInSelectedMonth(ref.date),
                 ).length
               }
             </p>
           </div>
         ))}
       </div>
-      {/* Listen: Bewirtungen je Status im gewählten Monat */}
+      {/* Listen: Refreshments je Status im gewählten Monat */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-2">
         {sections.map((section) => {
           const entries = refreshmentData.filter(
             (ref) =>
-              ref.status === section.status && isInSelectedMonth(ref.datum),
+              ref.status === section.status && isInSelectedMonth(ref.date),
           );
           return (
             <div
@@ -207,11 +207,11 @@ function BillingDashboard() {
                     <BillingItem
                       key={ref.id}
                       id={ref.id}
-                      name={ref.kunden_name}
-                      date={ref.datum}
+                      name={ref.customer_name}
+                      date={ref.date}
                       location={
                         orderContext.state.location.find(
-                          (loc) => loc.id === ref.standort_id,
+                          (loc) => loc.id === ref.location_id,
                         )?.name ?? "Unbekannt"
                       }
                     />

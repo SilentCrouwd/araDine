@@ -7,7 +7,7 @@ function RoomViewLayout() {
   const orderContext = useOrderContext();
 
   const currTitle = orderContext.state.location
-    .flatMap((location) => location.raeume)
+    .flatMap((location) => location.rooms)
     .find((room) => room.id === roomId)?.name;
 
   return (

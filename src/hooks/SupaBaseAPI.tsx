@@ -1,70 +1,70 @@
 import { supabase } from "@/lib/supabaseClient";
 import type {
-  NeueBewirtung,
-  NeuerTeilnehmer,
-  NeueZusatzleistung,
-  NewBillingInfo,
+  NewRefreshment,
+  NewParticipant,
+  NewAdditionalService,
+  BillingDetailInsert,
 } from "@/types/types";
 
-export async function fetchStandorte() {
+export async function fetchLocations() {
   const { data, error } = await supabase
-    .from("standorte")
-    .select("*, raeume(*)");
+    .from("locations")
+    .select("*, rooms(*)");
   if (error) {
-    console.error("Error fetching standorte:", error);
+    console.error("Error fetching locations:", error);
   }
-  //  console.log("Fetched standorte:", data);
+  //  console.log("Fetched locations:", data);
   return data;
 }
-export async function fetchBewirtungen() {
-  const { data: bewirtungen, error } = await supabase
-    .from("bewirtungen")
+export async function fetchRefreshments() {
+  const { data: refreshments, error } = await supabase
+    .from("refreshments")
     .select("*");
   if (error) {
-    console.error("Error fetching bewirtungen:", error);
+    console.error("Error fetching refreshments:", error);
   }
-  return bewirtungen;
+  return refreshments;
 }
 
-export async function fetchExtras() {
-  const { data: zusatzleistungen, error } = await supabase
-    .from("zusatzleistungen")
+export async function fetchAdditionalServices() {
+  const { data: additional_services, error } = await supabase
+    .from("additional_services")
     .select("*");
 
   if (error) {
     console.error(error);
   }
-  return zusatzleistungen;
+  return additional_services;
 }
 
-export async function insertBewirtung(
-  newRefreshment: NeueBewirtung,
-  extraServices: NeueZusatzleistung,
-  newPax: NeuerTeilnehmer,
+export async function insertRefreshment(
+  newRefreshment: NewRefreshment,
+  extraServices: NewAdditionalService,
+  newPax: NewParticipant,
 ) {
   const { data, error } = await supabase
-    .from("bewirtungen")
+    .from("refreshments")
     .insert(newRefreshment)
     .select("id")
     .single();
   if (error) {
-    console.error("Error inserting bewirtung:", error);
+    console.error("Error inserting refreshment:", error);
     return null;
   }
 
   const extraRows = Object.entries(extraServices).map(([name, value]) => ({
-    bewirtung_id: data.id,
-    extra_name: name,
-    extra_value: String(value),
+    refreshment_id: data.id,
+    service_name: name,
+    service_value: String(value),
   }));
   const paxRows = newPax.map((pax) => ({
     ...pax,
-    bewirtung_id: data.id,
+    refreshment_id: data.id,
   }));
 
   if (extraRows.length > 0) {
     const { data: extraServiceData, error: extraServiceError } = await supabase
-      .from("zusatzleistungen")
+      .from("additional_services")
       .insert(extraRows) // ganzes Array auf einmal, ein Request
       .select();
 
@@ -75,7 +75,7 @@ export async function insertBewirtung(
   }
   if (paxRows.length > 0) {
     const { data: paxData, error: paxError } = await supabase
-      .from("teilnehmer")
+      .from("participants")
       .insert(paxRows)
       .select();
     if (paxError) {
@@ -88,15 +88,15 @@ export async function insertBewirtung(
 
   return data;
 }
-export async function fetchBewirtungDatumUndStandort(
+export async function fetchRefreshmentsByDateAndLocation(
   currDate: string,
   currLocationId: string,
 ) {
   const { data, error } = await supabase
-    .from("bewirtungen")
-    .select("*,zusatzleistungen(*)")
-    .eq("standort_id", currLocationId)
-    .eq("datum", currDate);
+    .from("refreshments")
+    .select("*,additional_services(*)")
+    .eq("location_id", currLocationId)
+    .eq("date", currDate);
   if (error) {
     console.error(error);
   }
@@ -104,75 +104,56 @@ export async function fetchBewirtungDatumUndStandort(
   return data;
 }
 
-export async function fetchCurrBewirtung(refreshmentId: string) {
-  const { data: BewirtungenMitExtras, error } = await supabase
-    .from("bewirtungen")
-    .select("*,zusatzleistungen(*)")
+export async function fetchRefreshmentById(refreshmentId: string) {
+  const { data: refreshmentWithAdditionalServices, error } = await supabase
+    .from("refreshments")
+    .select("*,additional_services(*)")
     .eq("id", refreshmentId)
     .single();
   if (error) {
     console.error(error);
   }
-  return BewirtungenMitExtras;
+  return refreshmentWithAdditionalServices;
 }
 
-export async function fetchCurrTeilnehmer(bewirtung_id: string) {
-  const { data: teilnehmer, error } = await supabase
-    .from("teilnehmer")
+export async function fetchParticipantsByRefreshmentId(refreshmentId: string) {
+  const { data: participants, error } = await supabase
+    .from("participants")
     .select("*")
-    .eq("bewirtung_id", bewirtung_id);
+    .eq("refreshment_id", refreshmentId);
 
   if (error) {
     console.error(error);
   }
 
-  return teilnehmer;
+  return participants;
 }
 
-export async function fetchBewirtungenByStandortUndRaum(
-  room_id: string,
+export async function fetchRefreshmentsByRoomAndDate(
+  roomId: string,
   date: string,
 ) {
-  const { data: bewirtungen, error } = await supabase
-    .from("bewirtungen")
+  const { data: refreshments, error } = await supabase
+    .from("refreshments")
     .select("*")
-    .eq("raum_id", room_id)
-    .eq("datum", date);
+    .eq("room_id", roomId)
+    .eq("date", date);
   if (error) {
     console.error(error);
   }
-  console.log(bewirtungen);
-
-  return bewirtungen;
+  return refreshments;
 }
 
-export async function fetchRefreshmentsByRoomIdAndDate(
-  roomId: string,
-  currDate: string,
-) {
-  const { data: refreshment, error } = await supabase
-    .from("bewirtungen")
+export async function fetchBillingDetails(refreshmentId: string) {
+  const { data: billing_details, error } = await supabase
+    .from("billing_details")
     .select("*")
-    .eq("raum_id", roomId)
-    .eq("datum", currDate);
+    .eq("refreshment_id", refreshmentId);
 
   if (error) {
     console.error(error);
   }
-
-  return refreshment;
-}
-
-export async function fetchBillingInfos(refreshmentId: string) {
-  const { data: abrechnungsdetails, error } = await supabase
-    .from("abrechnungsdetails")
-    .select("*")
-    .eq("bewirtung_id", refreshmentId);
-
-  if (error) {
-    console.error(error);
-  }
-  return abrechnungsdetails;
+  return billing_details;
 }
 
 export async function updateRefreshmentStatus(
@@ -180,7 +161,7 @@ export async function updateRefreshmentStatus(
   currRefreshmentId: string,
 ) {
   const { data, error } = await supabase
-    .from("bewirtungen")
+    .from("refreshments")
     .update({ status: newStatus })
     .eq("id", currRefreshmentId)
     .select();
@@ -192,18 +173,22 @@ export async function updateRefreshmentStatus(
   }
 }
 
-export async function upsertActualDelivered(
-  billingInfos: NewBillingInfo,
+export async function upsertBillingDetails(
+  billingInfos: Record<string, FormDataEntryValue>,
   refreshmentId: string,
 ) {
-  const extraRows = Object.entries(billingInfos).map(([name, value]) => ({
-    bewirtung_id: refreshmentId,
-    name: name,
-    value: String(value),
-  }));
+  const billingRows: BillingDetailInsert[] = Object.entries(billingInfos).map(
+    ([name, value]) => ({
+      refreshment_id: refreshmentId,
+      billing_detail_name: name,
+      billing_detail_value: String(value),
+    }),
+  );
   const { data, error } = await supabase
-    .from("abrechnungsdetails")
-    .upsert(extraRows, { onConflict: "bewirtung_id,name" })
+    .from("billing_details")
+    .upsert(billingRows, {
+      onConflict: "refreshment_id,billing_detail_name",
+    })
     .select();
   if (error) {
     console.error(error);

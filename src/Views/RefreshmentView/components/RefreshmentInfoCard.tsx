@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import DetailRow from "@/components/DetailRow";
-import type { BewirtungenMitExtras } from "@/types/types";
+import type { RefreshmentWithAdditionalServices } from "@/types/types";
 import { Ban, CalendarDays, CircleCheckBig, Receipt, User } from "lucide-react";
 
 type RefreshmentInfoCardProps = Readonly<{
-  refreshment: BewirtungenMitExtras;
+  refreshment: RefreshmentWithAdditionalServices;
 }>;
 
 // Badge-Farben je Status, als volle Tailwind-Klassen.
@@ -20,23 +20,23 @@ function RefreshmentInfoCard({ refreshment }: RefreshmentInfoCardProps) {
       title: "Kunde",
       Icon: User,
       rows: [
-        ["Name", refreshment.kunden_name],
-        ["E-Mail", refreshment.kunden_email],
+        ["Name", refreshment.customer_name],
+        ["E-Mail", refreshment.customer_email],
       ],
     },
     {
       title: "Bewirtung",
       Icon: CalendarDays,
       rows: [
-        ["Personen", refreshment.personen_zahl],
+        ["Personen", refreshment.participant_count],
         [
           "Bewirtungsart",
-          refreshment.kundenBewirtung ? "Kundenbewirtung" : "Intern",
+          refreshment.is_customer_refreshment ? "Kundenbewirtung" : "Intern",
         ],
-        ["Anlass", refreshment.anlass || "-"],
+        ["Anlass", refreshment.occasion || "-"],
         [
           "Mittagessen",
-          refreshment.mittagsverpflegung ? (
+          refreshment.lunch_provided ? (
             <CircleCheckBig className="h-5 text-green-500" />
           ) : (
             <Ban className="h-5 text-red-500" />
@@ -48,9 +48,9 @@ function RefreshmentInfoCard({ refreshment }: RefreshmentInfoCardProps) {
       title: "Abrechnung",
       Icon: Receipt,
       rows: [
-        ["Kostenstelle", refreshment.kostenstelle || "-"],
-        ["Buchungskreis", refreshment.buchungskreis || "-"],
-        ["Abteilung", refreshment.abteilung || "-"],
+        ["Kostenstelle", refreshment.cost_center || "-"],
+        ["Buchungskreis", refreshment.company_code || "-"],
+        ["Abteilung", refreshment.department || "-"],
       ],
     },
   ];

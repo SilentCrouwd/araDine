@@ -14,21 +14,21 @@ function OrderMoreInformationForm() {
   // Die Feldnamen entsprechen den Schlüsseln, die OrderForm beim Submit aus FormData liest.
   const additionalFields = [
     {
-      id: "main_buchungskreis",
+      id: "main_company_code",
       label: "Buchungskreis:",
       type: "text",
       required: true,
     },
-    { id: "main_abteilung", label: "Abteilung:", type: "text" },
+    { id: "main_department", label: "Abteilung:", type: "text" },
     {
-      id: "main_kostenstelle",
+      id: "main_cost_center",
       label: "Kostenstelle:",
       type: "text",
       required: true,
     },
-    { id: "main_anlass", label: "Anlass:", type: "text" },
+    { id: "main_occasion", label: "Anlass:", type: "text" },
     {
-      id: "main_mittagsverpflegung",
+      id: "main_lunch_provided",
       label: "Mittagsverpflegung:",
       type: "checkbox",
       onChange: (e: ChangeEvent<HTMLInputElement>) =>

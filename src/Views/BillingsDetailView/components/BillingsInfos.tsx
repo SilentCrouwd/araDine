@@ -1,11 +1,11 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import DetailRow from "@/components/DetailRow";
 import { useOrderContext } from "@/context/RefreshmentContext";
-import type { BewirtungenMitExtras } from "@/types/types";
+import type { RefreshmentWithAdditionalServices } from "@/types/types";
 import { CalendarDays, Receipt, User } from "lucide-react";
 
 type BillingsInfosProps = Readonly<{
-  refreshment: BewirtungenMitExtras;
+  refreshment: RefreshmentWithAdditionalServices;
 }>;
 
 // Badge-Farben je Status, als volle Tailwind-Klassen.
@@ -32,10 +32,10 @@ function formatLunchProvision(hasLunchProvision: boolean | null) {
 function BillingsInfos({ refreshment }: BillingsInfosProps) {
   const orderContext = useOrderContext();
   const location = orderContext.state.location.find(
-    (location) => location.id === refreshment.standort_id,
+    (location) => location.id === refreshment.location_id,
   );
   const roomName =
-    location?.raeume.find((room) => room.id === refreshment.raum_id)?.name ??
+    location?.rooms.find((room) => room.id === refreshment.room_id)?.name ??
     "-";
 
   const sections = [
@@ -43,8 +43,8 @@ function BillingsInfos({ refreshment }: BillingsInfosProps) {
       title: "Kunde",
       Icon: User,
       rows: [
-        ["Name", refreshment.kunden_name],
-        ["E-Mail", refreshment.kunden_email],
+        ["Name", refreshment.customer_name],
+        ["E-Mail", refreshment.customer_email],
       ],
     },
     {
@@ -53,17 +53,17 @@ function BillingsInfos({ refreshment }: BillingsInfosProps) {
       rows: [
         [
           "Datum",
-          new Date(`${refreshment.datum}T00:00:00`).toLocaleDateString("de-DE"),
+          new Date(`${refreshment.date}T00:00:00`).toLocaleDateString("de-DE"),
         ],
-        ["Personen", String(refreshment.personen_zahl)],
-        ["Paket", refreshment.paket.replaceAll("_", " ")],
+        ["Personen", String(refreshment.participant_count)],
+        ["Paket", refreshment.package.replaceAll("_", " ")],
         ["Standort", location?.name ?? "-"],
         ["Raum", roomName],
-        ["Anlass", refreshment.anlass || "-"],
-        ["Bewirtungsart", formatRefreshmentType(refreshment.kundenBewirtung)],
+        ["Anlass", refreshment.occasion || "-"],
+        ["Bewirtungsart", formatRefreshmentType(refreshment.is_customer_refreshment)],
         [
           "Mittagsverpflegung",
-          formatLunchProvision(refreshment.mittagsverpflegung),
+          formatLunchProvision(refreshment.lunch_provided),
         ],
       ],
     },
@@ -71,9 +71,9 @@ function BillingsInfos({ refreshment }: BillingsInfosProps) {
       title: "Abrechnung",
       Icon: Receipt,
       rows: [
-        ["Kostenstelle", refreshment.kostenstelle || "-"],
-        ["Buchungskreis", refreshment.buchungskreis || "-"],
-        ["Abteilung", refreshment.abteilung || "-"],
+        ["Kostenstelle", refreshment.cost_center || "-"],
+        ["Buchungskreis", refreshment.company_code || "-"],
+        ["Abteilung", refreshment.department || "-"],
       ],
     },
   ];

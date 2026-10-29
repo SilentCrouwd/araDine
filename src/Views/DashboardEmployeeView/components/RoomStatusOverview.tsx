@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import type { Bewirtungen, Raeume } from "@/types/types";
+import type { Refreshments, Rooms } from "@/types/types";
 import { Link } from "react-router";
 
 function handleRoomStatus(roomStatus: string) {
@@ -13,8 +13,8 @@ function handleRoomStatus(roomStatus: string) {
   }
 }
 type roomProps = Readonly<{
-  rooms: Raeume;
-  refreshments: Bewirtungen;
+  rooms: Rooms;
+  refreshments: Refreshments;
 }>;
 function RoomStatusOverview({ rooms, refreshments }: roomProps) {
   return (
@@ -28,8 +28,8 @@ function RoomStatusOverview({ rooms, refreshments }: roomProps) {
           <p>{room.name}</p>
           <p>
             {refreshments
-              .find((refreshment) => refreshment.raum_id === room.id)
-              ?.startzeit.slice(0, 5)}
+              .find((refreshment) => refreshment.room_id === room.id)
+              ?.start_time.slice(0, 5)}
           </p>
           <p
             className={`${handleRoomStatus(room.status)} flex justify-center  w-1/2 font-bold text-sm tracking-tighter rounded-xl text-muted-foreground text-shadow-sm/40 `}
@@ -41,14 +41,14 @@ function RoomStatusOverview({ rooms, refreshments }: roomProps) {
             to={{
               pathname: `/araDine/dashboard/room-view/${room.id}`,
               search: room
-                ? `?date=${refreshments.find((ref) => ref.raum_id === room.id)?.datum}`
+                ? `?date=${refreshments.find((ref) => ref.room_id === room.id)?.date}`
                 : "",
             }}
           >
             <Button
               className="w-fit "
               variant="outline"
-              disabled={!refreshments.some((ref) => ref.raum_id === room.id)}
+              disabled={!refreshments.some((ref) => ref.room_id === room.id)}
             >
               Details
             </Button>

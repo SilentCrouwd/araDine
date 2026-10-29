@@ -1,11 +1,11 @@
 import { CheckCircle, Wrench } from "lucide-react";
-import type { Bewirtungen, Raeume } from "@/types/types";
+import type { Refreshments, Rooms } from "@/types/types";
 
-function getRoomsToClear(refreshments: Bewirtungen) {
+function getRoomsToClear(refreshments: Refreshments) {
   return new Set(
     refreshments
       .filter((refreshment) => refreshment.status === "Erledigt")
-      .map((refreshment) => refreshment.raum_id),
+      .map((refreshment) => refreshment.room_id),
   );
 }
 
@@ -14,7 +14,7 @@ const roomTiles = [
     title: "Räume im Service",
     Icon: Wrench,
     iconColor: "text-yellow-500",
-    count: (room: Raeume) =>
+    count: (room: Rooms) =>
       room.filter((roomItem) => roomItem.status.toLowerCase() === "service")
         .length,
   },
@@ -23,14 +23,14 @@ const roomTiles = [
     Icon: Wrench,
     iconColor: "text-blue-500",
     // Zählt Räume mit erledigter Bewirtung, ohne den Raumstatus zu ändern.
-    count: (_room: Raeume, refreshments: Bewirtungen) =>
+    count: (_room: Rooms, refreshments: Refreshments) =>
       getRoomsToClear(refreshments).size,
   },
   {
     title: "Räume frei",
     Icon: CheckCircle,
     iconColor: "text-green-500",
-    count: (room: Raeume, refreshments: Bewirtungen) => {
+    count: (room: Rooms, refreshments: Refreshments) => {
       const roomsToClear = getRoomsToClear(refreshments);
       return room.filter(
         (roomItem) =>
@@ -42,8 +42,8 @@ const roomTiles = [
 ];
 
 type RoomInfoCardProps = Readonly<{
-  room: Raeume;
-  refreshments: Bewirtungen;
+  room: Rooms;
+  refreshments: Refreshments;
 }>;
 
 function RoomInfoCard({ room, refreshments }: RoomInfoCardProps) {

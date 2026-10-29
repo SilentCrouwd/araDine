@@ -1,24 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useOrderContext } from "@/context/RefreshmentContext";
-import type { NeuerTeilnehmer } from "@/types/types";
+import type { NewParticipant } from "@/types/types";
 import { CheckIcon, DeleteIcon, PencilIcon } from "lucide-react";
 import React, { useState } from "react";
 
 function OrderParticipantsField() {
   // Temporärer Eingabewert, der erst mit der Bestätigung in die Teilnehmerliste übernommen wird.
-  const [valueName, setValueName] = useState<NeuerTeilnehmer[number] | null>(
+  const [valueName, setValueName] = useState<NewParticipant[number] | null>(
     null,
   );
   const orderContext = useOrderContext();
 
   function handleParticipantChange() {
     const name = valueName?.name?.trim();
-    const abteilung = valueName?.abteilung?.trim();
+    const department = valueName?.department?.trim();
 
-    if (!name || !abteilung) return;
+    if (!name || !department) return;
 
-    const newPax = { name, abteilung };
+    const newPax = { name, department };
     orderContext.dispatch({ type: "SET_PARTICIPANT", payload: newPax });
     setValueName(null);
   }
@@ -34,7 +34,7 @@ function OrderParticipantsField() {
       <label htmlFor="teilnehmerName" className="w-1/2">
         Teilnehmer:
       </label>
-      <label htmlFor="abteilung" className="w-1/2">
+      <label htmlFor="department" className="w-1/2">
         Abteilung:
       </label>
 
@@ -44,7 +44,7 @@ function OrderParticipantsField() {
             <div className="grid grid-cols-2 items-center gap-2" key={index}>
               <p>{participant.name}</p>
               <div className="flex">
-                <p>{participant.abteilung}</p>
+                <p>{participant.department}</p>
                 <div className="flex justify-end w-full gap-2">
                   <PencilIcon
                     className="h-4 w-4 ml-5 text-green-600 cursor-pointer"
@@ -52,7 +52,7 @@ function OrderParticipantsField() {
                       // Lädt den Namen zum Bearbeiten zurück ins Eingabefeld und nimmt ihn aus der Liste.
                       setValueName({
                         name: participant.name,
-                        abteilung: participant.abteilung,
+                        department: participant.department,
                       });
                       handleParticipantDelete(index);
                     }}
@@ -75,7 +75,7 @@ function OrderParticipantsField() {
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setValueName((current) => ({
             name: e.target.value,
-            abteilung: current?.abteilung ?? "",
+            department: current?.department ?? "",
           }))
         }
         value={valueName?.name ?? ""}
@@ -84,14 +84,14 @@ function OrderParticipantsField() {
         <Input
           type="text"
           className="w-full"
-          id="abteilung"
+          id="department"
           onChange={(e) =>
             setValueName((current) => ({
               name: current?.name ?? "",
-              abteilung: e.target.value,
+              department: e.target.value,
             }))
           }
-          value={valueName?.abteilung ?? ""}
+          value={valueName?.department ?? ""}
         />
         <Button
           onClick={() => {

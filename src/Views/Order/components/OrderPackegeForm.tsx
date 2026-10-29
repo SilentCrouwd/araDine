@@ -15,7 +15,7 @@ function OrdercurrPackageForm({
   // Gibt je nach Auswahl eine kurze Paketbeschreibung zurück.
   // Diese Info wird unter den Radio-Buttons angezeigt.
   function handleCurrPackageInfo() {
-    if (currPackage === "paket-1") {
+    if (currPackage === "package-1") {
       return (
         <p>
           <span>Paket-1: enthält die Standardverpflegung.</span>
@@ -27,7 +27,7 @@ function OrdercurrPackageForm({
         </p>
       );
     }
-    if (currPackage === "paket-2") {
+    if (currPackage === "package-2") {
       return (
         <p>
           <span className="tracking-tighter">
@@ -41,7 +41,7 @@ function OrdercurrPackageForm({
         </p>
       );
     }
-    if (currPackage === "paket-3") {
+    if (currPackage === "package-3") {
       return (
         <p>
           <span className="tracking-tighter">
@@ -64,60 +64,60 @@ function OrdercurrPackageForm({
         <div className="flex w-full justify-center">
           <div className="flex flex-col p-2 w-fit items-center ">
             <Label
-              htmlFor="paket-1"
+              htmlFor="package-1"
               className="text-base underline underline-offset-2"
             >
               Paket 1:
             </Label>
             <Input
               onChange={() => {
-                onCurrPackageChange("paket-1");
+                onCurrPackageChange("package-1");
                 // Meldet dem übergeordneten Formular, dass eine gültige Paketauswahl vorliegt.
               }}
-              checked={currPackage === "paket-1"}
+              checked={currPackage === "package-1"}
               type="radio"
-              name="main_paket"
+              name="main_package"
               value="Paket_1"
               required
-              id="paket-1"
+              id="package-1"
               className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
             />
           </div>
           <div className="flex flex-col p-2 w-fit items-center ">
             <Label
-              htmlFor="main_paket-2"
+              htmlFor="package-2"
               className="text-base underline underline-offset-2"
             >
               Paket 2:
             </Label>
             <Input
               onChange={() => {
-                onCurrPackageChange("paket-2");
+                onCurrPackageChange("package-2");
               }}
-              checked={currPackage === "paket-2"}
+              checked={currPackage === "package-2"}
               type="radio"
-              name="main_paket"
+              name="main_package"
               value="Paket_2"
-              id="paket-2"
+              id="package-2"
               className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
             />
           </div>
           <div className="flex flex-col p-2 w-fit items-center ">
             <Label
-              htmlFor="paket-3"
+              htmlFor="package-3"
               className="text-base underline underline-offset-2"
             >
               Paket 3:
             </Label>
             <Input
               onChange={() => {
-                onCurrPackageChange("paket-3");
+                onCurrPackageChange("package-3");
               }}
-              checked={currPackage === "paket-3"}
+              checked={currPackage === "package-3"}
               type="radio"
-              name="main_paket"
+              name="main_package"
               value="Paket_3"
-              id="paket-3"
+              id="package-3"
               className=" h-8 w-8  border border-border rounded-xl text-foreground p-2 text-base"
             />
           </div>

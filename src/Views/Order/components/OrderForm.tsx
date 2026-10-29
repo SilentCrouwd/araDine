@@ -15,10 +15,10 @@ import OrderExtraService from "./OrderExtraService";
 import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 import {
-  fetchBewirtungenByStandortUndRaum,
-  insertBewirtung,
+  fetchRefreshmentsByRoomAndDate,
+  insertRefreshment,
 } from "@/hooks/SupaBaseAPI";
-import type { NeueBewirtung, NeueZusatzleistung } from "@/types/types";
+import type { NewRefreshment, NewAdditionalService } from "@/types/types";
 import { useOrderContext } from "@/context/RefreshmentContext";
 import { toast } from "@/components/ui/toast";
 import { useNavigate } from "react-router";
@@ -61,16 +61,16 @@ function OrderForm() {
 
     const newRefreshment = {
       ...main,
-      personen_zahl: Number(main.personen_zahl),
+      participant_count: Number(main.participant_count),
       // Nicht angehakte Checkboxen fehlen in FormData.
-      kundenBewirtung: main.kundenBewirtung === "on",
-      mittagsverpflegung: main.mittagsverpflegung === "on",
-      anlass: String(main.anlass ?? "") || null,
-      standort_id: location?.id ?? null,
-      raum_id:
-        location?.raeume.find((r) => r.name === selectedRoom)?.id ?? null,
+      is_customer_refreshment: main.is_customer_refreshment === "on",
+      lunch_provided: main.lunch_provided === "on",
+      occasion: String(main.occasion ?? "") || null,
+      location_id: location?.id ?? null,
+      room_id:
+        location?.rooms.find((r) => r.name === selectedRoom)?.id ?? null,
       status: "Geplant",
-    } as NeueBewirtung;
+    } as NewRefreshment;
 
     orderContext.dispatch({ type: "ADD_ORDER", payload: newRefreshment });
 
@@ -83,27 +83,27 @@ function OrderForm() {
         extraService[cleanKey] = value;
       }
 
-      // Hier ist die neueZusatzleistung als Objekt vom Typ NeueZusatzleistung.
+      // Das Objekt entspricht dem Typ NewAdditionalService.
     }
 
-    if (selectedPackage === "paket-1") {
-      extraService.kaffee = String(Math.ceil(newRefreshment.personen_zahl / 4));
+    if (selectedPackage === "package-1") {
+      extraService.kaffee = String(Math.ceil(newRefreshment.participant_count / 4));
     }
 
-    if (selectedPackage === "paket-2") {
-      extraService.kaffee = String(Math.ceil(newRefreshment.personen_zahl / 4));
-      extraService.wasser = String(Math.ceil(newRefreshment.personen_zahl / 4));
-      extraService.tee = String(Math.ceil(newRefreshment.personen_zahl / 4));
+    if (selectedPackage === "package-2") {
+      extraService.kaffee = String(Math.ceil(newRefreshment.participant_count / 4));
+      extraService.wasser = String(Math.ceil(newRefreshment.participant_count / 4));
+      extraService.tee = String(Math.ceil(newRefreshment.participant_count / 4));
     }
-    if (selectedPackage === "paket-3") {
-      extraService.kaffee = String(Math.ceil(newRefreshment.personen_zahl / 4));
-      extraService.wasser = String(Math.ceil(newRefreshment.personen_zahl / 4));
-      extraService.tee = String(Math.ceil(newRefreshment.personen_zahl / 4));
-      extraService.obst = String(newRefreshment.personen_zahl);
-      extraService.softdrinks = String(newRefreshment.personen_zahl);
+    if (selectedPackage === "package-3") {
+      extraService.kaffee = String(Math.ceil(newRefreshment.participant_count / 4));
+      extraService.wasser = String(Math.ceil(newRefreshment.participant_count / 4));
+      extraService.tee = String(Math.ceil(newRefreshment.participant_count / 4));
+      extraService.obst = String(newRefreshment.participant_count);
+      extraService.softdrinks = String(newRefreshment.participant_count);
     }
 
-    const newExtraService: NeueZusatzleistung = extraService;
+    const newExtraService: NewAdditionalService = extraService;
     orderContext.dispatch({
       type: "ADD_EXTRA_SERVICE",
       payload: newExtraService,
@@ -111,22 +111,22 @@ function OrderForm() {
 
     const filteredRoomId = orderContext.state.location
       .find((location) => location.name === selectedLocation)
-      ?.raeume.find((room) => room.name === selectedRoom)?.id;
+      ?.rooms.find((room) => room.name === selectedRoom)?.id;
 
-    const currBew = await fetchBewirtungenByStandortUndRaum(
+    const currBew = await fetchRefreshmentsByRoomAndDate(
       filteredRoomId ?? "",
       currDate,
     );
     const conflict = currBew?.some(
       (bew) =>
-        newRefreshment.startzeit < bew.endzeit &&
-        newRefreshment.endzeit > bew.startzeit,
+        newRefreshment.start_time < bew.end_time &&
+        newRefreshment.end_time > bew.start_time,
     );
     if (conflict) {
       toaster("error", "Zeit Konflikt bitte andere Uhrzeit auswählen ");
       return;
     } else {
-      await insertBewirtung(
+      await insertRefreshment(
         newRefreshment,
         newExtraService,
         orderContext.state.participants,
@@ -179,7 +179,7 @@ function OrderForm() {
         </Select>
         {/* Die verfügbaren Räume hängen vom aktuell ausgewählten Standort ab. */}
         <Select
-          items={selectedLocationItem?.raeume.map((room) => ({
+          items={selectedLocationItem?.rooms.map((room) => ({
             label: room.name,
             value: room.name,
           }))}
@@ -194,7 +194,7 @@ function OrderForm() {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {selectedLocationItem?.raeume.map((room) => (
+              {selectedLocationItem?.rooms.map((room) => (
                 <SelectItem key={room.id} value={room.name}>
                   {room.name}
                 </SelectItem>

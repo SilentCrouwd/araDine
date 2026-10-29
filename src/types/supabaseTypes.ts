@@ -39,143 +39,140 @@ export type Database = {
   };
   public: {
     Tables: {
-      abrechnungsdetails: {
+      billing_details: {
         Row: {
-          bewirtung_id: string | null;
+          refreshment_id: string | null;
           id: string;
-          name: string | null;
-          value: string | null;
+          billing_detail_name: string | null;
+          billing_detail_value: string | null;
         };
         Insert: {
-          bewirtung_id?: string | null;
+          refreshment_id?: string | null;
           id?: string;
-          name?: string | null;
-          value?: string | null;
+          billing_detail_name?: string | null;
+          billing_detail_value?: string | null;
         };
         Update: {
-          bewirtung_id?: string | null;
+          refreshment_id?: string | null;
           id?: string;
-          name?: string | null;
-          value?: string | null;
+          billing_detail_name?: string | null;
+          billing_detail_value?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: "abrechnungsdetails_bewirtung_id_fkey";
-            columns: ["bewirtung_id"];
+            foreignKeyName: "billing_details_refreshment_id_fkey";
+            columns: ["refreshment_id"];
             isOneToOne: false;
-            referencedRelation: "bewirtungen";
+            referencedRelation: "refreshments";
             referencedColumns: ["id"];
           },
         ];
       };
-      bewirtungen: {
+      refreshments: {
         Row: {
-          abteilung: string | null;
-          anlass: string | null;
-          buchungskreis: string;
-          datum: string;
-          endzeit: string;
+          department: string | null;
+          occasion: string | null;
+          company_code: string;
+          date: string;
+          end_time: string;
           id: string;
-          kostenstelle: string;
-          kunden_email: string;
-          kunden_name: string;
-          kundenBewirtung: boolean | null;
-          mittagsverpflegung: boolean | null;
-          paket: Database["public"]["Enums"]["paket_enum"];
-          personen_zahl: number;
-          raum_id: string | null;
-          standort_id: string | null;
-          startzeit: string;
+          cost_center: string;
+          customer_email: string;
+          customer_name: string;
+          is_customer_refreshment: boolean | null;
+          lunch_provided: boolean | null;
+          package: Database["public"]["Enums"]["paket_enum"];
+          participant_count: number;
+          room_id: string | null;
+          location_id: string | null;
+          start_time: string;
           status: string;
-          teilnehmer_id: string | null;
         };
         Insert: {
-          abteilung?: string | null;
-          anlass?: string | null;
-          buchungskreis: string;
-          datum: string;
-          endzeit: string;
+          department?: string | null;
+          occasion?: string | null;
+          company_code: string;
+          date: string;
+          end_time: string;
           id?: string;
-          kostenstelle: string;
-          kunden_email: string;
-          kunden_name: string;
-          kundenBewirtung?: boolean | null;
-          mittagsverpflegung?: boolean | null;
-          paket: Database["public"]["Enums"]["paket_enum"];
-          personen_zahl: number;
-          raum_id?: string | null;
-          standort_id?: string | null;
-          startzeit: string;
+          cost_center: string;
+          customer_email: string;
+          customer_name: string;
+          is_customer_refreshment?: boolean | null;
+          lunch_provided?: boolean | null;
+          package: Database["public"]["Enums"]["paket_enum"];
+          participant_count: number;
+          room_id?: string | null;
+          location_id?: string | null;
+          start_time: string;
           status: string;
-          teilnehmer_id?: string | null;
         };
         Update: {
-          abteilung?: string | null;
-          anlass?: string | null;
-          buchungskreis?: string;
-          datum?: string;
-          endzeit?: string;
+          department?: string | null;
+          occasion?: string | null;
+          company_code?: string;
+          date?: string;
+          end_time?: string;
           id?: string;
-          kostenstelle?: string;
-          kunden_email?: string;
-          kunden_name?: string;
-          kundenBewirtung?: boolean | null;
-          mittagsverpflegung?: boolean | null;
-          paket?: Database["public"]["Enums"]["paket_enum"];
-          personen_zahl?: number;
-          raum_id?: string | null;
-          standort_id?: string | null;
-          startzeit?: string;
+          cost_center?: string;
+          customer_email?: string;
+          customer_name?: string;
+          is_customer_refreshment?: boolean | null;
+          lunch_provided?: boolean | null;
+          package?: Database["public"]["Enums"]["paket_enum"];
+          participant_count?: number;
+          room_id?: string | null;
+          location_id?: string | null;
+          start_time?: string;
           status?: string;
-          teilnehmer_id?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: "bewirtungen_raum_id_fkey";
-            columns: ["raum_id"];
+            foreignKeyName: "refreshments_room_id_fkey";
+            columns: ["room_id"];
             isOneToOne: false;
-            referencedRelation: "raeume";
+            referencedRelation: "rooms";
             referencedColumns: ["id"];
           },
           {
-            foreignKeyName: "bewirtungen_standort_id_fkey";
-            columns: ["standort_id"];
+            foreignKeyName: "refreshments_location_id_fkey";
+            columns: ["location_id"];
             isOneToOne: false;
-            referencedRelation: "standorte";
+            referencedRelation: "locations";
             referencedColumns: ["id"];
           },
         ];
       };
-      raeume: {
+      rooms: {
         Row: {
           id: string;
           name: string;
-          standort_id: string | null;
+          location_id: string | null;
           status: string;
         };
         Insert: {
           id?: string;
           name: string;
-          standort_id?: string | null;
+          location_id?: string | null;
           status?: string;
         };
         Update: {
           id?: string;
           name?: string;
-          standort_id?: string | null;
+          location_id?: string | null;
           status?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "raeume_standort_id_fkey";
-            columns: ["standort_id"];
+            foreignKeyName: "rooms_location_id_fkey";
+            columns: ["location_id"];
             isOneToOne: false;
-            referencedRelation: "standorte";
+            referencedRelation: "locations";
             referencedColumns: ["id"];
           },
         ];
       };
-      standorte: {
+      locations: {
         Row: {
           id: string;
           name: string;
@@ -190,63 +187,63 @@ export type Database = {
         };
         Relationships: [];
       };
-      teilnehmer: {
+      participants: {
         Row: {
-          abteilung: string | null;
-          bewirtung_id: string | null;
+          department: string | null;
+          refreshment_id: string | null;
           created_at: string;
           id: string;
           name: string | null;
         };
         Insert: {
-          abteilung?: string | null;
-          bewirtung_id?: string | null;
+          department?: string | null;
+          refreshment_id?: string | null;
           created_at?: string;
           id?: string;
           name?: string | null;
         };
         Update: {
-          abteilung?: string | null;
-          bewirtung_id?: string | null;
+          department?: string | null;
+          refreshment_id?: string | null;
           created_at?: string;
           id?: string;
           name?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: "teilnehmer_bewirtung_id_fkey";
-            columns: ["bewirtung_id"];
+            foreignKeyName: "participants_refreshment_id_fkey";
+            columns: ["refreshment_id"];
             isOneToOne: false;
-            referencedRelation: "bewirtungen";
+            referencedRelation: "refreshments";
             referencedColumns: ["id"];
           },
         ];
       };
-      zusatzleistungen: {
+      additional_services: {
         Row: {
-          bewirtung_id: string | null;
-          extra_name: string | null;
-          extra_value: string | null;
+          refreshment_id: string | null;
+          service_name: string | null;
+          service_value: string | null;
           id: string;
         };
         Insert: {
-          bewirtung_id?: string | null;
-          extra_name?: string | null;
-          extra_value?: string | null;
+          refreshment_id?: string | null;
+          service_name?: string | null;
+          service_value?: string | null;
           id?: string;
         };
         Update: {
-          bewirtung_id?: string | null;
-          extra_name?: string | null;
-          extra_value?: string | null;
+          refreshment_id?: string | null;
+          service_name?: string | null;
+          service_value?: string | null;
           id?: string;
         };
         Relationships: [
           {
-            foreignKeyName: "zusatzleistungen_bewirtung_id_fkey";
-            columns: ["bewirtung_id"];
+            foreignKeyName: "additional_services_refreshment_id_fkey";
+            columns: ["refreshment_id"];
             isOneToOne: false;
-            referencedRelation: "bewirtungen";
+            referencedRelation: "refreshments";
             referencedColumns: ["id"];
           },
         ];

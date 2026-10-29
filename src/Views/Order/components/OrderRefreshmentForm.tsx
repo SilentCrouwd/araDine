@@ -7,30 +7,30 @@ type OrderRefreshmentFormProps = Readonly<{
 
 function OrderRefreshmentForm({ onChangeDate }: OrderRefreshmentFormProps) {
   const refreshmentFields = [
-    { id: "name", name: "main_kunden_name", label: "Name:", type: "text" },
+    { id: "name", name: "main_customer_name", label: "Name:", type: "text" },
     {
       id: "personenZahl",
-      name: "main_personen_zahl",
+      name: "main_participant_count",
       label: "Personen:",
       type: "number",
     },
-    { id: "email", name: "main_kunden_email", label: "E-mail:", type: "email" },
+    { id: "email", name: "main_customer_email", label: "E-mail:", type: "email" },
     {
-      id: "startzeit",
-      name: "main_startzeit",
+      id: "start_time",
+      name: "main_start_time",
       label: "Startzeit:",
       type: "time",
     },
-    { id: "endzeit", name: "main_endzeit", label: "Endzeit:", type: "time" },
+    { id: "end_time", name: "main_end_time", label: "Endzeit:", type: "time" },
     {
-      id: "datum",
-      name: "main_datum",
+      id: "date",
+      name: "main_date",
       label: "Datum:",
       type: "date",
     },
     {
       id: "kundenbewirtung",
-      name: "main_kundenBewirtung",
+      name: "main_is_customer_refreshment",
       label: "Kundenbewirtung:",
       type: "checkbox",
     },
@@ -61,7 +61,7 @@ function OrderRefreshmentForm({ onChangeDate }: OrderRefreshmentFormProps) {
                   ? (e) => onChangeDate(e.currentTarget.value)
                   : undefined
               }
-              required={field.name !== "main_kundenBewirtung"}
+              required={field.name !== "main_is_customer_refreshment"}
               className={
                 field.type === "time" || field.type === "date"
                   ? "w-full [&::-webkit-calendar-picker-indicator]:invert"

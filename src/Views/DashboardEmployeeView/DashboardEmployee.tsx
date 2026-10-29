@@ -23,9 +23,9 @@ import { Link } from "react-router";
 import RoomInfoCard from "./components/RoomInfoCard";
 import RoomStatusOverview from "./components/RoomStatusOverview";
 import { useOrderContext } from "@/context/RefreshmentContext";
-import type { Bewirtungen, BewirtungenMitExtras, Raeume } from "@/types/types";
+import type { Refreshments, RefreshmentWithAdditionalServices, Rooms } from "@/types/types";
 import {
-  fetchBewirtungDatumUndStandort,
+  fetchRefreshmentsByDateAndLocation,
   updateRefreshmentStatus,
 } from "@/hooks/SupaBaseAPI";
 
@@ -34,7 +34,7 @@ function DashboardEmployee() {
   const locations = orderContext.state.location;
   // Enthält die vom Server geladenen Bewirtungen samt zugehörigen Zusatzleistungen.
   const [selectedRefreshments, setSelectedRefreshments] = useState<
-    BewirtungenMitExtras[]
+    RefreshmentWithAdditionalServices[]
   >([]);
   // Speichert den ausgewählten Standort und das ausgewählte Datum.
   const [selectedLocationName, setSelectedLocationName] = useState(
@@ -58,7 +58,7 @@ function DashboardEmployee() {
     async function loadCurrBewirtungen() {
       // Ohne beide Filterwerte wird keine Datenbankabfrage gestartet.
       if (currLocation && selectedDate) {
-        const selectedRefresh = await fetchBewirtungDatumUndStandort(
+        const selectedRefresh = await fetchRefreshmentsByDateAndLocation(
           selectedDate,
           currLocation,
         );
@@ -71,7 +71,7 @@ function DashboardEmployee() {
               ref.status === "Geplant" &&
               (selectedDate < today ||
                 (selectedDate === today &&
-                  ref.endzeit.slice(0, 5) <= currentTime)),
+                  ref.end_time.slice(0, 5) <= currentTime)),
           );
 
           await Promise.all(
@@ -98,16 +98,16 @@ function DashboardEmployee() {
   // Ermittelt die Räume des ausgewählten Standorts.
   const selectedRooms =
     locations.find((location) => location.name === selectedLocationName)
-      ?.raeume ?? [];
+      ?.rooms ?? [];
 
-  function updateRoomStatus(selectedRefreshments: Bewirtungen, rooms: Raeume) {
+  function updateRoomStatus(selectedRefreshments: Refreshments, rooms: Rooms) {
     const now = new Date();
     const today = format(now, "yyyy-MM-dd");
     const currentTime = format(now, "HH:mm");
 
     return rooms.map((room) => {
       const refreshment = selectedRefreshments.find(
-        (item) => item.raum_id === room.id,
+        (item) => item.room_id === room.id,
       );
 
       if (selectedDate && selectedDate < today) {
@@ -123,7 +123,7 @@ function DashboardEmployee() {
       }
 
       // Bei heutigen Bewirtungen ist ein Raum nach der Endzeit wieder frei.
-      const endTime = refreshment.endzeit.slice(0, 5);
+      const endTime = refreshment.end_time.slice(0, 5);
 
       if (currentTime > endTime) {
         return { ...room, status: "Frei" };
@@ -227,7 +227,7 @@ function DashboardEmployee() {
               <RefreshmentCard
                 refreshment={refreshment}
                 rooms={selectedRooms}
-                extras={refreshment.zusatzleistungen}
+                extras={refreshment.additional_services}
               ></RefreshmentCard>
             </Link>
           ))}

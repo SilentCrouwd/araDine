@@ -4,31 +4,31 @@ import ActualDeliveryForm from "./components/ActualDeliveryForm";
 import PaxOverviewList from "./PaxOverviewList";
 import { useEffect, useState } from "react";
 import {
-  fetchBillingInfos,
-  fetchCurrBewirtung,
-  fetchCurrTeilnehmer,
+  fetchBillingDetails,
+  fetchRefreshmentById,
+  fetchParticipantsByRefreshmentId,
 } from "@/hooks/SupaBaseAPI";
 import { useParams } from "react-router";
 import type {
-  BewirtungenMitExtras,
-  NewBillingInfo,
-  Teilnehmer,
+  RefreshmentWithAdditionalServices,
+  BillingDetailInsert,
+  Participants,
 } from "@/types/types";
 
 function RefreshmentDetail() {
   const { refreshmentId } = useParams();
   const [currRefreshment, setCurrRefreshment] =
-    useState<BewirtungenMitExtras>();
-  const [currBillingInfos, setCurrBillingInfos] = useState<NewBillingInfo[]>(
+    useState<RefreshmentWithAdditionalServices>();
+  const [currBillingInfos, setCurrBillingInfos] = useState<BillingDetailInsert[]>(
     [],
   );
-  const [currPax, setCurrPax] = useState<Teilnehmer>([]);
+  const [currPax, setCurrPax] = useState<Participants>([]);
   useEffect(() => {
     async function loadCurrBewirtungen() {
       if (refreshmentId) {
-        const currBew = await fetchCurrBewirtung(refreshmentId);
-        const currPax = await fetchCurrTeilnehmer(refreshmentId);
-        const currBillingInfos = await fetchBillingInfos(refreshmentId);
+        const currBew = await fetchRefreshmentById(refreshmentId);
+        const currPax = await fetchParticipantsByRefreshmentId(refreshmentId);
+        const currBillingInfos = await fetchBillingDetails(refreshmentId);
         if (currBew) {
           setCurrRefreshment(currBew);
         }

@@ -1,14 +1,14 @@
 import type {
-  NeueBewirtung,
-  NeueZusatzleistung,
-  StandorteMitRaeumen,
-  NeuerTeilnehmer,
+  NewRefreshment,
+  NewAdditionalService,
+  LocationsWithRooms,
+  NewParticipant,
 } from "@/types/types";
 export type OrderState = {
-  orders: NeueBewirtung[];
-  extraServices: NeueZusatzleistung[];
-  location: StandorteMitRaeumen;
-  participants: NeuerTeilnehmer;
+  orders: NewRefreshment[];
+  extraServices: NewAdditionalService[];
+  location: LocationsWithRooms;
+  participants: NewParticipant;
 };
 
 export const initialOrderState: OrderState = {
@@ -18,10 +18,10 @@ export const initialOrderState: OrderState = {
   participants: [],
 };
 export type OrderAction =
-  | { type: "ADD_ORDER"; payload: NeueBewirtung }
-  | { type: "ADD_EXTRA_SERVICE"; payload: NeueZusatzleistung }
-  | { type: "GET_LOCATION"; payload: StandorteMitRaeumen }
-  | { type: "SET_PARTICIPANT"; payload: NeuerTeilnehmer[number] }
+  | { type: "ADD_ORDER"; payload: NewRefreshment }
+  | { type: "ADD_EXTRA_SERVICE"; payload: NewAdditionalService }
+  | { type: "GET_LOCATION"; payload: LocationsWithRooms }
+  | { type: "SET_PARTICIPANT"; payload: NewParticipant[number] }
   | { type: "DELETE_PARTICIPANT"; payload: number };
 export function orderReducer(state: OrderState, action: OrderAction) {
   switch (action.type) {

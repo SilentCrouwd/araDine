@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import DetailRow from "@/components/DetailRow";
-import type { NewBillingInfo } from "@/types/types";
+import type { BillingDetailInsert } from "@/types/types";
 import { PackageCheck } from "lucide-react";
 
 type BillingInfoDeliveredValuesProps = Readonly<{
-  billingInfos: NewBillingInfo[];
+  billingInfos: BillingDetailInsert[];
 }>;
 
 function BillingInfoDeliveredValues({
@@ -27,8 +27,13 @@ function BillingInfoDeliveredValues({
             <p className="py-2">Keine Werte erfasst</p>
           ) : (
             billingInfos.map((info) => (
-              <DetailRow key={info.name} label={info.name ?? "-"}>
-                {info.name === "service" ? `${info.value} Pax` : info.value}
+              <DetailRow
+                key={info.billing_detail_name}
+                label={info.billing_detail_name ?? "-"}
+              >
+                {info.billing_detail_name === "service"
+                  ? `${info.billing_detail_value} Pax`
+                  : info.billing_detail_value}
               </DetailRow>
             ))
           )}

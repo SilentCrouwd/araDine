@@ -12,16 +12,16 @@ import {
 import { toast } from "@/components/ui/toast";
 import {
   updateRefreshmentStatus,
-  upsertActualDelivered,
+  upsertBillingDetails,
 } from "@/hooks/SupaBaseAPI";
-import type { BewirtungenMitExtras, NewBillingInfo } from "@/types/types";
+import type { RefreshmentWithAdditionalServices, BillingDetailInsert } from "@/types/types";
 import React, { useState } from "react";
 import { PackageCheck } from "lucide-react";
 import { useNavigate } from "react-router";
 
 type ActualDeliveryFormProps = Readonly<{
-  refreshment: BewirtungenMitExtras;
-  billingInfos: NewBillingInfo[];
+  refreshment: RefreshmentWithAdditionalServices;
+  billingInfos: BillingDetailInsert[];
 }>;
 
 function ActualDeliveryForm({
@@ -31,23 +31,26 @@ function ActualDeliveryForm({
   const navigate = useNavigate();
   const [servicePax, setServicePax] = useState<string | null>(null);
   const savedServicePax =
-    billingInfos.find((info) => info.name === "service")?.value ?? null;
-  const newExtraRows = refreshment.zusatzleistungen
+    billingInfos.find((info) => info.billing_detail_name === "service")
+      ?.billing_detail_value ?? null;
+  const newExtraRows = refreshment.additional_services
     .filter(
       (extra) =>
-        extra.extra_name !== "nachbewirtung" &&
-        extra.extra_name !== "nachbewirtungUhrzeit",
+        extra.service_name !== "nachbewirtung" &&
+        extra.service_name !== "nachbewirtungUhrzeit",
     )
     .map((extra) => {
-      const extraName = extra.extra_name ?? "";
+      const extraName = extra.service_name ?? "";
 
       return {
         name: "actual_" + extraName,
         label: extraName.charAt(0).toUpperCase() + extraName.slice(1) + ":",
         id: extraName,
         value:
-          billingInfos.find((info) => info.name === extra.extra_name)?.value ??
-          extra.extra_value,
+          billingInfos.find(
+            (info) => info.billing_detail_name === extra.service_name,
+          )?.billing_detail_value ??
+          extra.service_value,
         type: extraName === "sonstige" ? "text" : "number",
       };
     });
@@ -66,7 +69,7 @@ function ActualDeliveryForm({
       }
     }
 
-    await upsertActualDelivered(actual, refreshment.id);
+    await upsertBillingDetails(actual, refreshment.id);
     refreshment.status = "Abrechnungsbereit";
     await updateRefreshmentStatus(refreshment.status, refreshment.id);
 

@@ -1,9 +1,9 @@
 import {
-  fetchBillingInfos,
-  fetchCurrBewirtung,
+  fetchBillingDetails,
+  fetchRefreshmentById,
   updateRefreshmentStatus,
 } from "@/hooks/SupaBaseAPI";
-import type { BewirtungenMitExtras, NewBillingInfo } from "@/types/types";
+import type { RefreshmentWithAdditionalServices, BillingDetailInsert } from "@/types/types";
 import BillingsInfos from "./components/BillingsInfos";
 import BillingInfoDeliveredValues from "./components/BillingInfoDeliveredValues";
 import { Button } from "@/components/ui/button";
@@ -14,8 +14,8 @@ import { useNavigate, useParams } from "react-router";
 function BillingDetailView() {
   const { refreshmentId } = useParams();
   const navigate = useNavigate();
-  const [refreshment, setRefreshment] = useState<BewirtungenMitExtras>();
-  const [billingInfos, setBillingInfos] = useState<NewBillingInfo[]>([]);
+  const [refreshment, setRefreshment] = useState<RefreshmentWithAdditionalServices>();
+  const [billingInfos, setBillingInfos] = useState<BillingDetailInsert[]>([]);
 
   useEffect(() => {
     async function fetchRefreshment() {
@@ -23,14 +23,14 @@ function BillingDetailView() {
         console.error("No ID provided");
         return;
       }
-      const responseRefreshment = await fetchCurrBewirtung(refreshmentId);
+      const responseRefreshment = await fetchRefreshmentById(refreshmentId);
       if (!responseRefreshment) {
         console.error("No refreshment found");
         return;
       }
       setRefreshment(responseRefreshment);
 
-      const responseBillingInfos = await fetchBillingInfos(refreshmentId);
+      const responseBillingInfos = await fetchBillingDetails(refreshmentId);
       if (responseBillingInfos) {
         setBillingInfos(responseBillingInfos);
       }
