@@ -23,7 +23,6 @@ function PaxOverviewList({ pax }: PaxOverviewProps) {
             <p>Name</p>
             <p>Abteilung</p>
           </div>
-          {/* Ab hier wird dasnn mit map dynamisch eingelesen erst speichern als Array von Personen  */}
           {pax.map((participant, index) => (
             <div
               key={index}

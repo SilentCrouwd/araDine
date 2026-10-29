@@ -5,13 +5,10 @@ import { Input } from "@/components/ui/input";
 import OrderParticipantsField from "./OrderParticipantsField";
 
 function OrderMoreInformationForm() {
-  // Der Toggle bestimmt, ob im Formular zusätzliche Teilnehmer- oder Zeitangaben
-  // für die Mittagsverpflegung bzw. Nachbewirtung angezeigt werden.
+  // Aktiviert die Erfassung externer Teilnehmender für die Mittagsverpflegung.
   const [lunch, setLunch] = useState(false);
 
-  // Standardfelder für die Zusatzinformationen des Belegs.
-  // Checkboxen schalten zusätzliche Abschnitte ein oder aus.
-  // Die Feldnamen entsprechen den Schlüsseln, die OrderForm beim Submit aus FormData liest.
+  // Die main_-Feldnamen werden beim Absenden von OrderForm den Bewirtungsdaten zugeordnet.
   const additionalFields = [
     {
       id: "main_company_code",
@@ -62,7 +59,6 @@ function OrderMoreInformationForm() {
           </div>
         ))}
       </div>
-      {/* Wird nur bei aktivierter Mittagsverpflegung angezeigt */}
       {lunch && (
         <div className="mt-3 flex w-full flex-col rounded-xl bg-accent-foreground/50 p-3">
           <h2 className="pb-2 text-xl font-bold">Personen Angaben</h2>

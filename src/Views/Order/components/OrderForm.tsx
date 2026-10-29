@@ -18,7 +18,7 @@ import {
   fetchRefreshmentsByRoomAndDate,
   insertRefreshment,
 } from "@/hooks/SupaBaseAPI";
-import type { NewRefreshment, NewAdditionalService } from "@/types/types";
+import type { NewRefreshment } from "@/types/types";
 import { useOrderContext } from "@/context/RefreshmentContext";
 import { toast } from "@/components/ui/toast";
 import { useNavigate } from "react-router";
@@ -31,8 +31,7 @@ function toaster(type: string, description: string) {
 }
 
 function OrderForm() {
-  // Zustände für die ausgewählten Werte in der Standort- und Raum-Auswahl.
-  // Der Paketstatus wird zusätzlich zum Radiowert verwendet, um das Absenden zu steuern.
+  // Die Auswahlwerte steuern abhängige Felder; currDate wird für die Konfliktprüfung benötigt.
   const navigate = useNavigate();
   const [currDate, setCurrDate] = useState<string>("");
   const [selectedPackage, setSelectedPackage] = useState("");
@@ -41,13 +40,48 @@ function OrderForm() {
   const [selectedRoom, setSelectedRoom] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    // Verhindert das native Neuladen der Seite und liest alle benannten Formularfelder aus.
+    // Verhindert das native Neuladen der Seite und sammelt die Formularwerte für die Prüfung.
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
 
-    // Überführt die Formularwerte in das Datenbankformat der Bewirtung.
-    // Alle Felder mit Präfix "main_" einsammeln (Präfix wird entfernt).
+    const currentDate = String(formData.get("main_date") ?? "");
+    const today = new Date().toISOString().split("T")[0];
+    const startTime = String(formData.get("main_start_time") ?? "");
+    const endTime = String(formData.get("main_end_time") ?? "");
+    const hasAfterRefreshment = formData.get("extra_nachbewirtung") === "on";
+    const afterRefreshmentTime = String(
+      formData.get("extra_nachbewirtungUhrzeit") ?? "",
+    );
+
+    // Prüft Zeitregeln, die sich nicht allein durch Pflichtfelder absichern lassen.
+    if (currentDate < today) {
+      toaster(
+        "error",
+        "Das aktuelle Datum darf nicht in der Vergangenheit liegen.",
+      );
+      return;
+    }
+
+    if (startTime >= endTime) {
+      toaster("error", "Die Startzeit muss vor der Endzeit liegen.");
+      return;
+    }
+
+    if (
+      hasAfterRefreshment &&
+      (!afterRefreshmentTime ||
+        afterRefreshmentTime <= startTime ||
+        afterRefreshmentTime >= endTime)
+    ) {
+      toaster(
+        "error",
+        "Die Uhrzeit der Nachbewirtung muss nach der Startzeit und vor der Endzeit liegen.",
+      );
+      return;
+    }
+
+    // Entfernt das Formularpräfix, damit die Feldnamen den Datenbankspalten entsprechen.
     const main: Record<string, FormDataEntryValue> = {};
     for (const [key, value] of formData.entries()) {
       if (key.startsWith("main_")) {
@@ -67,52 +101,57 @@ function OrderForm() {
       lunch_provided: main.lunch_provided === "on",
       occasion: String(main.occasion ?? "") || null,
       location_id: location?.id ?? null,
-      room_id:
-        location?.rooms.find((r) => r.name === selectedRoom)?.id ?? null,
+      room_id: location?.rooms.find((r) => r.name === selectedRoom)?.id ?? null,
       status: "Geplant",
     } as NewRefreshment;
 
-    orderContext.dispatch({ type: "ADD_ORDER", payload: newRefreshment });
-
-    // Wandelt die Felder mit dem Präfix "extra_" in ein Objekt für die Zusatzleistungen um.
+    // Zusatzleistungen werden getrennt von den Bewirtungsfeldern gespeichert.
     const extraService: Record<string, FormDataEntryValue> = {};
     for (let [key, value] of formData.entries()) {
       if (key.startsWith("extra_")) {
-        // "sub_" vom Key entfernen, falls gewünscht:
+        // Das Präfix ist Teil des Formularnamens, nicht des gespeicherten Leistungsnamens.
         const cleanKey = key.replace("extra_", "");
         extraService[cleanKey] = value;
       }
-
-      // Das Objekt entspricht dem Typ NewAdditionalService.
     }
 
+    // Paketmengen richten sich nach der Personenzahl: Kaffee, Tee und Wasser je vier Personen.
     if (selectedPackage === "package-1") {
-      extraService.kaffee = String(Math.ceil(newRefreshment.participant_count / 4));
+      extraService.kaffee = String(
+        Math.ceil(newRefreshment.participant_count / 4),
+      );
     }
 
     if (selectedPackage === "package-2") {
-      extraService.kaffee = String(Math.ceil(newRefreshment.participant_count / 4));
-      extraService.wasser = String(Math.ceil(newRefreshment.participant_count / 4));
-      extraService.tee = String(Math.ceil(newRefreshment.participant_count / 4));
+      extraService.kaffee = String(
+        Math.ceil(newRefreshment.participant_count / 4),
+      );
+      extraService.wasser = String(
+        Math.ceil(newRefreshment.participant_count / 4),
+      );
+      extraService.tee = String(
+        Math.ceil(newRefreshment.participant_count / 4),
+      );
     }
     if (selectedPackage === "package-3") {
-      extraService.kaffee = String(Math.ceil(newRefreshment.participant_count / 4));
-      extraService.wasser = String(Math.ceil(newRefreshment.participant_count / 4));
-      extraService.tee = String(Math.ceil(newRefreshment.participant_count / 4));
+      extraService.kaffee = String(
+        Math.ceil(newRefreshment.participant_count / 4),
+      );
+      extraService.wasser = String(
+        Math.ceil(newRefreshment.participant_count / 4),
+      );
+      extraService.tee = String(
+        Math.ceil(newRefreshment.participant_count / 4),
+      );
       extraService.obst = String(newRefreshment.participant_count);
       extraService.softdrinks = String(newRefreshment.participant_count);
     }
-
-    const newExtraService: NewAdditionalService = extraService;
-    orderContext.dispatch({
-      type: "ADD_EXTRA_SERVICE",
-      payload: newExtraService,
-    });
 
     const filteredRoomId = orderContext.state.location
       .find((location) => location.name === selectedLocation)
       ?.rooms.find((room) => room.name === selectedRoom)?.id;
 
+    // Erfasst auch Teilüberschneidungen: neuer Start vor bestehendem Ende und neues Ende nach bestehendem Start.
     const currBew = await fetchRefreshmentsByRoomAndDate(
       filteredRoomId ?? "",
       currDate,
@@ -128,7 +167,7 @@ function OrderForm() {
     } else {
       await insertRefreshment(
         newRefreshment,
-        newExtraService,
+        extraService,
         orderContext.state.participants,
       );
       toaster("success", "Danke! Wir haben ihren Termin gebucht");
@@ -136,18 +175,16 @@ function OrderForm() {
     await navigate(-1);
   }
 
-  // Dient dazu, im zweiten Auswahlfeld nur Räume des gewählten Standorts anzubieten.
+  // Begrenzt die Raum-Auswahl auf den zuvor gewählten Standort.
   const selectedLocationItem = orderContext.state.location.find(
     (item) => item?.name === selectedLocation,
   );
 
   return (
-    // Hauptformular für die Bewirtungsbestellung.
     <form
       className="p-4 flex flex-col items-center gap-4 "
       onSubmit={handleSubmit}
     >
-      {/* Standort- und Raum-Auswahl */}
       <div className="flex p-4 w-full justify-between sm:justify-evenly">
         {/* Die Standortauswahl speichert den Namen; beim Absenden wird daraus die Datenbank-ID ermittelt. */}
         <Select
@@ -177,7 +214,6 @@ function OrderForm() {
             </SelectGroup>
           </SelectContent>
         </Select>
-        {/* Die verfügbaren Räume hängen vom aktuell ausgewählten Standort ab. */}
         <Select
           items={selectedLocationItem?.rooms.map((room) => ({
             label: room.name,
@@ -218,7 +254,6 @@ function OrderForm() {
       </div>
       <Button
         type="submit"
-        // Erst absenden, wenn Standort, Raum und Verpflegungspaket gewählt wurden.
         disabled={!selectedLocation || !selectedRoom || !selectedPackage}
         variant="default"
         className="w-full mt-5 mx-auto p-5 text-lg flex items-center justify-center sm:w-120"

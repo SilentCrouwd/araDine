@@ -22,7 +22,7 @@ const roomTiles = [
     title: "Räume Abräumen",
     Icon: Wrench,
     iconColor: "text-blue-500",
-    // Zählt Räume mit erledigter Bewirtung, ohne den Raumstatus zu ändern.
+    // Erledigte Bewirtungen bleiben sichtbar, auch wenn ihr Raumstatus bereits frei ist.
     count: (_room: Rooms, refreshments: Refreshments) =>
       getRoomsToClear(refreshments).size,
   },
@@ -48,7 +48,7 @@ type RoomInfoCardProps = Readonly<{
 
 function RoomInfoCard({ room, refreshments }: RoomInfoCardProps) {
   return (
-    // Zählt die Räume je Status für die kompakte Übersicht oberhalb der Liste.
+    // Fasst die drei Raum-Kennzahlen in derselben Kachelstruktur zusammen.
     <section className="grid grid-cols-1 md:grid-cols-3 gap-2">
       {roomTiles.map((tile) => (
         <div

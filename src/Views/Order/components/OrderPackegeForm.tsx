@@ -10,10 +10,7 @@ function OrdercurrPackageForm({
   currPackage,
   onCurrPackageChange,
 }: OrderCurrPackageFormProps) {
-  // Steuert sowohl die markierte Radio-Option als auch die darunter angezeigte Beschreibung.
-
-  // Gibt je nach Auswahl eine kurze Paketbeschreibung zurück.
-  // Diese Info wird unter den Radio-Buttons angezeigt.
+  // Zeigt eine Vorschau passend zur Paketauswahl an, die im übergeordneten Formular verwaltet wird.
   function handleCurrPackageInfo() {
     if (currPackage === "package-1") {
       return (
@@ -57,7 +54,6 @@ function OrdercurrPackageForm({
     return null;
   }
   return (
-    // Auswahl der Verpflegungspakete mit erläuternder Vorschau.
     <div className="h-fit w-full rounded-xl border border-border bg-card/20 p-2 text-muted-foreground">
       <h2 className="p-2 text-xl font-bold">Pakete</h2>
       <div className="rounded-xl bg-accent-foreground/50 p-3">
@@ -72,7 +68,6 @@ function OrdercurrPackageForm({
             <Input
               onChange={() => {
                 onCurrPackageChange("package-1");
-                // Meldet dem übergeordneten Formular, dass eine gültige Paketauswahl vorliegt.
               }}
               checked={currPackage === "package-1"}
               type="radio"

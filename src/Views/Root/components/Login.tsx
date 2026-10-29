@@ -1,7 +1,7 @@
+import { toast } from "@/components/ui/toast";
 import { supabase } from "@/lib/supabaseClient";
 import React, { useState } from "react";
-
-import { Link } from "react-router";
+import { useNavigate, Link } from "react-router";
 
 async function signInWithEmail(userMail: string, userPassword: string) {
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -18,7 +18,7 @@ async function signInWithEmail(userMail: string, userPassword: string) {
 
 function Login() {
   const [userMail, setUserMail] = useState("");
-
+  const navigate = useNavigate();
   const [userPassword, setUserPassword] = useState("");
 
   return (
@@ -88,7 +88,16 @@ function Login() {
         <button
           className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground hover:opacity-90"
           type="button"
-          onClick={async () => await signInWithEmail(userMail, userPassword)}
+          onClick={async () => {
+            const data = await signInWithEmail(userMail, userPassword);
+            if (data) {
+              await navigate("/araDine/");
+              toast.add({
+                type: "success",
+                description: "Erfolgreich angemeldet",
+              });
+            }
+          }}
         >
           Anmelden
         </button>

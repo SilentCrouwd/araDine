@@ -1,3 +1,4 @@
+-- Benennt Tabellen, Spalten und Fremdschlüssel um, ohne vorhandene Datensätze zu ersetzen.
 begin;
 
 alter table public.bewirtungen rename to refreshments;
@@ -39,6 +40,7 @@ alter table public.billing_details rename column value to billing_detail_value;
 
 do $$
 begin
+  -- Fremdschlüssel erhalten neue Bezeichnungen, sofern ihre bisherigen Namen vorhanden sind.
   if exists (
     select 1 from pg_constraint
     where conname = 'bewirtungen_raum_id_fkey'

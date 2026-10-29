@@ -7,9 +7,9 @@ type OrderExtraServiceProps = Readonly<{
 }>;
 
 function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
-  // Steuert, ob nach Auswahl der Nachbewirtung zusätzlich eine Uhrzeit abgefragt wird.
+  // Schaltet das zusätzliche Uhrzeitfeld für eine Nachbewirtung ein oder aus.
   const [refresh, setRefresh] = useState(false);
-  // Diese Konfiguration erzeugt die Eingabefelder und ihre Namen für FormData.
+  // Felddefinitionen bündeln Beschriftung, FormData-Schlüssel und Paketabhängigkeiten.
   const extraServiceData = [
     {
       id: "extra_kaffee",
@@ -76,26 +76,6 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
       },
     },
   ];
-  // function handleSelectPackage(selectedPackage: string) {
-  //   if (selectedPackage === "package-2") {
-  //     const newSelects = extraServiceData.filter(
-  //       (datas) => datas.label !== "Wasser:" && datas.label !== "Tee:",
-  //     );
-  //     return newSelects;
-  //   } else if (selectedPackage === "package-3") {
-  //     const newSelects = extraServiceData.filter(
-  //       (datas) =>
-  //         datas.label !== "Wasser:" &&
-  //         datas.label !== "Tee:" &&
-  //         datas.label !== "Softdrinks:" &&
-  //         datas.label !== "Obst:",
-  //     );
-  //     return newSelects;
-  //   } else return extraServiceData;
-  // }
-
-  // const filteredSelects = handleSelectPackage(selectedPackage);
-  // console.log(selectedPackage);c
   const filteredSelects = extraServiceData;
   return (
     <div className="h-fit w-full rounded-xl border border-border bg-card/20 p-2 text-muted-foreground">

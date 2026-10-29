@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { useNavigate, Link } from "react-router";
+import { toast } from "@/components/ui/toast";
 
 async function signUpNewUser(userMail: string, userPassword: string) {
   const { data, error } = await supabase.auth.signUp({
@@ -18,7 +19,35 @@ async function signUpNewUser(userMail: string, userPassword: string) {
   return data;
 }
 
+async function validatePassword(
+  password: string,
+  confirmPassword: string,
+  userMail: string,
+  navigate: (path: string) => void,
+) {
+  if (password !== confirmPassword) {
+    toast.add({
+      type: "error",
+      description: "Passwort stimmt nicht überein",
+    });
+    return;
+  }
+  if (password.length < 8) {
+    toast.add({
+      type: "error",
+      description: "Passwort muss mindestens 8 Zeichen lang sein",
+    });
+    return;
+  }
+  await signUpNewUser(userMail, password);
+  toast.add({
+    type: "success",
+    description: "Konto erfolgreich erstellt",
+  });
+  navigate("/araDine/");
+}
 function SignUp() {
+  const navigate = useNavigate();
   const [userMail, setUserMail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [userPasswordConfirm, setUserPasswordConfirm] = useState("");
@@ -111,13 +140,14 @@ function SignUp() {
         <button
           className="rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground hover:opacity-90"
           type="button"
-          onClick={async () => {
-            if (userPassword === userPasswordConfirm) {
-              await signUpNewUser(userMail, userPassword);
-            } else {
-              alert("Passwort stimmt nicht Überein");
-            }
-          }}
+          onClick={async () =>
+            validatePassword(
+              userPassword,
+              userPasswordConfirm,
+              userMail,
+              navigate,
+            )
+          }
         >
           Registrieren
         </button>

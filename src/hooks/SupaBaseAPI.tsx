@@ -13,7 +13,6 @@ export async function fetchLocations() {
   if (error) {
     console.error("Error fetching locations:", error);
   }
-  //  console.log("Fetched locations:", data);
   return data;
 }
 export async function fetchRefreshments() {
@@ -42,6 +41,7 @@ export async function insertRefreshment(
   extraServices: NewAdditionalService,
   newPax: NewParticipant,
 ) {
+  // Zuerst wird die Bewirtung angelegt, damit ihre ID den zugehörigen Datensätzen zugeordnet werden kann.
   const { data, error } = await supabase
     .from("refreshments")
     .insert(newRefreshment)
@@ -65,7 +65,7 @@ export async function insertRefreshment(
   if (extraRows.length > 0) {
     const { data: extraServiceData, error: extraServiceError } = await supabase
       .from("additional_services")
-      .insert(extraRows) // ganzes Array auf einmal, ein Request
+      .insert(extraRows) // Alle Zusatzleistungen werden gemeinsam in einem Request gespeichert.
       .select();
 
     if (extraServiceError) {

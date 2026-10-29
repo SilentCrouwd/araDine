@@ -24,6 +24,7 @@ const OrderContext = createContext<OrderContextValue | undefined>(undefined);
 export function OrderProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(orderReducer, initialOrderState);
   useEffect(() => {
+    // Standort- und Raumdaten werden zentral geladen, damit alle Views sie nutzen können.
     async function loadStandorte() {
       const locations: LocationsWithRooms = (await fetchLocations()) ?? [];
       dispatch({ type: "GET_LOCATION", payload: locations ?? [] });
@@ -40,7 +41,6 @@ export function OrderProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// unterhalb von OrderContext:
 export function useOrderContext() {
   const context = useContext(OrderContext);
 

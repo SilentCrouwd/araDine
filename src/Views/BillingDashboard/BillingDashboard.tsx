@@ -26,7 +26,7 @@ const monthItems = Array.from({ length: 12 }, (_, monthIndex) => ({
   }),
 }));
 
-// Jede Section erzeugt eine Kachel und eine Liste; iconColor als volle Tailwind-Klasse.
+// Eine Statusdefinition steuert sowohl die Kennzahl-Kachel als auch die zugehörige Liste.
 const sections = [
   {
     title: "Geplante Bewirtungen",
@@ -72,7 +72,7 @@ function BillingDashboard() {
   }, []);
 
   const now = new Date();
-  // Startwert ist der aktuelle Monat bzw. das aktuelle Jahr, sonst die gespeicherte Auswahl.
+  // Stellt gespeicherte Filter wieder her; ohne Auswahl gelten aktueller Monat und aktuelles Jahr.
   const [selectedMonth, setSelectedMonth] = useState(
     () =>
       sessionStorage.getItem("araDine.billing.month") ?? String(now.getMonth()),
@@ -93,8 +93,7 @@ function BillingDashboard() {
     sessionStorage.setItem("araDine.billing.year", year);
   }
 
-  // Jahre aus den Daten plus aktuelles Jahr, neueste zuerst.
-  // Set entfernt doppelte Jahre.
+  // Bietet alle Jahre aus den Daten und das aktuelle Jahr ohne Duplikate, neueste zuerst, an.
   const yearItems = [
     ...new Set([
       now.getFullYear(),
@@ -108,7 +107,7 @@ function BillingDashboard() {
 
   const monthName = monthItems[Number(selectedMonth)].label;
 
-  // Select liefert Strings, daher Vergleich über Number().
+  // Select-Werte sind Strings; für den Vergleich mit Date-Werten werden sie in Zahlen umgewandelt.
   function isInSelectedMonth(date: string) {
     const refreshmentDate = new Date(date);
     return (
@@ -119,7 +118,6 @@ function BillingDashboard() {
 
   return (
     <div className="flex flex-col">
-      {/* Auswahl von Monat und Jahr */}
       <div className="flex justify-evenly gap-2 p-2 pb-0">
         <Select
           value={selectedMonth}
@@ -161,7 +159,6 @@ function BillingDashboard() {
           </SelectContent>
         </Select>
       </div>
-      {/* Kacheln: Anzahl je Status im gewählten Monat */}
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 p-2 pb-0">
         {sections.map((section) => (
           <div
@@ -184,7 +181,6 @@ function BillingDashboard() {
           </div>
         ))}
       </div>
-      {/* Listen: Refreshments je Status im gewählten Monat */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-2">
         {sections.map((section) => {
           const entries = refreshmentData.filter(

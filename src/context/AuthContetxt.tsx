@@ -27,6 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     async function loadSession() {
       const { data, error } = await supabase.auth.getSession();
 
+      // Verhindert ein State-Update, falls der Provider vor Abschluss des Abrufs unmountet.
       if (!mounted) return;
 
       if (error) {
@@ -38,6 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setLoading(false);
     }
 
+    // Initialer Abruf und Ereignis-Listener halten den Context mit Supabase synchron.
     void loadSession();
 
     const {

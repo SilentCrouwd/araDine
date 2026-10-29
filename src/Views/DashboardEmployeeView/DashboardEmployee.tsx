@@ -32,11 +32,11 @@ import {
 function DashboardEmployee() {
   const orderContext = useOrderContext();
   const locations = orderContext.state.location;
-  // Enthält die vom Server geladenen Bewirtungen samt zugehörigen Zusatzleistungen.
+  // Enthält die Bewirtungen des gewählten Standorts und Tages samt Zusatzleistungen.
   const [selectedRefreshments, setSelectedRefreshments] = useState<
     RefreshmentWithAdditionalServices[]
   >([]);
-  // Speichert den ausgewählten Standort und das ausgewählte Datum.
+  // Die Filter bleiben beim Wechsel zwischen Dashboard-Unterseiten in der Sitzung erhalten.
   const [selectedLocationName, setSelectedLocationName] = useState(
     () => sessionStorage.getItem("araDine.dashboard.location") ?? "",
   );
@@ -53,10 +53,10 @@ function DashboardEmployee() {
   // Formatiert das Datum passend zum gespeicherten Format YYYY-MM-DD.
   const selectedDate = date ? format(date, "yyyy-MM-dd") : undefined;
 
-  // Lädt die Bewirtungen erneut, sobald Standort oder Datum geändert wurden.
+  // Lädt die gefilterten Bewirtungen neu und aktualisiert abgelaufene Termine.
   useEffect(() => {
     async function loadCurrBewirtungen() {
-      // Ohne beide Filterwerte wird keine Datenbankabfrage gestartet.
+      // Ohne Standort und Datum ist die Filterabfrage nicht eindeutig.
       if (currLocation && selectedDate) {
         const selectedRefresh = await fetchRefreshmentsByDateAndLocation(
           selectedDate,
@@ -66,6 +66,7 @@ function DashboardEmployee() {
           const today = format(new Date(), "yyyy-MM-dd");
           const currentTime = format(new Date(), "HH:mm");
 
+          // Vergangene Termine und heute bereits beendete Termine gelten als erledigt.
           const toMarkDone = selectedRefresh.filter(
             (ref) =>
               ref.status === "Geplant" &&
@@ -122,7 +123,7 @@ function DashboardEmployee() {
         return { ...room, status: "Service" };
       }
 
-      // Bei heutigen Bewirtungen ist ein Raum nach der Endzeit wieder frei.
+      // Für den heutigen Tag wird ein belegter Raum nach der Endzeit wieder frei.
       const endTime = refreshment.end_time.slice(0, 5);
 
       if (currentTime > endTime) {
@@ -134,13 +135,9 @@ function DashboardEmployee() {
   }
 
   const updatedRooms = updateRoomStatus(selectedRefreshments, selectedRooms);
-  // wenn Urzeit > als Startzeitund Uhrzeit kleiner als Endzeit +30 min dann Service HellRot
-  // wenn Uhrzeit > als Endzeit dann Fertig Orange
-
   return (
     <div className="flex flex-col py-4 px-4 gap-4  ">
       <div className="  grid grid-cols-2 self-center md:gap-5">
-        {/* Auswahl des Standorts */}
         <Select
           value={selectedLocationName}
           onValueChange={(value) => {
@@ -166,7 +163,6 @@ function DashboardEmployee() {
           </SelectContent>
         </Select>
 
-        {/* Auswahl des Datums */}
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger
             render={
@@ -213,8 +209,6 @@ function DashboardEmployee() {
 
       <RoomInfoCard room={updatedRooms} refreshments={selectedRefreshments} />
 
-      {/* Zeigt die Bewirtungen für den ausgewählten Standort und das Datum an. */}
-      {/* Jede Karte erhält außerdem die Räume und Zusatzleistungen der Bewirtung. */}
       <div className="w-full p-6  mx-auto flex flex-col bg-card/20 border border-border rounded-xl text-muted-foreground">
         <h2 className="text-lg font-bold p-4">Bewirtungen Heute</h2>
         <div className="grid gap-10 grid-cols-1   overflow-y-auto md:grid-cols-3 lg:grid-cols-4">
@@ -234,8 +228,6 @@ function DashboardEmployee() {
         </div>
       </div>
 
-      {/* Übersicht über Räume und deren aktuellen Status */}
-      {/* Die Übersicht verknüpft jeden Raum mit seiner Bewirtung für Details und Startzeit. */}
       <div className=" flex flex-col bg-card/20 border border-border py-4 px-6 rounded-xl text-muted-foreground">
         <h2 className="text-lg font-bold   ">Raum Übersicht</h2>
         <div className="flex flex-col px-1 ">

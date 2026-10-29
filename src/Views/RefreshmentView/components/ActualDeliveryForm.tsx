@@ -33,6 +33,7 @@ function ActualDeliveryForm({
   const savedServicePax =
     billingInfos.find((info) => info.billing_detail_name === "service")
       ?.billing_detail_value ?? null;
+  // Vorhandene Istwerte haben Vorrang; andernfalls dienen bestellte Mengen als Eingabevorschlag.
   const newExtraRows = refreshment.additional_services
     .filter(
       (extra) =>
@@ -69,6 +70,7 @@ function ActualDeliveryForm({
       }
     }
 
+    // Erst Istwerte sichern, danach den Status für die Abrechnung freigeben.
     await upsertBillingDetails(actual, refreshment.id);
     refreshment.status = "Abrechnungsbereit";
     await updateRefreshmentStatus(refreshment.status, refreshment.id);
