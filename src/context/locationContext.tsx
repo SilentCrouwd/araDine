@@ -7,23 +7,23 @@ import {
   type ReactNode,
 } from "react";
 import {
-  initialOrderState,
-  orderReducer,
-  type OrderAction,
-} from "../hooks/UseReducerOrder";
+  initialLocationState,
+  locationReducer,
+  type LocationAction,
+} from "../hooks/UseReducerLocation";
 import { fetchLocations } from "@/hooks/SupaBaseAPI";
 import type { LocationsWithRooms } from "@/types/types";
 import { useAuthContext } from "./AuthContetxt";
 
-type OrderContextValue = {
-  state: typeof initialOrderState;
-  dispatch: Dispatch<OrderAction>;
+type LocationContextValue = {
+  state: typeof initialLocationState;
+  dispatch: Dispatch<LocationAction>;
 };
 
-const OrderContext = createContext<OrderContextValue | undefined>(undefined);
+const LocationContext = createContext<LocationContextValue | undefined>(undefined);
 
-export function OrderProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(orderReducer, initialOrderState);
+export function LocationProvider({ children }: { children: ReactNode }) {
+  const [state, dispatch] = useReducer(locationReducer, initialLocationState);
   const { user } = useAuthContext();
   useEffect(() => {
     // Standort- und Raumdaten werden zentral geladen, damit alle Views sie nutzen können.
@@ -37,18 +37,18 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     });
   }, [user]);
   return (
-    <OrderContext.Provider value={{ state, dispatch }}>
+    <LocationContext.Provider value={{ state, dispatch }}>
       {children}
-    </OrderContext.Provider>
+    </LocationContext.Provider>
   );
 }
 
-export function useOrderContext() {
-  const context = useContext(OrderContext);
+export function useLocationContext() {
+  const context = useContext(LocationContext);
 
   if (!context) {
     throw new Error(
-      "useOrderContext muss innerhalb von OrderProvider verwendet werden",
+      "useLocationContext muss innerhalb von LocationProvider verwendet werden",
     );
   }
 

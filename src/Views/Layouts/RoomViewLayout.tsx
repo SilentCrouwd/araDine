@@ -1,12 +1,12 @@
-import { useOrderContext } from "@/context/RefreshmentContext";
+import { useLocationContext } from "@/context/locationContext";
 import { Outlet, useParams } from "react-router";
 
 function RoomViewLayout() {
   const { roomId } = useParams();
 
-  const orderContext = useOrderContext();
+  const locationContext = useLocationContext();
 
-  const currTitle = orderContext.state.location
+  const currTitle = locationContext.state.location
     .flatMap((location) => location.rooms)
     .find((room) => room.id === roomId)?.name;
 

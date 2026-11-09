@@ -1,18 +1,18 @@
 import type { LocationsWithRooms, NewParticipant } from "@/types/types";
-export type OrderState = {
+export type LocationState = {
   location: LocationsWithRooms;
   participants: NewParticipant;
 };
 
-export const initialOrderState: OrderState = {
+export const initialLocationState: LocationState = {
   location: [],
   participants: [],
 };
-export type OrderAction =
+export type LocationAction =
   | { type: "GET_LOCATION"; payload: LocationsWithRooms }
   | { type: "SET_PARTICIPANT"; payload: NewParticipant[number] }
   | { type: "DELETE_PARTICIPANT"; payload: number };
-export function orderReducer(state: OrderState, action: OrderAction) {
+export function locationReducer(state: LocationState, action: LocationAction) {
   switch (action.type) {
     case "GET_LOCATION":
       return {

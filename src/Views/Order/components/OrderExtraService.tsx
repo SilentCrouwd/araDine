@@ -68,7 +68,7 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
     },
     {
       id: "extra_nachbewirtung",
-      label: "Nachbewirtung:",
+      label: "Nachbewirtung",
       value_id: "nachbewirtung_value",
       type: "checkbox",
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,12 +83,12 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
       <div className="rounded-xl bg-accent-foreground/50 p-3">
         {filteredSelects.map((service) => (
           <div
-            className="flex flex-col gap-1.5 border-b border-border/50 py-2 last:border-b-0"
+            className={`flex ${service.type === "checkbox" ? "flex-row items-center" : "flex-col"} gap-1.5 border-b border-border/50 py-2 last:border-b-0`}
             key={service.id}
             hidden={service.hidden}
           >
             <Label
-              className="cursor-pointer text-xs uppercase tracking-wider text-muted-foreground/80"
+              className={`cursor-pointer text-xs uppercase tracking-wider text-muted-foreground/80 ${service.type === "checkbox" ? "order-2" : ""}`}
               htmlFor={service.value_id}
             >
               {service.label}
@@ -101,7 +101,7 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
               name={service.id}
               className={
                 service.type === "checkbox"
-                  ? "w-40 p-0"
+                  ? "order-1 w-7"
                   : "w-full text-muted-foreground placeholder:text-muted"
               }
             />

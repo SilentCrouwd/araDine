@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Fragment } from "react";
 import DetailRow from "@/components/DetailRow";
-import { useOrderContext } from "@/context/RefreshmentContext";
+import { useLocationContext } from "@/context/locationContext";
 import type { RefreshmentWithAdditionalServices } from "@/types/types";
 import {
   AlertTriangle,
@@ -63,12 +63,12 @@ function handleExtraStatus(extras: {
 }
 
 function DeliveryDetailCard({ refreshment }: DeliveryDetailCardProps) {
-  const orderContext = useOrderContext();
+  const locationContext = useLocationContext();
 
-  const locationName = orderContext.state.location.find(
+  const locationName = locationContext.state.location.find(
     (location) => location.id === refreshment.location_id,
   )?.name;
-  const roomName = orderContext.state.location
+  const roomName = locationContext.state.location
     .find((standort) => standort.id === refreshment.location_id)
     ?.rooms.find((room) => room.id === refreshment.room_id)?.name;
 

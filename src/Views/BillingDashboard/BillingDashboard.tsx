@@ -1,4 +1,4 @@
-import { useOrderContext } from "@/context/RefreshmentContext";
+import { useLocationContext } from "@/context/locationContext";
 import BillingItem from "./components/BillingItem";
 import { fetchRefreshments } from "@/hooks/SupaBaseAPI";
 import type { Refreshments } from "@/types/types";
@@ -55,7 +55,7 @@ const sections = [
 ];
 
 function BillingDashboard() {
-  const orderContext = useOrderContext();
+  const locationContext = useLocationContext();
   const [refreshmentData, setRefreshmentData] = useState<Refreshments>([]);
 
   useEffect(() => {
@@ -206,7 +206,7 @@ function BillingDashboard() {
                       name={ref.customer_name}
                       date={ref.date}
                       location={
-                        orderContext.state.location.find(
+                        locationContext.state.location.find(
                           (loc) => loc.id === ref.location_id,
                         )?.name ?? "Unbekannt"
                       }

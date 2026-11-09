@@ -26,7 +26,7 @@ function OrderMoreInformationForm() {
     { id: "main_occasion", label: "Anlass:", type: "text" },
     {
       id: "main_lunch_provided",
-      label: "Mittagsverpflegung:",
+      label: "Mittagsverpflegung",
       type: "checkbox",
       onChange: (e: ChangeEvent<HTMLInputElement>) =>
         setLunch(e.target.checked),
@@ -40,11 +40,11 @@ function OrderMoreInformationForm() {
         {additionalFields.map((field) => (
           <div
             key={field.id}
-            className="flex flex-col gap-1.5 border-b border-border/50 py-2 last:border-b-0"
+            className={`flex ${field.type === "checkbox" ? "flex-row items-center" : "flex-col"} gap-1.5 border-b border-border/50 py-2 last:border-b-0`}
           >
             <Label
               htmlFor={field.id}
-              className="text-xs uppercase tracking-wider text-muted-foreground/80"
+              className={`text-xs uppercase tracking-wider text-muted-foreground/80 ${field.type === "checkbox" ? "order-2" : ""}`}
             >
               {field.label}
             </Label>
@@ -52,7 +52,9 @@ function OrderMoreInformationForm() {
               onChange={field.onChange}
               type={field.type}
               id={field.id}
-              className={field.type === "checkbox" ? "w-40 p-0" : "w-full"}
+              className={
+                field.type === "checkbox" ? "order-1 w-7" : "w-full"
+              }
               name={field.id.toLowerCase()}
               required={field.required ?? false}
             />

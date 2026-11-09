@@ -22,16 +22,20 @@ import RefreshmentCard from "./components/RefreshmentCard";
 import { Link } from "react-router";
 import RoomInfoCard from "./components/RoomInfoCard";
 import RoomStatusOverview from "./components/RoomStatusOverview";
-import { useOrderContext } from "@/context/RefreshmentContext";
-import type { Refreshments, RefreshmentWithAdditionalServices, Rooms } from "@/types/types";
+import { useLocationContext } from "@/context/locationContext";
+import type {
+  Refreshments,
+  RefreshmentWithAdditionalServices,
+  Rooms,
+} from "@/types/types";
 import {
   fetchRefreshmentsByDateAndLocation,
   updateRefreshmentStatus,
 } from "@/hooks/SupaBaseAPI";
 
 function DashboardEmployee() {
-  const orderContext = useOrderContext();
-  const locations = orderContext.state.location;
+  const locationContext = useLocationContext();
+  const locations = locationContext.state.location;
   // Enthält die Bewirtungen des gewählten Standorts und Tages samt Zusatzleistungen.
   const [selectedRefreshments, setSelectedRefreshments] = useState<
     RefreshmentWithAdditionalServices[]

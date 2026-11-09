@@ -19,7 +19,7 @@ import {
   insertRefreshment,
 } from "@/hooks/SupaBaseAPI";
 import type { NewRefreshment } from "@/types/types";
-import { useOrderContext } from "@/context/RefreshmentContext";
+import { useLocationContext } from "@/context/locationContext";
 import { toast } from "@/components/ui/toast";
 import { useNavigate } from "react-router";
 
@@ -36,7 +36,7 @@ function OrderForm() {
   const [currDate, setCurrDate] = useState<string>("");
   const [selectedPackage, setSelectedPackage] = useState("");
   const [selectedLocation, setSelectedLocation] = useState<string>("");
-  const orderContext = useOrderContext();
+  const locationContext = useLocationContext();
   const [selectedRoom, setSelectedRoom] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -89,7 +89,7 @@ function OrderForm() {
       }
     }
 
-    const location = orderContext.state.location.find(
+    const location = locationContext.state.location.find(
       (loc) => loc.name === selectedLocation,
     );
 
@@ -147,7 +147,7 @@ function OrderForm() {
       extraService.softdrinks = String(newRefreshment.participant_count);
     }
 
-    const filteredRoomId = orderContext.state.location
+    const filteredRoomId = locationContext.state.location
       .find((location) => location.name === selectedLocation)
       ?.rooms.find((room) => room.name === selectedRoom)?.id;
 
@@ -168,7 +168,7 @@ function OrderForm() {
       await insertRefreshment(
         newRefreshment,
         extraService,
-        orderContext.state.participants,
+        locationContext.state.participants,
       );
       toaster("success", "Danke! Wir haben ihren Termin gebucht");
     }
@@ -176,7 +176,7 @@ function OrderForm() {
   }
 
   // Begrenzt die Raum-Auswahl auf den zuvor gewählten Standort.
-  const selectedLocationItem = orderContext.state.location.find(
+  const selectedLocationItem = locationContext.state.location.find(
     (item) => item?.name === selectedLocation,
   );
 
@@ -188,7 +188,7 @@ function OrderForm() {
       <div className="flex p-4 w-full justify-between sm:justify-evenly">
         {/* Die Standortauswahl speichert den Namen; beim Absenden wird daraus die Datenbank-ID ermittelt. */}
         <Select
-          items={orderContext.state.location?.map((location) => ({
+          items={locationContext.state.location?.map((location) => ({
             label: location?.name,
             value: location?.name,
           }))}
@@ -206,7 +206,7 @@ function OrderForm() {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {orderContext.state.location?.map((item) => (
+              {locationContext.state.location?.map((item) => (
                 <SelectItem key={item?.id} value={item.name}>
                   {item.name}
                 </SelectItem>

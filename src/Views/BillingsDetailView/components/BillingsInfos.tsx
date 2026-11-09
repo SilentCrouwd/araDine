@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import DetailRow from "@/components/DetailRow";
-import { useOrderContext } from "@/context/RefreshmentContext";
+import { useLocationContext } from "@/context/locationContext";
 import type { RefreshmentWithAdditionalServices } from "@/types/types";
 import { CalendarDays, Receipt, User } from "lucide-react";
 
@@ -30,8 +30,8 @@ function formatLunchProvision(hasLunchProvision: boolean | null) {
 }
 
 function BillingsInfos({ refreshment }: BillingsInfosProps) {
-  const orderContext = useOrderContext();
-  const location = orderContext.state.location.find(
+  const locationContext = useLocationContext();
+  const location = locationContext.state.location.find(
     (location) => location.id === refreshment.location_id,
   );
   const roomName =
@@ -60,7 +60,10 @@ function BillingsInfos({ refreshment }: BillingsInfosProps) {
         ["Standort", location?.name ?? "-"],
         ["Raum", roomName],
         ["Anlass", refreshment.occasion || "-"],
-        ["Bewirtungsart", formatRefreshmentType(refreshment.is_customer_refreshment)],
+        [
+          "Bewirtungsart",
+          formatRefreshmentType(refreshment.is_customer_refreshment),
+        ],
         [
           "Mittagsverpflegung",
           formatLunchProvision(refreshment.lunch_provided),

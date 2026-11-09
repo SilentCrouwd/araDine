@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useOrderContext } from "@/context/RefreshmentContext";
+import { useLocationContext } from "@/context/locationContext";
 import type { NewParticipant } from "@/types/types";
 import { CheckIcon, DeleteIcon, PencilIcon } from "lucide-react";
 import React, { useState } from "react";
@@ -10,7 +10,7 @@ function OrderParticipantsField() {
   const [valueName, setValueName] = useState<NewParticipant[number] | null>(
     null,
   );
-  const orderContext = useOrderContext();
+  const locationContext = useLocationContext();
 
   function handleParticipantChange() {
     const name = valueName?.name?.trim();
@@ -19,11 +19,11 @@ function OrderParticipantsField() {
     if (!name || !department) return;
 
     const newPax = { name, department };
-    orderContext.dispatch({ type: "SET_PARTICIPANT", payload: newPax });
+    locationContext.dispatch({ type: "SET_PARTICIPANT", payload: newPax });
     setValueName(null);
   }
   function handleParticipantDelete(indexToDelete: number) {
-    orderContext.dispatch({
+    locationContext.dispatch({
       type: "DELETE_PARTICIPANT",
       payload: indexToDelete,
     });
@@ -39,7 +39,7 @@ function OrderParticipantsField() {
       </label>
 
       <div className="col-span-2">
-        {orderContext.state.participants.map((participant, index) => {
+        {locationContext.state.participants.map((participant, index) => {
           return (
             <div className="grid grid-cols-2 items-center gap-2" key={index}>
               <p>{participant.name}</p>
