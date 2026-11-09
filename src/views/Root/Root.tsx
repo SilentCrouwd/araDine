@@ -24,7 +24,7 @@ function Root() {
       </aside>
       <div className=" flex flex-col items-center gap-4 px-10">
         <Link
-          to="/araDine/order"
+          to="/aradine/order"
           className="inline-block w-70 text-center text-xl bg-accent-foreground text-accent px-4 py-2 rounded-md transition-transform hover:scale-98 hover:bg-accent-foreground/70"
         >
           <p className="flex items-center justify-center gap-2">
@@ -32,7 +32,7 @@ function Root() {
           </p>
         </Link>
         <Link
-          to="/araDine/dashboard"
+          to="/aradine/dashboard"
           className="inline-block w-70 text-center text-xl bg-accent-foreground text-accent px-4 py-2 rounded-md transition-transform hover:scale-98 hover:bg-accent-foreground/70"
         >
           <p className="flex items-center justify-center gap-2">
@@ -40,7 +40,7 @@ function Root() {
           </p>
         </Link>
         <Link
-          to="/araDine/billingDashboard"
+          to="/aradine/billingdashboard"
           className="inline-block w-70 text-center text-xl bg-accent-foreground text-accent px-4 py-2 rounded-md transition-transform hover:scale-98 hover:bg-accent-foreground/70"
         >
           <p className="flex items-center justify-center gap-2">

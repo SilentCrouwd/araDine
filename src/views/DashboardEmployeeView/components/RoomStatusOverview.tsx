@@ -39,7 +39,7 @@ function RoomStatusOverview({ rooms, refreshments }: roomProps) {
           <Link
             className="inline-block transition-transform hover:scale-98"
             to={{
-              pathname: `/araDine/dashboard/room-view/${room.id}`,
+              pathname: `/aradine/dashboard/room-view/${room.id}`,
               search: room
                 ? `?date=${refreshments.find((ref) => ref.room_id === room.id)?.date}`
                 : "",

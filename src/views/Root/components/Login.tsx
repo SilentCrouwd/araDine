@@ -91,7 +91,7 @@ function Login() {
           onClick={async () => {
             const data = await signInWithEmail(userMail, userPassword);
             if (data) {
-              await navigate("/araDine/");
+              await navigate("/aradine/");
               toast.add({
                 type: "success",
                 description: "Erfolgreich angemeldet",
@@ -104,7 +104,7 @@ function Login() {
         <p className="text-center text-sm text-muted">
           Noch kein Konto?{" "}
           <Link
-            to="/araDine/order/signup/"
+            to="/aradine/order/signup/"
             className="inline-block text-primary transition-transform hover:scale-98 hover:underline"
           >
             Jetzt registrieren

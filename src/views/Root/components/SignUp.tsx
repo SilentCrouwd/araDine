@@ -8,7 +8,7 @@ async function signUpNewUser(userMail: string, userPassword: string) {
     email: userMail,
     password: userPassword,
     options: {
-      emailRedirectTo: "http://localhost:5173/araDine/order",
+      emailRedirectTo: "http://localhost:5173/aradine/order",
     },
   });
   if (error) {
@@ -44,7 +44,7 @@ async function validatePassword(
     type: "success",
     description: "Konto erfolgreich erstellt",
   });
-  navigate("/araDine/");
+  navigate("/aradine/");
 }
 function SignUp() {
   const navigate = useNavigate();
@@ -154,7 +154,7 @@ function SignUp() {
         <p className="text-center text-sm text-muted-foreground">
           Bereits registriert?{" "}
           <Link
-            to="/araDine/order/login/"
+            to="/aradine/order/login/"
             className="inline-block text-primary transition-transform hover:scale-98 hover:underline"
           >
             Jetzt anmelden

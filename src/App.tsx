@@ -18,14 +18,14 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="araDine/" element={<Root />} />
+        <Route path="aradine/" element={<Root />} />
 
-        <Route path="araDine/order" element={<Order />}>
+        <Route path="aradine/order" element={<Order />}>
           <Route index element={<OrderView />} />
           <Route path="login/" element={<Login />} />
           <Route path="signup/" element={<SignUp />} />
         </Route>
-        <Route path="araDine/dashboard" element={<Dashboard />}>
+        <Route path="aradine/dashboard" element={<Dashboard />}>
           <Route index element={<DashboardEmployee />} />
 
           <Route
@@ -37,7 +37,7 @@ function App() {
           </Route>
         </Route>
         <Route
-          path="araDine/BillingDashboard"
+          path="aradine/billingdashboard"
           element={<BillingDashboardLayout />}
         >
           <Route index element={<BillingDashboard />} />
