@@ -13,6 +13,7 @@ import {
 } from "../hooks/UseReducerOrder";
 import { fetchLocations } from "@/hooks/SupaBaseAPI";
 import type { LocationsWithRooms } from "@/types/types";
+import { useAuthContext } from "./AuthContetxt";
 
 type OrderContextValue = {
   state: typeof initialOrderState;
@@ -23,6 +24,7 @@ const OrderContext = createContext<OrderContextValue | undefined>(undefined);
 
 export function OrderProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(orderReducer, initialOrderState);
+  const { user } = useAuthContext();
   useEffect(() => {
     // Standort- und Raumdaten werden zentral geladen, damit alle Views sie nutzen können.
     async function loadStandorte() {
@@ -33,7 +35,7 @@ export function OrderProvider({ children }: { children: ReactNode }) {
     loadStandorte().catch((error) => {
       console.error("Fehler beim Laden der Standorte", error);
     });
-  }, []);
+  }, [user]);
   return (
     <OrderContext.Provider value={{ state, dispatch }}>
       {children}
