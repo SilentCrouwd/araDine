@@ -1,19 +1,19 @@
 import { Route, Routes } from "react-router";
 import "./App.css";
-import Root from "./Views/Root/Root";
-import Order from "./Views/Layouts/OrderLayout";
-import Dashboard from "./Views/Layouts/DashboardLayout";
-import SignUp from "./Views/Root/components/SignUp";
-import Login from "./Views/Root/components/Login";
-import RefreshmentDetail from "./Views/RefreshmentView/RefreshmentDetail";
-import DashboardEmployee from "./Views/DashboardEmployeeView/DashboardEmployee";
-import OrderView from "./Views/Order/OrderView";
-import RoomViewLayout from "./Views/Layouts/RoomViewLayout";
-import RoomView from "./Views/RoomView/RoomView";
+import Root from "./views/Root/Root";
+import Order from "./views/layouts/OrderLayout";
+import Dashboard from "./views/layouts/DashboardLayout";
+import SignUp from "./views/Root/components/SignUp";
+import Login from "./views/Root/components/Login";
+import RefreshmentDetail from "./views/RefreshmentView/RefreshmentDetail";
+import DashboardEmployee from "./views/DashboardEmployeeView/DashboardEmployee";
+import OrderView from "./views/Order/OrderView";
+import RoomViewLayout from "./views/layouts/RoomViewLayout";
+import RoomView from "./views/RoomView/RoomView";
 import { Toaster } from "./components/ui/toast";
-import BillingDashboard from "./Views/BillingDashboard/BillingDashboard";
-import BillingDashboardLayout from "./Views/Layouts/BillingDashboardLayout";
-import BillingDetailView from "./Views/BillingsDetailView/BillingDetailView";
+import BillingDashboard from "./views/BillingDashboard/BillingDashboard";
+import BillingDashboardLayout from "./views/layouts/BillingDashboardLayout";
+import BillingDetailView from "./views/BillingsDetailView/BillingDetailView";
 function App() {
   return (
     <>

@@ -14,7 +14,10 @@ import {
   updateRefreshmentStatus,
   upsertBillingDetails,
 } from "@/hooks/SupaBaseAPI";
-import type { RefreshmentWithAdditionalServices, BillingDetailInsert } from "@/types/types";
+import type {
+  RefreshmentWithAdditionalServices,
+  BillingDetailInsert,
+} from "@/types/types";
 import React, { useState } from "react";
 import { PackageCheck } from "lucide-react";
 import { useNavigate } from "react-router";
@@ -50,8 +53,7 @@ function ActualDeliveryForm({
         value:
           billingInfos.find(
             (info) => info.billing_detail_name === extra.service_name,
-          )?.billing_detail_value ??
-          extra.service_value,
+          )?.billing_detail_value ?? extra.service_value,
         type: extraName === "sonstige" ? "text" : "number",
       };
     });
@@ -72,8 +74,8 @@ function ActualDeliveryForm({
 
     // Erst Istwerte sichern, danach den Status für die Abrechnung freigeben.
     await upsertBillingDetails(actual, refreshment.id);
-    refreshment.status = "Abrechnungsbereit";
-    await updateRefreshmentStatus(refreshment.status, refreshment.id);
+
+    await updateRefreshmentStatus("Abrechnungsbereit", refreshment.id);
 
     await navigate(-1);
   }

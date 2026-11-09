@@ -76,12 +76,12 @@ function OrderExtraService({ selectedPackage }: OrderExtraServiceProps) {
       },
     },
   ];
-  const filteredSelects = extraServiceData;
+
   return (
     <div className="h-fit w-full rounded-xl border border-border bg-card/20 p-2 text-muted-foreground">
       <h2 className="p-2 text-xl font-bold">Zusatzleistungen</h2>
       <div className="rounded-xl bg-accent-foreground/50 p-3">
-        {filteredSelects.map((service) => (
+        {extraServiceData.map((service) => (
           <div
             className={`flex ${service.type === "checkbox" ? "flex-row items-center" : "flex-col"} gap-1.5 border-b border-border/50 py-2 last:border-b-0`}
             key={service.id}
