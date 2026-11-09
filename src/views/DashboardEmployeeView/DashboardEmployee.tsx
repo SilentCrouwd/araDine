@@ -219,7 +219,7 @@ function DashboardEmployee() {
           {selectedRefreshments.map((refreshment) => (
             <Link
               className="flex w-full gap-2 transition-transform hover:scale-98"
-              to={`/aradine/dashboard/refreshment-detail/${refreshment.id}`}
+              to={`/araDine/dashboard/refreshment-detail/${refreshment.id}`}
               key={refreshment.id}
             >
               <RefreshmentCard

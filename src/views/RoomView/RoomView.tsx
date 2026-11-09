@@ -32,7 +32,7 @@ function RoomView() {
           <Link
             className="transition-transform hover:scale-98 h-fit"
             key={ref.id}
-            to={`/aradine/dashboard/refreshment-detail/${ref.id}`}
+            to={`/araDine/dashboard/refreshment-detail/${ref.id}`}
           >
             <RoomRefreshmentItem
               name={ref.customer_name}

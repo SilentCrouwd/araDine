@@ -8,7 +8,7 @@ function Order() {
   return (
     <div className="min-h-screen bg-background text-foreground lg:max-w-350 lg:mx-auto border border-border lg:text-xl">
       <header className=" flex justify-between items-center border-b border-l border-r border-border bg-background px-6 py-4 ">
-        <Button variant="link" onClick={() => navigate("/aradine/")}>
+        <Button variant="link" onClick={() => navigate("/araDine/")}>
           <ArrowBigLeft className="mr-2" />
           Back
         </Button>
